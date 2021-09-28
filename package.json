@@ -1,0 +1,22 @@
+{
+  "name": "proep-group8",
+  "version": "1.0.0",
+  "description": "This repo holds code for our PRO_EP project",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.fhict.nl/I413156/proep-group8.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mui/material": "^5.0.1",
+    "react": "^17.0.2"
+  }
+}
