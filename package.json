@@ -1,7 +1,7 @@
 {
   "name": "proep-group8",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "This repo holds code for our PRO_EP project",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
@@ -17,6 +17,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.fhict.nl/I413156/proep-group8.git"
   },
   "eslintConfig": {
     "extends": [

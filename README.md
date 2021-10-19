@@ -53,3 +53,26 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+
+## React
+
+React tutorial series 
+https://www.youtube.com/playlist?list=PL4cUxeGkcC9gZD-Tvwfod2gaISzfRiP9d
+
+
+## Django
+
+Django follow the MVC pattern.
+Tutorial series (Videos #21-#25 on user registration and login)
+https://www.youtube.com/playlist?list=PLsyeobzWxl7r2ukVgTqIQcl-1T0C2mzau
+
+
+## Django + React integration
+
+https://www.youtube.com/watch?v=F9o4GSkSo40
+
+
+### Database connection with Django and MySQL
+
+https://www.askpython.com/django/django-mysql
