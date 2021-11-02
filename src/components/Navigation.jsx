@@ -11,7 +11,16 @@ function Navigation(props) {
           </Link>
 
           <div>
-            <ul class="navbar-nav ml-auto">              
+            <ul class="navbar-nav ml-auto"> 
+            <li
+                class={`nav-item  ${
+                  props.location.pathname === "/login" ? "active" : ""
+                }`}
+              >
+                <Link class="nav-link" to="/login">
+                  Login
+                </Link>
+              </li>             
 			  <li
                 class={`nav-item  ${
                   props.location.pathname === "/register" ? "active" : ""
