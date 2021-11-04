@@ -3,11 +3,11 @@ import React from "react";
 function Login() {
   return (
     <div className="login">
-      <div class="container">
-        <div class="row align-items-center my-5">
+      <div className="container">
+        <div className="row align-items-center my-5">
           
-          <div class="col-lg-5">
-            <h1 class="font-weight-light">Login</h1>
+          <div className="col-lg-5">
+            <h1 className="font-weight-light">Login</h1>
 
            <form>
                 <div className="form-group">
