@@ -14,7 +14,7 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const blog = { title, body, author };
+    // const blog = { title, body, author };
 
     
     
@@ -30,17 +30,17 @@ function Register() {
 
   return (
     <div className="register">
-      <div class="container">
-        <div class="row align-items-center my-5">
-          <div class="col-lg-2">
+      <div className="container">
+        <div className="row align-items-center my-5">
+          <div className="col-lg-2">
             
           </div>
-          <div class="col-lg-8">
+          <div className="col-lg-8">
             
-              <div class="row">
+              <div className="row">
                 
-                <div class="col-lg-4"></div>
-                <h1 class="font-weight-light col-lg-4"><center>Register</center></h1>
+                <div className="col-lg-4"></div>
+                <h1 className="font-weight-light col-lg-4"><center>Register</center></h1>
               </div>
             
             
@@ -48,121 +48,121 @@ function Register() {
 
             <form>
               
-              <div class="row">
-                  <div class="col-lg-4">
+              <div className="row">
+                  <div className="col-lg-4">
                     <label>
                       First Name:
                     </label>
                   </div>
-                  <input class="col-lg-8" type="text" name="f_name" value={inputs} onChange={(e) => setInputs(e.target.value)}/>
+                  <input className="col-lg-8" type="text" name="f_name" value={inputs} onChange={(e) => setInputs(e.target.value)}/>
               </div>
 
               <p></p>
 
-              <div class="row">
-                  <div class="col-lg-4">
+              <div className="row">
+                  <div className="col-lg-4">
                     <label>
                       Last Name:
                     </label>
                   </div>
-                  <input class="col-lg-8" type="text" name="l_name" onChange={handleChange}/>
+                  <input className="col-lg-8" type="text" name="l_name" onChange={handleChange}/>
               </div>
 
               <p></p>
 
-              <div class="row">
-                  <div class="col-lg-4">
+              <div className="row">
+                  <div className="col-lg-4">
                     <label>
                       Email:
                     </label>
                   </div>
-                  <input class="col-lg-8" type="text" name="email"/>
+                  <input className="col-lg-8" type="text" name="email"/>
               </div>
 
               <p></p>
 
-              <div class="row">
-                  <div class="col-lg-4">
+              <div className="row">
+                  <div className="col-lg-4">
                     <label>
                       Password:
                     </label>
                   </div>
-                  <input class="col-lg-8" type="password" name="password"/>
+                  <input className="col-lg-8" type="password" name="password"/>
               </div>
 
               <p></p>
 
-              <div class="row">
-                  <div class="col-lg-4">
+              <div className="row">
+                  <div className="col-lg-4">
                     <label>
                       Confirm Password:
                     </label>
                   </div>
-                  <input class="col-lg-8" type="password" name="c_password"/>
+                  <input className="col-lg-8" type="password" name="c_password"/>
               </div>
 
               <p></p>
 
-              <div class="row">
-                  <div class="col-lg-4">
+              <div className="row">
+                  <div className="col-lg-4">
                     <label>
                       Street Name:
                     </label>
                   </div>
-                  <input class="col-lg-8" type="text" name="street_name"/>
+                  <input className="col-lg-8" type="text" name="street_name"/>
               </div>
 
               <p></p>
 
-              <div class="row">
-                  <div class="col-lg-4">
+              <div className="row">
+                  <div className="col-lg-4">
                     <label>
                       State:
                     </label>
                   </div>
-                  <input class="col-lg-8" type="text" name="state"/>
+                  <input className="col-lg-8" type="text" name="state"/>
               </div>
 
               <p></p>
 
-              <div class="row">
-                  <div class="col-lg-4">
+              <div className="row">
+                  <div className="col-lg-4">
                     <label>
                       Postal Code:
                     </label>
                   </div>
-                  <input class="col-lg-8" type="text" name="post"/>
+                  <input className="col-lg-8" type="text" name="post"/>
               </div>
 
               <p></p>
 
-              <div class="row">
-                  <div class="col-lg-4">
+              <div className="row">
+                  <div className="col-lg-4">
                     <label>
                       Country:
                     </label>
                   </div>
-                  <input class="col-lg-8" type="text" name="country"/>
+                  <input className="col-lg-8" type="text" name="country"/>
               </div>
 
               <p></p>
 
-              <div class="row">
-                  <div class="col-lg-4">
+              <div className="row">
+                  <div className="col-lg-4">
                     <label>
                       Phone Number:
                     </label>
                   </div>
-                  <input class="col-lg-8" type="number" name="phone"/>
+                  <input className="col-lg-8" type="number" name="phone"/>
               </div>
 
               <p></p>
 
-              <div class="row">
-                  <div class="col-lg-10">
+              <div className="row">
+                  <div className="col-lg-10">
                     
                   </div>
-                  <input class="col-lg-2" type="submit" value="Submit" />
+                  <input className="col-lg-2" type="submit" value="Submit" />
               
               </div>
 
@@ -176,6 +176,6 @@ function Register() {
   );
 }
 
-ReactDOM.render(<Register />, document.getElementById('root'));
+//ReactDOM.render(<Register />, document.getElementById('root'));
 
 export default Register;
