@@ -14,7 +14,7 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const blog = { title, body, author };
+    // const blog = { title, body, author };
 
     
     
