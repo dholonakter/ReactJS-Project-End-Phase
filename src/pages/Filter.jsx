@@ -10,7 +10,6 @@ function Filter() {
 	console.log(productList);
 	console.log(filteredList);
   return (
-  
     <div className="filter">
 	  <div>
         <Navigation/>    
@@ -23,7 +22,6 @@ function Filter() {
         </label>
         <br />
   <input type="range" min="1" max="100" value="50" className="slider" id="myRange" />
-
       </form>	  
 			<Footer/>          
         </div>
