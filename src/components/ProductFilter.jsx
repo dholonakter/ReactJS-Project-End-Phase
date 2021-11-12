@@ -19,15 +19,26 @@ class ProductFilter{
 	getList(){
 		return this.productList;	
 	}
+	// value needs to be an object to allow multiple choice
 	sortList(filterType, value){
 		let filteredList = [];
-		if(filterType == "CATEGORY"){
-			for( let product of this.productList) {
-				if(product.category_id == value){
-					filteredList.push(product);
-				}
+		for( let product of this.productList) {
+		  if(filterType == "CATEGORY"){
+			if(product.category_id == value){
+				filteredList.push(product);
 			}
 			
+			
+		  }else if (filterType == "NAME"){
+			  // contains name, not equal to
+			if(product.id == value){
+				filteredList.push(product);
+			}
+		  }else if (filterType == "PRICE"){
+			if(product.product_price <= value){
+				filteredList.push(product);
+			}
+		  }
 		}
 		return filteredList;
 	}
