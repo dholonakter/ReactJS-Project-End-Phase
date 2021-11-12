@@ -2,6 +2,7 @@ import React from "react";
 import axios from 'axios'
 import { useState } from "react";
 import ReactDOM from "react-dom";
+import { findByPlaceholderText } from "@testing-library/dom";
 
 function Register() {
   const [f_name, setF_name] = useState('');
@@ -19,7 +20,6 @@ function Register() {
   }
 async function postArr(event, arr){
   event.preventDefault()
- alert(arr+", test:"+arr.f_name);
   try{
   //   await axios({
   //     url: 'https://i383988.hera.fhict.nl/database.php',
@@ -37,10 +37,22 @@ async function postArr(event, arr){
   }
 }
   const handleSubmit = event => {
-    // const blog = { title, body, author };
-   setArr({"f_name":f_name,"l_name":l_name,"e_mail":e_mail,"password":password,"phone_number":phone_number,"address_id":address_id});
-   postArr(event, arr);
    event.preventDefault();
+
+   let formData = new FormData();
+   setArr({"f_name":f_name,"l_name":l_name,"e_mail":e_mail,"password":password,"phone_number":phone_number,"address_id":address_id});
+   formData.append('f_name', f_name);
+   formData.append('l_name',l_name);
+   console.log(f_name + l_name);
+   axios({
+     method: 'POST',
+     url:'https://i383988.hera.fhict.nl/database.php?',
+     data: formData,
+     config: {headers:{'Content-Type': 'multipart/form-data'}}
+   }).then(function(response){
+     console.log(response);
+     console.log('New User Added');
+   })
   }
   return (
     <div className="register">

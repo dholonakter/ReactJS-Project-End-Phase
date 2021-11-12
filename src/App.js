@@ -29,13 +29,17 @@ function App() {
   }
   async function post(e){
     e.preventDefault()
-    try{
-      await axios.post("https://i383988.hera.fhict.nl/database.php?submit",{
-        name
-      })
-    } catch(error){
-      console.log(error)
-    }
+    const Data = new FormData();
+    Data.append('submit', 'works');
+    //try{
+      await axios.post('https://i383988.hera.fhict.nl/database.php', Data, {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+    })
+    //} catch(error){
+    //  console.log(error)
+    //}
   }
   return (
     <div className="App">
