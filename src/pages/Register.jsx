@@ -1,9 +1,10 @@
 import React from "react";
 import axios from 'axios'
-import { useState } from "react";
+import { useEffect, useState, } from "react";
 import ReactDOM from "react-dom";
+import { findByPlaceholderText } from "@testing-library/dom";
 
-function Register() {
+function Register(){
   const [f_name, setF_name] = useState('');
   const [l_name, setL_name] = useState('');
   const [e_mail, setE_mail] = useState('');
@@ -12,35 +13,65 @@ function Register() {
   const [phone_number, setP_number] = useState('');
   const [address_id, setAddress] = useState('');
   const[arr, setArr]= useState('');
-  //const[arr] = useState(' ');
+  const [home, setHome]= useState('');
+  const[userArr, setUser] = useState([]);
+  const users = [];
+  const [firstname, setFirstname]=useState('');
   const handleChange = (e) => { 
     const varr = {};
     console.log(varr);
   }
-async function postArr(event, arr){
-  event.preventDefault()
- alert(arr+", test:"+arr.f_name);
-  try{
-  //   await axios({
-  //     url: 'https://i383988.hera.fhict.nl/database.php',
-  //     method: 'post',
-  //     data: arr
-  //   }).then(function (response) {
-  //     // your action after success
-  //     console.log(response);
-  // })
-  await axios.post("./database.php",{
-    arr
+
+const handleGet = event => {
+  event.preventDefault();
+  axios({
+    method: 'GET',
+    url:'https://i383988.hera.fhict.nl/database.php?get=user', //
+    config: {headers:{'Content-Type': 'multipart/form-data'}}
+  }).then(function(response){
+    let arruser =  [];
+    if (response.data.error) {
+      console.log("error");
+      setHome("error lol");
+    } else {
+      arruser.push(response.data);
+      setUser(arruser);
+      console.log(response.data);
+    }})
+ }
+ const Get = event => {
+  event.preventDefault();
+  axios({
+    method: 'GET',
+    url:'https://i383988.hera.fhict.nl/database.php?get=user', //
+    config: {headers:{'Content-Type': 'multipart/form-data'}}
+  }).then(response => response.data).then((data) =>{
+     for(let i = 0; i<data.length; i++){
+         users.push(data[i]);
+     }
+     console.log("data ="+ data);
+     console.log("data2 ="+ users);
+     console.log("data3 ="+ JSON.stringify(users[0]));
+     console.log("data4 ="+ JSON.stringify(users[0].firstname));
+     setFirstname(JSON.stringify(users[0].firstname));
   })
-  } catch(error){
-    console.log(error)
-  }
-}
+ }
   const handleSubmit = event => {
-    // const blog = { title, body, author };
-   setArr({"f_name":f_name,"l_name":l_name,"e_mail":e_mail,"password":password,"phone_number":phone_number,"address_id":address_id});
-   postArr(event, arr);
    event.preventDefault();
+
+   let formData = new FormData();
+   setArr({"f_name":f_name,"l_name":l_name,"e_mail":e_mail,"password":password,"phone_number":phone_number,"address_id":address_id});
+   formData.append('f_name', f_name);
+   formData.append('l_name',l_name);
+   console.log(f_name + l_name);
+   axios({
+     method: 'POST',
+     url:'https://i383988.hera.fhict.nl/database.php?',
+     data: formData,
+     config: {headers:{'Content-Type': 'multipart/form-data'}}
+   }).then(function(response){
+     console.log('Tried get');
+   })
   }
   return (
     <div className="register">
@@ -168,12 +199,10 @@ async function postArr(event, arr){
                     
                   </div>
                   <input className="col-lg-2" type="submit" onClick={handleSubmit} value="Submit" />
-                  <button className="button" onClick={handleSubmit}>button</button>
+                  <input className="col-lg-2" type="submit" onClick={Get} value="Get" />
               </div>
-
+              {firstname}
             </form>
-
-
           </div>
         </div>
       </div>
