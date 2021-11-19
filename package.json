@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "This repo holds code for our PRO_EP project",
   "dependencies": {
+    "@material-ui/core": "^4.12.3",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
