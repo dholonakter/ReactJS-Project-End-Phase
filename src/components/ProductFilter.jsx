@@ -7,7 +7,10 @@ class ProductFilter{
 	constructor(){
 		this.productList = [];
 		this.createProduct(1, 1, 1, "A book", 35, 1);
-		this.createProduct(2, 2, 2, "A 2nd book", 59.95, 2);
+		this.createProduct(3, 2, 3, "A book 2 ", 35, 1);
+		this.createProduct(4, 1, 1, "A book 3", 35, 1);
+		this.createProduct(5, 3, 2, "A book 4", 35, 2);
+		this.createProduct(2, 2, 2, "A 5nd book", 59.95, 2);
 		
 	}
 	
