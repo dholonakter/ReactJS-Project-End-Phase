@@ -1,8 +1,13 @@
 import React from "react";
+import Navigation from "../components/Navigation"
+import Footer from "../components/Footer"
 
 function About() {
   return (
     <div className="about">
+        <div>
+        <Navigation/>    
+      </div>
       <div className="container">
         <div className="row align-items-center my-5">
           <div className="col-lg-7">
@@ -23,7 +28,11 @@ function About() {
           </div>
         </div>
       </div>
-    </div>
+      <div> 
+        <Footer/>
+      </div>
+    </div>  
+    
   );
 }
 

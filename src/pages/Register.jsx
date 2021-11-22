@@ -5,6 +5,8 @@ import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
 import { useState } from "react";
+import Navigation from "../components/Navigation"
+import Footer from "../components/Footer"
 //import ReactDOM from "react-dom";
 
 function Register() {
@@ -24,9 +26,11 @@ function Register() {
 
 
   const handleSubmit = event => {
-    //event.preventDefault();
+    event.preventDefault();
     let formData = new FormData();
     setArr({"f_name":f_name,"l_name":l_name,"phone":phone,"email":email,"password":password,"street":street,"statee":statee,"post":post,"country":country});
+    console.log(f_name + ", "+ l_name + ", "+ phone + ", "+ email + ", "+ password + ", "+ street + ", "+ statee + ", "+ post + ", "+ country);
+    formData.append('register_user', "registering");
     formData.append('f_name', f_name);
     formData.append('l_name',l_name);
     formData.append('phone',phone);
@@ -57,7 +61,7 @@ function Register() {
       if(valid == 1){
         axios({
           method: 'POST',
-          url:'https://i383988.hera.fhict.nl/registerUser/registerUser.php?',
+          url:'https://i383988.hera.fhict.nl/database.php?',
           data: formData,
           config: {headers:{'Content-Type': 'multipart/form-data'}}
         }).then(function(response){
@@ -73,7 +77,12 @@ function Register() {
     
 
   return (
+    <div className="app">   
+     <div>
+        <Navigation/>    
+      </div>
     <div className="register">
+  
       <div className="container">
         <div className="row align-items-center my-5">
           <div className="col-lg-2">
@@ -275,10 +284,12 @@ function Register() {
               </div>
 
             </form>
-
-
           </div>
         </div>
+      </div>
+    </div>
+    <div> 
+        <Footer/>
       </div>
     </div>
   );

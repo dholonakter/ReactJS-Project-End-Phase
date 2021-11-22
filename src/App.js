@@ -5,58 +5,30 @@ import Filter from "./pages/Filter";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import About from "./pages/About";
-import axios from 'axios'
+import Profile from "./pages/Profile";
+import axios from 'axios';
+import {store, useGlobalState} from 'state-pool';
 
 function App() {
-  const [name, setName] = useState("")
-  const [home, setHome]= useState("")
-  // this useEffect function is what GETS the data which is being posted in the database.php file with $_POST
-  useEffect(()=>{
-    axios.get("https://i383988.hera.fhict.nl/database.php").then(function(response){
-      setHome(response.data);
-    })
-  }, [])
+  const currentUser = store.getState("currentUser");
+  console.log(currentUser);
 
-  //these post dont work yet so you can ignore them
-  async function postName(e){
-    e.preventDefault()
-    try{
-      await axios.post("https://i383988.hera.fhict.nl/database.php",{
-        name
-      })
-    } catch(error){
-      console.log(error)
-    }
-  }
-  async function post(e){
-    e.preventDefault()
-    const Data = new FormData();
-    Data.append('submit', 'works');
-    //try{
-      await axios.post('https://i383988.hera.fhict.nl/database.php', Data, {
-        headers: {
-          'content-type': 'multipart/form-data'
-        }
-    })
-    //} catch(error){
-    //  console.log(error)
-    //}
-  }
+  // this useEffect function is what GETS the data which is being posted in the database.php file with $_POST
+  // useEffect(()=>{
+  //   axios.get("https://i383988.hera.fhict.nl/database.php").then(function(response){
+  //     setHome(response.data);
+  //   })
+  // }, [])
+
   return (
     <div className="App">
-      <form onSubmit={postName}> 
-        <input type="text" value={name} onChange={(e)=>setName(e.target.value)}/>
-        <button type="submit" onclick={postName}> Send Name</button>
-        <button  onclick={post}> Send Name</button>
-        </form>
-        {home}
       <Router>
         <Switch>
-          <Route exact path="/"><Home /></Route>
-		  <Route exact path="/filter"><Filter /></Route>
+      <Route exact path="/"><Home /></Route>
 		  <Route exact path="/register"><Register /></Route>
 		  <Route exact path="/login"><Login /></Route>
 		  <Route exact path="/about"><About /></Route>
+      <Route exact path="/profile"><Profile /></Route>
         </Switch>
       </Router>
     </div>
