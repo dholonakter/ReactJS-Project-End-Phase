@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
+import Filter from "./pages/Filter";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import About from "./pages/About";
