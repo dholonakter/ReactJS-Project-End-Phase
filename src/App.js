@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import About from "./pages/About";
+import Chat from "./pages/Chat";
 import axios from 'axios'
 
 function App() {
@@ -43,11 +44,11 @@ function App() {
   }
   return (
     <div className="App">
-      <form onSubmit={postName}> 
+      {/* <form onSubmit={postName}> 
         <input type="text" value={name} onChange={(e)=>setName(e.target.value)}/>
         <button type="submit" onclick={postName}> Send Name</button>
         <button  onclick={post}> Send Name</button>
-        </form>
+        </form> */}
         {home}
       <Router>
         <Switch>
@@ -55,6 +56,7 @@ function App() {
 		  <Route exact path="/register"><Register /></Route>
 		  <Route exact path="/login"><Login /></Route>
 		  <Route exact path="/about"><About /></Route>
+      <Route exact path="/chat"><Chat /></Route>
         </Switch>
       </Router>
     </div>
