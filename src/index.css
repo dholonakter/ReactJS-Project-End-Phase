@@ -11,3 +11,38 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.prod-search {
+	width: 100%;
+}
+
+.prod-search-result {	
+	float:left; 
+	width: 80%;
+}
+
+.prod-search-filter {
+	float:right;
+}
+
+.prod-search-bottom {
+	clear:both;
+}
+
+.prod-search-price {
+	margin-top: 50px;
+	margin-bottom: 50px;
+	margin-left: 10px;
+}
+
+.prod-search-name {
+	margin-top: 10px;
+	margin-bottom: 50px;
+	margin-left: 10px;
+}
+
+.prod-search-cat {
+	margin-top: 50px;
+	margin-bottom: 50px;
+	margin-left: 10px;
+}
