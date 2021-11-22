@@ -32,6 +32,7 @@ function App() {
 		  <Route exact path="/login"><Login /></Route>
 		  <Route exact path="/about"><About /></Route>
       <Route exact path="/profile"><Profile /></Route>
+      <Route exact path="/filter"><Filter/></Route>
       <Route exact path="/all" component={AllProducts} />
         <Route exact path="/add" component={AddProduct} />
         <Route exact path="/edit/:id" component={EditProduct} />
