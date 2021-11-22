@@ -3,17 +3,19 @@ import axios from 'axios';
 import TextFields from '@material-ui/core/TextField';
 import {store, useGlobalState} from 'state-pool';
 import Buttons from '@material-ui/core/Button';
-import Navigation from "../components/Navigation"
-import Footer from "../components/Footer"
+import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
+import { deepPurple } from "@material-ui/core/colors";
 
 store.setState("currentUser", null);
+store.setState("navigation", "/Login");
 
 function Login() {
   const [currentUser, setCurrentUser] = useGlobalState("currentUser");
+  const [navigation, setNav] = useGlobalState("navigation");
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
-
   const handleLogin = event => {
     event.preventDefault();    
     let formData = new FormData();
@@ -29,7 +31,9 @@ function Login() {
       if(response.data.id){
         console.log(response.data);
         setCurrentUser(response.data);
+        setNav("/Profile");
         alert("Login Successful");
+        document.querySelector("#home_nav").click();
       }else{
         alert("Incorrect email or password");
       }
@@ -44,7 +48,7 @@ function Login() {
       <div className="container">
         <div className="row align-items-center my-5">
           
-          <div className="col-lg-5">
+          <div className="col-lg-5" style={{margin: 'auto'}}>
             <h1 className="font-weight-light">Login</h1>
 
            <form>
@@ -67,9 +71,12 @@ function Login() {
                         <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
                     </div>
                 </div>
-                <Buttons className="col-lg-2" variant="contained" color="primary" onClick={handleLogin}>Submit</Buttons>
-                <p className="forgot-password text-right">
-                    Forgot <a href="/">password?</a>
+                <Buttons className="col-lg-2" variant="contained" color="primary"onClick={handleLogin}>Submit</Buttons>
+                <p className="register-user text-right" style={{paddingRight: '40px'}}>
+                  <a href="/register">Register</a>
+                </p>
+                <p className="forgot-password text-right" style={{paddingRight: '40px'}}>
+                    Forgot <a href="/">Password?</a>
                 </p>
             </form>
           </div>

@@ -1,17 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
-import { useState } from "react";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import {store, useGlobalState} from 'state-pool';
-//import ReactDOM from "react-dom";
 
-function Register() {
+
+function Profile() {
+
   const currentUser = store.getState("currentUser", {default: null});
-  const [f_name, setF_name] = useState('');
+  const [firstname, setFirstname] = useState('');
   const [l_name, setL_name] = useState('');
   const [phone, setPhone] = useState('');
 
@@ -23,25 +23,41 @@ function Register() {
   const [statee, setStatee] = useState('');
   const [post, setPost] = useState('');
   const [country, setCountry] = useState('');
-  const [arr, setArr]= useState('');
 
 
-  const handleProfile = event => {
-    event.preventDefault();
-    setF_name(currentUser.value.firstname);
-    setL_name(currentUser.value.lastname);
-    setPhone(currentUser.value.phone_number);
-    setEmail(currentUser.value.email);
-    console.log(currentUser.value);
+  function handleProfile(){    
+    if(currentUser.value !== null){
+      axios({
+        method: 'GET',
+        url:"https://i383988.hera.fhict.nl/database.php?get_address="+currentUser.value.address_id,
+        config: {headers:{'Content-Type': 'multipart/form-data'}}
+      }).then(function(response){
+        setStreet(JSON.stringify(response.data.street_name));
+        setStatee(JSON.stringify(response.data.state));
+        setPost(JSON.stringify(response.data.postal_code));
+        setCountry(JSON.stringify(response.data.country));
+      });
+      setFirstname(currentUser.value.firstname);
+      setL_name(currentUser.value.lastname);
+      setPhone(currentUser.value.phone_number);
+      setEmail(currentUser.value.email_address);
+      console.log(currentUser.value);
+    }else{
+      document.querySelector("#home_nav").click();
+    }
+  
   }
-    
+
+  useEffect(()=>{
+    handleProfile();
+  }, [])
 
   return (
-    <div onLoad={()=>this.handleProfile()} className="app">   
+    <div className="app">   
      <div>
         <Navigation/>     
       </div>
-    <div className="profile">
+    <div  className="profile">
   
       <div className="container">
         <div className="row align-items-center my-5">
@@ -52,107 +68,93 @@ function Register() {
             
               <div className="row">
                 
-              <div className="col-lg-10"><center>
-                <Typography className="font-weight-light" variant="h2">Profile</Typography></center>
+              <div className="col-lg-12"><center>
+                <Typography className="font-weight-light col-lg-12 text-right" variant="h3">Profile</Typography></center>
                 </div>
               </div>
             
     
             <form>
               <div className="row">
-                <Typography className="font-weight-light col-lg-12" variant="h4">Personal Information</Typography>
+                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">Personal Information</Typography>
               </div>
 
               <p></p>
               
               <div className="row">
                   <div className="col-lg-1"></div>
-                  <Typography className="font-weight-light col-lg-12" variant="h6">{f_name}</Typography>
+                  <Typography className="font-weight-light col-lg-12 text-right" variant="h7">{firstname}</Typography>
               </div>
 
               <p></p>
 
               <div className="row">
                   <div className="col-lg-1"></div>
-                  <Typography className="font-weight-light col-lg-12" variant="h6">{l_name}</Typography>
+                  <Typography className="font-weight-light col-lg-12 text-right" variant="h7">{l_name}</Typography>
               </div>
 
               <p></p>
               
               <div className="row">
                   <div className="col-lg-1"></div>
-                  <Typography className="font-weight-light col-lg-12" variant="h6">{phone}</Typography>
+                  <Typography className="font-weight-light col-lg-12 text-right" variant="h7">{phone}</Typography>
               </div>
 
               <p></p>
 
               <div className="row">
-                <Typography className="font-weight-light col-lg-12" variant="h4">Account Information</Typography>
+                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">Account Information</Typography>
               </div>
               
               <p></p>
 
               <div className="row">
                   <div className="col-lg-1"></div>
-                  <Typography className="font-weight-light col-lg-12" variant="h6">{email}</Typography>
+                  <Typography className="font-weight-light col-lg-12 text-right" variant="h7">{email}</Typography>
               </div>
 
               <p></p>
 
               <div className="row">
                   <div className="col-lg-1"></div>
-                  <Typography className="font-weight-light col-lg-12" variant="h6">{f_name}</Typography>
+                  <Typography className="font-weight-light col-lg-12 text-right" variant="h7">***********</Typography>
+              </div>
+
+              <p></p>
+
+              <div className="row">
+                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">Address</Typography>
               </div>
 
               <p></p>
 
               <div className="row">
                   <div className="col-lg-1"></div>
-                  <Typography className="font-weight-light col-lg-12" variant="h6">Change Password</Typography>
-              </div>
-
-              <p></p>
-
-              <div className="row">
-                <Typography className="font-weight-light col-lg-12" variant="h4">Address</Typography>
+                  <Typography className="font-weight-light col-lg-12 text-right" variant="h7">{street}</Typography>
               </div>
 
               <p></p>
 
               <div className="row">
                   <div className="col-lg-1"></div>
-                  <Typography className="font-weight-light col-lg-12" variant="h6">{street}</Typography>
+                  <Typography className="font-weight-light col-lg-12 text-right" variant="h7">{statee}</Typography>
               </div>
 
               <p></p>
 
               <div className="row">
                   <div className="col-lg-1"></div>
-                  <Typography className="font-weight-light col-lg-12" variant="h6">{statee}</Typography>
+                  <Typography className="font-weight-light col-lg-12 text-right" variant="h7">{post}</Typography>
               </div>
 
               <p></p>
 
               <div className="row">
                   <div className="col-lg-1"></div>
-                  <Typography className="font-weight-light col-lg-12" variant="h6">{post}</Typography>
+                  <Typography className="font-weight-light col-lg-12 text-right" variant="h7">{country}</Typography>
               </div>
 
               <p></p>
-
-              <div className="row">
-                  <div className="col-lg-1"></div>
-                  <Typography className="font-weight-light col-lg-12" variant="h6">{country}</Typography>
-              </div>
-
-              <p></p>
-
-              <div className="row">
-                  <div className="col-lg-10">
-                    
-                  </div>
-                  <Buttons className="col-lg-2" variant="contained" color="primary" onClick={handleProfile}>Register</Buttons>
-              </div>
 
             </form>
           </div>
@@ -168,4 +170,4 @@ function Register() {
 
 //ReactDOM.render(<Register />, document.getElementById('root'));
 
-export default Register;
+export default Profile;

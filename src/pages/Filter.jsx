@@ -162,7 +162,10 @@ class Filter extends React.Component {
   render(){	
   
   return (
-    <div className="filter">	  
+    <div className="filter">	 
+	<div>
+        <Navigation/>    
+    </div> 
       <div className="container">
 	    <div className="col-xs-8">
 		  <h1> Search products </h1>

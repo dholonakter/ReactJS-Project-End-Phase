@@ -49,7 +49,7 @@ function Register() {
       
       if(password.length >= 8 && (new RegExp(/^((([0-9])+([a-z]))|(([a-z])+([0-9])))/, 'i')).test(password)){
 
-        if(password != c_password){
+        if(password !== c_password){
           valid = 0;
           alert("Password and confirm password needs to be the same!");
         }
@@ -254,7 +254,7 @@ function Register() {
                   <input className="col-lg-8" type="text" name="post" value={post} onChange={(e) => setPost(e.target.value)}/> */}
                   <div className="col-lg-1"></div>
                   <TextFields required
-                  className="col-lg-11" variant="outlined" label="Post COde" type="text" name="post" value={post} onChange={(e) => setPost(e.target.value)}
+                  className="col-lg-11" variant="outlined" label="Post Code" type="text" name="post" value={post} onChange={(e) => setPost(e.target.value)}
                   />
               </div>
 

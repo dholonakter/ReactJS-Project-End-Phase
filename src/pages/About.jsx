@@ -20,10 +20,13 @@ function About() {
           <div className="col-lg-5">
             <h1 className="font-weight-light">About</h1>
             <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book.
+              FHICT is an online marketplace where fontys students can buy and
+              sell new and second-hand products which are used for educational
+              purposes. Products like notes, books and bikes are often hard to 
+              get rid and at the same time highly demanded by students. 
+              
+              We hope to make this trade connection between students easier
+              with the use of our website FHICTrade.
             </p>
           </div>
         </div>
