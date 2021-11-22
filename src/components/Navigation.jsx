@@ -1,7 +1,22 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import {store, useGlobalState} from 'state-pool';
+import Buttons from '@material-ui/core/Button';
+
+
 
 function Navigation(props) {
+  const currentUser = store.getState("currentUser", {default: null});
+  
+  const handleGlobal = event => {
+  event.preventDefault();
+  console.log(currentUser.value.firstname);
+  console.log(currentUser.value);
+}
+
+const handleNavigation = event => {
+  
+}
   return (
     <div className="navigation">
       <nav className="navbar navbar-expand navbar-dark bg-dark">
@@ -9,8 +24,8 @@ function Navigation(props) {
           <Link className="navbar-brand" to="/">
             FHICTrade
           </Link>
-
           <div>
+          <Buttons className="col-lg-2" variant="contained" color="primary" onClick={handleGlobal}>GetGlobal</Buttons>
             <ul className="navbar-nav ml-auto"> 
             <li
                 className={`nav-item  ${
