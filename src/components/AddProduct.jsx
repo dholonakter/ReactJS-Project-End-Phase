@@ -2,6 +2,8 @@ import react, { useState } from 'react';
 import { FormGroup, FormControl, InputLabel, Input, Button, makeStyles, Typography } from '@material-ui/core';
 import { addProduct } from '../Service/api';
 import { useHistory } from 'react-router-dom';
+import NewNavigation from "../components/NewNavigation";
+import Footer from "../components/Footer";
 
 const initialValue = {
     name: '',
@@ -36,6 +38,10 @@ const AddProduct = () => {
     }
 
     return (
+        <div className="addproduct">
+        <div>
+        <NewNavigation/>    
+       </div>
         <FormGroup className={classes.container}>
             <Typography variant="h4">Add Product</Typography>
             <FormControl>
@@ -54,6 +60,8 @@ const AddProduct = () => {
                 <Button variant="contained" color="primary" onClick={() => addUserDetails()}>Add Product</Button>
             </FormControl>
         </FormGroup>
+        <Footer/>
+        </div>
     )
 }
 
