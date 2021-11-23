@@ -1,20 +1,6 @@
 {
   "products": [
     {
-      "name": "book",
-      "userid": "1",
-      "description": "good product",
-      "price": "35 euro",
-      "id": 3
-    },
-    {
-      "name": "laptop",
-      "userid": "1",
-      "description": "good product",
-      "price": "35 euro",
-      "id": 3
-    },
-    {
       "name": "others",
       "userid": "1",
       "description": "good product",

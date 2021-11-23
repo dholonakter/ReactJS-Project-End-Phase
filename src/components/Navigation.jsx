@@ -4,7 +4,6 @@ import {store, useGlobalState} from 'state-pool';
 import Buttons from '@material-ui/core/Button';
 
 
-
 function Navigation(props) {
   const currentUser = store.getState("currentUser", {default: null});
   

@@ -11,6 +11,8 @@ import {store, useGlobalState} from 'state-pool';
 import AddProduct from "./components/AddProduct";
 import EditProduct from "./components/EditProdcut";
 import AllProducts  from "./components/AllProducts";
+import NewNavigation from "./components/NewNavigation";
+import NewHome from "./pages/NewHome";
 
 function App() {
   const currentUser = store.getState("currentUser");
@@ -28,6 +30,7 @@ function App() {
       <Router>
         <Switch>
       <Route exact path="/"><Home /></Route>
+      <Route exact path="/newhome"><NewHome /></Route>
 		  <Route exact path="/register"><Register /></Route>
 		  <Route exact path="/login"><Login /></Route>
 		  <Route exact path="/about"><About /></Route>
