@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {Typography, TextField, Button, Slider, Checkbox, FormGroup, FormControlLabel} from '@material-ui/core';
 
-import Navigation from "../components/Navigation"
+import NewNavigation from "../components/NewNavigation"
 import Footer from "../components/Footer"
 
 class Filter extends React.Component {
@@ -164,7 +164,7 @@ class Filter extends React.Component {
   return (
     <div className="filter">	 
 	<div>
-        <Navigation/>    
+        <NewNavigation/>    
     </div> 
       <div className="container">
 	    <div className="col-xs-8">

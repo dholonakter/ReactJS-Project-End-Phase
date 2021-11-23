@@ -3,7 +3,7 @@ import axios from 'axios';
 import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
-import Navigation from "../components/Navigation";
+import NewNavigation from "../components/NewNavigation";
 import Footer from "../components/Footer";
 import {store, useGlobalState} from 'state-pool';
 
@@ -55,7 +55,7 @@ function Profile() {
   return (
     <div className="app">   
      <div>
-        <Navigation/>     
+        <NewNavigation/>     
       </div>
     <div  className="profile">
   
