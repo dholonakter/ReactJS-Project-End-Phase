@@ -23,11 +23,18 @@ class Filter extends React.Component {
 		  id: 2,
 		  label: "Accessories",
 		},		
+		{
+		  id: 3,
+		  label: "Bicycles",
+		},		
 		],
 		bookSelected: true,
 		accSelected: true,
-		priceValue: 100,
-		sliderValue: 500,
+		bikeSelected: true,
+		//priceValue: 100,
+		//sliderValue: 500,
+		priceValue: [0, 1000],
+		sliderValue: [0, 1000],
 		marks:[
 		{
 			value: 0,
@@ -67,6 +74,7 @@ class Filter extends React.Component {
 		let nameValue = this.state.nameValue;
 		let categories = this.state.categories;
 		let priceValue = this.state.priceValue;
+		console.log(priceValue);
 		
 		for( let product of productList) {
 		  let priceCheck = false;
@@ -79,11 +87,14 @@ class Filter extends React.Component {
 		    }else if(product.category_id == 2 && this.state.accSelected){
 			  catCheck = true;
 			}
+			else if(product.category_id == 3 && this.state.bikeSelected){
+			  catCheck = true;
+			}
 		  }
-		  if(product.product_description == nameValue || nameValue == ""){
+		  if(product.product_description.toLowerCase().indexOf(nameValue.toLowerCase()) == 0 || nameValue == ""){
 				nameCheck = true;
 			}
-		  if(product.product_price <= priceValue){
+		  if(product.product_price >= priceValue[0] && product.product_price <= priceValue[1]){
 				priceCheck = true;
 			}
           if(priceCheck && catCheck && nameCheck){
@@ -96,25 +107,44 @@ class Filter extends React.Component {
 	
   handleTextChange(event){
 	let textValue = event.target.value;
-    this.setState({ nameValue: textValue });
-	console.log(textValue);
+    this.setState({ nameValue: textValue }, () => {
+      this.handleFilter();
+    });
   }	
 	
   handleCheckChange(event){
     switch(event.target.name){
 	  case "Books":
-	    this.setState({ bookSelected: event.target.checked });
+	    this.setState({ bookSelected: event.target.checked }, () => {
+          this.handleFilter();
+		});
 	    break;
 	  case "Accessories": 
-	    this.setState({ accSelected: event.target.checked })
+	    this.setState({ accSelected: event.target.checked }, () => {
+          this.handleFilter();
+        });
 	    break;
-	}
+	  case "Bicycles": 
+	    this.setState({ bikeSelected: event.target.checked }, () => {
+          this.handleFilter();
+        });
+	    break;
+	}	
   }
 	
   handleSlideChange(event, value){
-	let scaledValue = this.calculateValue(value);
-	this.setState({ priceValue: scaledValue });
+	//let newValue = [];
+    let lowerValue = value[0];
+    let	upperValue = value[1];
+	console.log(upperValue);
+	console.log(lowerValue);
+	lowerValue = this.calculateValue(lowerValue);
+	upperValue = this.calculateValue(upperValue);
+	let newValue = [lowerValue, upperValue];
+	//let scaledValue = this.calculateValue(value);
+	this.setState({ priceValue: newValue });
 	this.setState({ sliderValue: value });
+	this.handleFilter();
   }
   
   valueLabelFormat(value){ // Not using the calculateValue function here - It causes an error as it doesn't get defined properly.
@@ -131,7 +161,7 @@ class Filter extends React.Component {
   }
   
   calculateValue(value){
-	let newValue = value; 
+	let newValue = value;
 	if(value < 500){
 		newValue = value / 5;
 	}else{
@@ -205,8 +235,9 @@ class Filter extends React.Component {
 			    <Slider
 				  value={this.state.sliderValue}
 				  defaultValue={100}
-				  aria-label="Price slider"
-				  getAriaValueText={this.valueLabelFormat}
+				  //aria-label="Price slider"
+				  getAriaLabel={() => 'Temperature range'}
+				  //getAriaValueText={this.valueLabelFormat}
 				  valueLabelFormat={this.valueLabelFormat}
 				  step={20}
 				  min={0}
@@ -226,6 +257,10 @@ class Filter extends React.Component {
 				    control={
 					  <Checkbox checked={this.state.accSelected} onChange={this.handleCheckChange} name="Accessories"/>
 				    } label="Accessories" />
+					<FormControlLabel 
+				    control={
+					  <Checkbox checked={this.state.bikeSelected} onChange={this.handleCheckChange} name="Bicycles"/>
+				    } label="Bicycles" />
 				</FormGroup>
 			  </div>
 			  <div>
