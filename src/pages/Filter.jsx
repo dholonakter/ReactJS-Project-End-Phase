@@ -3,8 +3,12 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {Typography, TextField, Button, Slider, Checkbox, FormGroup, FormControlLabel} from '@material-ui/core';
 
-import NewNavigation from "../components/NewNavigation"
+import Banner from "../components/Banner";
 import Footer from "../components/Footer"
+import ProductsRow from "../components/ProductsRow";
+import bikeImg from "../assests/images/bike.jpg"
+import bookImg from "../assests/images/book.jpg"
+import NewNavigation from "../components/NewNavigation";
 
 class Filter extends React.Component {
 	
@@ -48,7 +52,37 @@ class Filter extends React.Component {
 			value: 1000,
 			label: "€1000",
 		},
-		]
+		],
+		bikesData: [
+    {
+      img: bikeImg,
+      title: "Bike 1",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
+      price: 50,
+      rating: 4
+    },
+    {
+      img: bikeImg,
+      title: "Bike 2",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
+      price: 50,
+      rating: 4
+    },
+    {
+      img: bikeImg,
+      title: "Bike 3",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
+      price: 50,
+      rating: 4
+    },
+    {
+      img: bikeImg,
+      title: "Bike 4",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
+      price: 50,
+      rating: 4
+    },
+  ],
 	  };
 	  // Fixes undefined error when setting the state
 	  this.handleFilter = this.handleFilter.bind(this);
@@ -194,7 +228,7 @@ class Filter extends React.Component {
   return (
     <div className="filter">	 
 	<div>
-        <NewNavigation/>    
+        <NewNavigation/>
     </div> 
       <div className="container">
 	    <div className="col-xs-8">
@@ -270,6 +304,8 @@ class Filter extends React.Component {
             </div>
           </div>
           <div className="prod-search-bottom">
+		    
+        <ProductsRow sectionTitle="Products" data={this.state.bikesData}/>
 		  </div>		  
 		</div>
 		
