@@ -8,9 +8,11 @@ import Footer from "../components/Footer";
 import {store, useGlobalState} from 'state-pool';
 
 
-function Profile() {
+function Profile() {  
+  const [currentUser, setCurrentUser] = useGlobalState("currentUser");
+  const [navigation, setNav] = useGlobalState("navigation");
+  const user = store.getState("currentUser");
 
-  const currentUser = store.getState("currentUser", {default: null});
   const [firstname, setFirstname] = useState('');
   const [l_name, setL_name] = useState('');
   const [phone, setPhone] = useState('');
@@ -25,11 +27,11 @@ function Profile() {
   const [country, setCountry] = useState('');
 
 
-  function handleProfile(){    
-    if(currentUser.value !== null){
+  function handleProfile(){  
+    if(user.value != null){
       axios({
         method: 'GET',
-        url:"https://i383988.hera.fhict.nl/database.php?get_address="+currentUser.value.address_id,
+        url:"https://i383988.hera.fhict.nl/database.php?get_address="+user.value.address_id,
         config: {headers:{'Content-Type': 'multipart/form-data'}}
       }).then(function(response){
         setStreet(JSON.stringify(response.data.street_name));
@@ -37,11 +39,11 @@ function Profile() {
         setPost(JSON.stringify(response.data.postal_code));
         setCountry(JSON.stringify(response.data.country));
       });
-      setFirstname(currentUser.value.firstname);
-      setL_name(currentUser.value.lastname);
-      setPhone(currentUser.value.phone_number);
-      setEmail(currentUser.value.email_address);
-      console.log(currentUser.value);
+      setFirstname(user.value.firstname);
+      setL_name(user.value.lastname);
+      setPhone(user.value.phone_number);
+      setEmail(user.value.email_address);
+      console.log(user.value);
     }else{
       document.querySelector("#home_nav").click();
     }
@@ -50,7 +52,37 @@ function Profile() {
 
   useEffect(()=>{
     handleProfile();
-  }, [])
+  }, []);
+
+  function setExpiration(){
+    let timestamp = new Date();
+    timestamp.setDate(timestamp.getDate());
+    timestamp.setHours(timestamp.getHours());
+    timestamp.setMinutes(timestamp.getMinutes());
+    timestamp.setSeconds(timestamp.getSeconds()+1);
+    return timestamp;
+  }
+
+  const handleLogout = event => {
+    event.preventDefault();
+    if(user.value !=null){
+      let formData = new FormData();
+      formData.append('logout_user', 'Signing out');
+      formData.append('user_id', user.value.id);
+      axios({
+        method: 'POST',
+        url:'https://i383988.hera.fhict.nl/database.php?',
+        data: formData,
+        config: {headers:{'Content-Type': 'multipart/form-data'}}
+      }).then(function(response){
+          setNav("/Login");
+          setCurrentUser("");
+          document.cookie="current_user= ; expires="+ setExpiration().toUTCString();
+          alert("Successfully logged out!");
+          document.querySelector("#home_nav").click();
+      });
+    }
+  }
 
   return (
     <div className="app">   
@@ -153,9 +185,13 @@ function Profile() {
                   <div className="col-lg-1"></div>
                   <Typography className="font-weight-light col-lg-12 text-right" variant="h7">{country}</Typography>
               </div>
-
+              <div className="row">
+                  <div className="col-lg-10">
+                    
+                  </div>
+                  <Buttons className="col-lg-2" variant="contained" color="primary" onClick={handleLogout}>Sign out</Buttons>
+              </div>
               <p></p>
-
             </form>
           </div>
         </div>
