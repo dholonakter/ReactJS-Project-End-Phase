@@ -7,8 +7,8 @@ import NewNavigation from "../components/NewNavigation";
 import Footer from "../components/Footer";
 import { deepPurple } from "@material-ui/core/colors";
 
-store.setState("currentUser", null);
-store.setState("navigation", "/Login");
+//store.setState("navigation", "/Login");
+
 
 function Login() {
   const [currentUser, setCurrentUser] = useGlobalState("currentUser");
@@ -16,8 +16,33 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
+  function getDateTime(){
+    let timestamp = new Date();
+    timestamp.setDate(timestamp.getDate());
+    timestamp.setHours(timestamp.getHours());
+    timestamp.setMinutes(timestamp.getMinutes());
+    timestamp.setSeconds(timestamp.getSeconds());
+    return timestamp;
+  }
+
+  function CreateSession(id){
+    let formData = new FormData();
+    formData.append('session', 'Create Session');
+    formData.append('user_id', id);
+    formData.append('timestamp',getDateTime());
+    axios({
+      method: 'POST',
+      url:'https://i383988.hera.fhict.nl/database.php?',
+      data: formData,
+      config: {headers:{'Content-Type': 'multipart/form-data'}}
+    }).then(function(response){
+       document.cookie="current_user="+id;
+    });
+  }
+
   const handleLogin = event => {
-    event.preventDefault();    
+    event.preventDefault(); 
+    let user_id;   
     let formData = new FormData();
     formData.append('login_user', 'logging in');
     formData.append('email', email);
@@ -32,13 +57,15 @@ function Login() {
         console.log(response.data);
         setCurrentUser(response.data);
         setNav("/Profile");
-        alert("Login Successful");
+        CreateSession(response.data.id);
+        alert("Login Successful");    
         document.querySelector("#home_nav").click();
       }else{
         alert("Incorrect email or password");
       }
     })
   }
+
 
   return (
     <div className="login">
