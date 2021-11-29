@@ -27,23 +27,22 @@ function App() {
   useEffect(()=>{ 
     console.log(document.cookie);
     let current_user;
-    axios.get("https://i383988.hera.fhict.nl/database.php?session").then(function(response){
-      current_user = response.data.user_id; 
-      console.log("trying to get session:"+response.data.user_id);
-      if(document.cookie == "current_user="+current_user){ 
-        console.log("trying to log");
-        axios({
-          method: 'GET',
-          url:"https://i383988.hera.fhict.nl/database.php?user_id="+current_user,
-          config: {headers:{'Content-Type': 'multipart/form-data'}}
-        }).then(function(response){
-          setCurrentUser(response.data);
-          setNav("/Profile");
-          console.log(response.data);
-          console.log(store.getState("currentUser"));
+    if(document.cookie!=""){
+      axios.get("https://i383988.hera.fhict.nl/database.php?session").then(function(response){
+          current_user = response.data.user_id; 
+          if(document.cookie == "current_user="+current_user){ 
+            console.log("trying to log");
+            axios({
+              method: 'GET',
+              url:"https://i383988.hera.fhict.nl/database.php?user_id="+current_user,
+              config: {headers:{'Content-Type': 'multipart/form-data'}}
+            }).then(function(response){
+              setCurrentUser(response.data);
+              setNav("/Profile");
+            });
+          }
         });
       }
-    });
   }, [])
 
   return (

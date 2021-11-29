@@ -25,6 +25,21 @@ function Login() {
     return timestamp;
   }
 
+  function CreateSession(id){
+    let formData = new FormData();
+    formData.append('session', 'Create Session');
+    formData.append('user_id', id);
+    formData.append('timestamp',getDateTime());
+    axios({
+      method: 'POST',
+      url:'https://i383988.hera.fhict.nl/database.php?',
+      data: formData,
+      config: {headers:{'Content-Type': 'multipart/form-data'}}
+    }).then(function(response){
+       document.cookie="current_user="+id;
+    });
+  }
+
   const handleLogin = event => {
     event.preventDefault(); 
     let user_id;   
@@ -40,21 +55,9 @@ function Login() {
     }).then(function(response){
       if(response.data.id){
         console.log(response.data);
-        user_id = response.data.id; 
         setCurrentUser(response.data);
         setNav("/Profile");
-        let formData = new FormData();
-        formData.append('session', 'Create Session');
-        formData.append('user_id',user_id);
-        formData.append('timestamp',getDateTime());
-        axios({
-          method: 'POST',
-          url:'https://i383988.hera.fhict.nl/database.php?',
-          data: formData,
-          config: {headers:{'Content-Type': 'multipart/form-data'}}
-        }).then(function(response){
-           document.cookie="current_user="+user_id;
-        });
+        CreateSession(response.data.id);
         alert("Login Successful");    
         document.querySelector("#home_nav").click();
       }else{
