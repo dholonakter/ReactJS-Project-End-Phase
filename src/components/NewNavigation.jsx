@@ -2,6 +2,7 @@ import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import { FaSearch } from "react-icons/fa"
 import {store, useGlobalState} from 'state-pool';
+import SearchBar from "../components/SearchBar";
 
 function NewNavigation(props) {
   const currentUser = store.getState("currentUser", {default: null});
@@ -9,18 +10,17 @@ function NewNavigation(props) {
   return (
     <div>
       <div className="bg-light">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light container ">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light container ">
           <Link id="home_nav" className="navbar-brand font-weight-bold" to="/newhome">
             FHICTrade
           </Link>
 
-          <div class="input-group mx-5">
-            <input type="text" class="form-control" placeholder="Search Product...." />
-            <span class="input-group-text bg-dark text-white" id="basic-addon1"><FaSearch /></span>
+		  <div className="input-group mx-5">
+            <SearchBar/>
           </div>
 
 
-          <ul class="navbar-nav ml-auto">
+          <ul className="navbar-nav ml-auto">
             <li className={`nav-item  ${props.location.pathname === "/login" ? "active" : ""}`} >
               <Link id="login_nav" className="nav-link font-weight-bold" to={currentNavigation.value}>
                {currentNavigation.value.replace("/", "")}

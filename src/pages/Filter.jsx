@@ -305,7 +305,7 @@ class Filter extends React.Component {
           </div>
           <div className="prod-search-bottom">
 		    
-        <ProductsRow sectionTitle="Products" data={this.state.bikesData}/>
+        <ProductsRow sectionTitle="Products" data={this.state.filteredProducts}/>
 		  </div>		  
 		</div>
 		
