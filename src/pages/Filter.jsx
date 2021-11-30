@@ -6,8 +6,6 @@ import {Typography, TextField, Button, Slider, Checkbox, FormGroup, FormControlL
 import Banner from "../components/Banner";
 import Footer from "../components/Footer"
 import ProductsRow from "../components/ProductsRow";
-import bikeImg from "../assests/images/bike.jpg"
-import bookImg from "../assests/images/book.jpg"
 import NewNavigation from "../components/NewNavigation";
 
 class Filter extends React.Component {
@@ -53,36 +51,6 @@ class Filter extends React.Component {
 			label: "€1000",
 		},
 		],
-		bikesData: [
-    {
-      img: bikeImg,
-      title: "Bike 1",
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
-      price: 50,
-      rating: 4
-    },
-    {
-      img: bikeImg,
-      title: "Bike 2",
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
-      price: 50,
-      rating: 4
-    },
-    {
-      img: bikeImg,
-      title: "Bike 3",
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
-      price: 50,
-      rating: 4
-    },
-    {
-      img: bikeImg,
-      title: "Bike 4",
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
-      price: 50,
-      rating: 4
-    },
-  ],
 	  };
 	  // Fixes undefined error when setting the state
 	  this.handleFilter = this.handleFilter.bind(this);
@@ -144,7 +112,7 @@ class Filter extends React.Component {
     this.setState({ nameValue: textValue }, () => {
       this.handleFilter();
     });
-  }	
+  }
 	
   handleCheckChange(event){
     switch(event.target.name){
@@ -235,24 +203,7 @@ class Filter extends React.Component {
 		  <h1> Search products </h1>
 		  <div className="prod-search">
             <div className="prod-search-result">
-		      <table className="table table-striped">
-		      <thead className="thead-light">
-			    <tr>
-			    <th>Name</th>
-			    <th>Price</th>
-			    <th>Category</th>
-				</tr>
-			  </thead>
-			  <tbody>
-			  {this.state.filteredProducts.map((pr, index) => (
-			    <tr key={index}>
-			      <td>{pr.product_description}</td>
-			      <td>{pr.product_price}</td>
-			  	  <td>{this.getCategoryName(pr.category_id)}</td>
-			    </tr>
-			  ))}
-			  </tbody>
-		    </table>
+			  <ProductsRow sectionTitle="Products" data={this.state.filteredProducts}/>
             </div>
             <div className="prod-search-filter">
 			  <div className="prod-search-name">
@@ -305,7 +256,7 @@ class Filter extends React.Component {
           </div>
           <div className="prod-search-bottom">
 		    
-        <ProductsRow sectionTitle="Products" data={this.state.filteredProducts}/>
+        
 		  </div>		  
 		</div>
 		

@@ -29,9 +29,8 @@ function ProductsRow({ sectionTitle, data }) {
 export default ProductsRow*/
 
 import React from 'react'
-import bikeImage from '../assests/images/bike.jpg'
 
-function ProductsRow({ sectionTitle, data }) {
+function ProductsRow({ sectionTitle, data }) {	
     return (
         <div className="container py-5">
             <h4>{sectionTitle}</h4>
@@ -39,7 +38,7 @@ function ProductsRow({ sectionTitle, data }) {
                 {data.map((item, idx) => (
                     <div className="col-md-3" key={idx}>
                         <div className="card" >
-                            <img src={item.img} className="card-img-top p-3" alt="..." />
+                            <img src={process.env.PUBLIC_URL + '/images/' + item.img_name + '.jpg'} className="card-img-top p-3" alt="..." />
                             <div className="card-body">
                                 <h5 className="card-title ">{item.title}</h5>
                                 <p className="card-text">{item.product_description}</p>
