@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import About from "./pages/About";
 import Chat from "./pages/Chat";
+import ChatMessage from "./pages/ChatMessage";
 import axios from 'axios'
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
 		  <Route exact path="/login"><Login /></Route>
 		  <Route exact path="/about"><About /></Route>
       <Route exact path="/chat"><Chat /></Route>
+      <Route exact path="/chatMessage"><ChatMessage /></Route>
         </Switch>
       </Router>
     </div>

@@ -2,6 +2,7 @@ import React from "react";
 import axios from 'axios';
 import { useState } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -89,7 +90,7 @@ function getData(){
 
 const chatList = getData();
 
-export default function StickyHeadTable() {
+export default function Chat() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -98,6 +99,16 @@ const users = [];
 const [firstname, setFirstname]=useState('');
 const [message, setMessage]=useState('');
 const [time, setTime]=useState('');
+
+const history = useHistory();
+function chatMessage(a){
+  alert(a);
+  history.push("/chatMessage?id="+a);
+}
+function alerting(a){
+  alert(a);
+  history.push("/login");
+}
 
 // const Get = event => {
 //   event.preventDefault();
@@ -177,7 +188,7 @@ const [time, setTime]=useState('');
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align}>
+                        <TableCell key={column.id} align={column.align} onClick={() => chatMessage(row.id)}>
                           {/* <Router>
   <Link to = 'https://google.com/'> */}
                           {column.format && typeof value === 'number'
