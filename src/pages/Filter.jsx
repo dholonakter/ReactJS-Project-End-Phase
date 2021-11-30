@@ -52,7 +52,7 @@ class Filter extends React.Component {
   }
 	
   componentDidMount(){
-	const url = 'https://i383988.hera.fhict.nl/searchProduct/searchProduct.php?';
+	const url = 'https://i383988.hera.fhict.nl/database.php?search_product';
 	axios.get(url).then(response => response.data)
 	.then((data) => {
 		this.setState({ products: data});
