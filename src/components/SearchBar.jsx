@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {TextField, ListItem, ListItemButton, ListItemText} from '@material-ui/core';
-import { FaSearch } from "react-icons/fa"
+import { Autocomplete } from '@material-ui/lab';
+import { FaSearch } from "react-icons/fa";
 
 class SearchBar extends React.Component {
 	constructor(props){
@@ -41,7 +42,7 @@ class SearchBar extends React.Component {
 	
 	handleTextChange(event){
 	  let textValue = event.target.value;
-	  //console.log(textValue);
+	  console.log(textValue);
 	  let filteredSearch = this.filterSearch(textValue);
 	  this.setState({ filteredProducts: filteredSearch });
     }	
@@ -49,9 +50,41 @@ class SearchBar extends React.Component {
     render(){	
   
       return (
-        <div className="input-group mx-5">
-            <input type="text" className="form-control" placeholder="Search Product...." onChange={this.handleTextChange}/>
-            <span className="input-group-text bg-dark text-white" id="basic-addon1"><FaSearch /></span>
+	    <div>
+	      <Autocomplete
+		    style={{ width: 300 }}
+			autoHighlight
+            freeSolo
+            id="search-bar"			
+            options={this.state.filteredProducts}
+			getOptionLabel={(option) => option.product_name.toString()}
+			renderOption={(option) => (
+              <React.Fragment>
+                <span
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    window.location.href = '#';
+                  }}
+                >
+				{option.product_name}
+                  <img src={process.env.PUBLIC_URL + '/images/' + option.img_name + '.jpg'} className="img-fluid w-50" alt="" />
+                </span>
+              </React.Fragment>
+            )}
+            renderInput={(params) => (
+              <TextField
+			      {...params}
+				  label="Search Product..."
+				  id="search-bar"
+				  size="small"
+				  onChange={this.handleTextChange}
+				  InputProps={{
+              ...params.InputProps,
+              type: 'search',
+            }}
+				/>
+            )}
+          />
         </div>
       );
 	}

@@ -1,5 +1,4 @@
 import React from 'react'
-//import bannerImg from "../assests/images/banner-img.jpg"
 
 function Banner() {
     return (
