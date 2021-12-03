@@ -27,7 +27,7 @@ class SearchBar extends React.Component {
 	  let filteredList = [];
 		for(let product of this.state.products){
 		  let nameCheck = false;
-		  if(product.product_description.toLowerCase().indexOf(text.toLowerCase()) == 0){
+		  if(product.product_description.toLowerCase().indexOf(text.toLowerCase()) != -1 && text != ""){
 			nameCheck = true;
 		  }
 		  else{
@@ -42,7 +42,6 @@ class SearchBar extends React.Component {
 	
 	handleTextChange(event){
 	  let textValue = event.target.value;
-	  console.log(textValue);
 	  let filteredSearch = this.filterSearch(textValue);
 	  this.setState({ filteredProducts: filteredSearch });
     }	
@@ -89,6 +88,5 @@ class SearchBar extends React.Component {
       );
 	}
 }
-
 
 export default SearchBar;

@@ -33,8 +33,6 @@ class Filter extends React.Component {
 		bookSelected: true,
 		accSelected: true,
 		bikeSelected: true,
-		//priceValue: 100,
-		//sliderValue: 500,
 		priceValue: [0, 1000],
 		sliderValue: [0, 1000],
 		marks:[
@@ -93,7 +91,7 @@ class Filter extends React.Component {
 			  catCheck = true;
 			}
 		  }
-		  if(product.product_description.toLowerCase().indexOf(nameValue.toLowerCase()) == 0 || nameValue == ""){
+		  if(product.product_description.toLowerCase().indexOf(nameValue.toLowerCase()) != -1 || nameValue == ""){
 				nameCheck = true;
 			}
 		  if(product.product_price >= priceValue[0] && product.product_price <= priceValue[1]){
@@ -135,7 +133,6 @@ class Filter extends React.Component {
   }
 	
   handleSlideChange(event, value){
-	//let newValue = [];
     let lowerValue = value[0];
     let	upperValue = value[1];
 	console.log(upperValue);
@@ -143,7 +140,6 @@ class Filter extends React.Component {
 	lowerValue = this.calculateValue(lowerValue);
 	upperValue = this.calculateValue(upperValue);
 	let newValue = [lowerValue, upperValue];
-	//let scaledValue = this.calculateValue(value);
 	this.setState({ priceValue: newValue });
 	this.setState({ sliderValue: value });
 	this.handleFilter();
@@ -249,20 +245,11 @@ class Filter extends React.Component {
 				</FormGroup>
 			  </div>
 			  <div>
-			  <Button className="col-lg-2" variant="contained" color="primary" onClick={this.handleFilter}>Search</Button>
 			  <Button className="col-lg-2" variant="contained" color="primary" onClick={this.handleReset}>Reset</Button>
 			  </div>
             </div>
-          </div>
-          <div className="prod-search-bottom">
-		    
-        
-		  </div>		  
-		</div>
-		
-      
-	  
-      <Footer />     
+          </div>  
+		</div> 
       </div>
     </div>	  
   );
@@ -270,4 +257,3 @@ class Filter extends React.Component {
 }
 
 export default Filter;
-
