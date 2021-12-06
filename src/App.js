@@ -21,6 +21,7 @@ import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
 import ProfileNavigation from "./components/ProfileNavigation";
 import { FaPhoneSlash } from "react-icons/fa";
+import SingleProductPage from "./pages/SingleProductPage";
 
 store.setState("currentUser", null);
 store.setState("navigation", "/Login");
@@ -106,6 +107,7 @@ function App() {
           <Route exact path="/add" component={AddProduct} />
           <Route exact path="/edit/:id" component={EditProduct} />
         </Switch>
+     <Route exact path="/SingleProductPage"><SingleProductPage/></Route>
       </Router>
     </div>
   );
