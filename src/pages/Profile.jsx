@@ -84,6 +84,10 @@ function Profile() {
     }
   }
 
+  const navigateUpdate = event =>{
+    window.location.href="https://i383988.hera.fhict.nl/updateinfo";
+  }
+
   return (
     <div className="app">   
      <div>
@@ -189,6 +193,7 @@ function Profile() {
                   <div className="col-lg-10">
                     
                   </div>
+                  <Buttons className="col-lg-2" variant="contained" color="primary" onClick={navigateUpdate}>Update User</Buttons>
                   <Buttons className="col-lg-2" variant="contained" color="primary" onClick={handleLogout}>Sign out</Buttons>
               </div>
               <p></p>
