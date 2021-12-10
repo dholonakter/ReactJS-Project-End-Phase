@@ -1,0 +1,32 @@
+{
+  "products": [
+    {
+      "name": "others",
+      "userid": "1",
+      "description": "good product",
+      "price": "35 euro",
+      "id": 3
+    },
+    {
+      "name": "Amazon",
+      "userid": "1",
+      "description": "good product",
+      "price": "35 euro",
+      "id": 3
+    },
+    {
+      "name": "book2",
+      "userid": "1",
+      "description": "good product",
+      "price": "35 euro",
+      "id": 3
+    },
+    {
+      "name": "book3",
+      "userid": "1",
+      "description": "good product",
+      "price": "35 euro",
+      "id": 3
+    }
+  ]
+}
