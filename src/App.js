@@ -50,7 +50,6 @@ function App() {
         <button type="submit" onclick={postName}> Send Name</button>
         <button  onclick={post}> Send Name</button>
         </form> */}
-        {home}
       <Router>
         <Switch>
           <Route exact path="/"><Home /></Route>
