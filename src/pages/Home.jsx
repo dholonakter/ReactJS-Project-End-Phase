@@ -1,6 +1,7 @@
 import React from "react";
 import Navigation from "../components/Navigation"
 import Footer from "../components/Footer"
+import {store, useGlobalState} from 'state-pool';
 
 function Home() {
   return (
@@ -19,7 +20,7 @@ function Home() {
           </div>
           <div className="col-lg-5">
             <h1 className="font-weight-light">Home</h1>
-			
+    
             <p>
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
