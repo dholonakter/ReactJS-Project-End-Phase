@@ -1,9 +1,9 @@
 import React from "react";
 import axios from 'axios';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -11,7 +11,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -54,111 +53,44 @@ const columns = [
   },
 ];
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-function createChatPreview(a, b, c){
-  return { a, b, c };
-}
-
-const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-];
-
-
-
-function getData(){
-
-  const chatData = [];
-
-  axios({
-    method: 'GET',
-    url:'https://i383988.hera.fhict.nl/chat/getChatList.php?', //
-    config: {headers:{'Content-Type': 'multipart/form-data'}}
-  }).then(response => response.data).then((data) =>{
-     for(let i = 0; i<data.length; i++){
-         chatData.push(data[i]);
-     }
-     
-  })
-  console.log(chatData);
-  return chatData;
-}
-
-const chatList = getData();
-
-
-
-
+var chatData;
+chatData = [];
 
 
 export default function ChatMessage() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const params = useParams();
 
-const users = [];
+  const passdata = useLocation();
 
-const [firstname, setFirstname]=useState('');
-const [message, setMessage]=useState('');
-const [time, setTime]=useState('');
-
-const history = useHistory();
-function chatMessage(a){
-  // alert("data1 ="+ JSON.stringify(params));
-  // console.log("data1 ="+ JSON.stringify(params));
-  // history.push("/chatMessage?id="+a);
+  function TEST(){
   
+    
+       return (<div>aaauluu</div>);
+    
+  }
+
+  function getData(a, b){
   
-  
+    axios({
+      method: 'GET',
+      url:'https://i383988.hera.fhict.nl/chat/getChat.php?id='+a+'&targetid='+b,
+      config: {headers:{'Content-Type': 'multipart/form-data'}}
+    }).then(response => response.data).then((data) =>{
+       chatData = [];
+       for(let i = 0; i<data.length; i++){
+         //alert(JSON.stringify(data[i]));
+           chatData.push(data[i]);
+           //console.log(chatData);
+       }
+       
+    })
+       return chatData;
+    
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // this.props.history.push({
-  //   pathname: '/chatMessage',
-  //     state: data // your data array of objects
-  // })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-}
-function alerting(a){
-  
-  
-  alert(params);
-  history.push("/login");
-}
+  const chatList = getData(passdata.state.id, passdata.state.targetid);
+  console.log(chatData);
+  console.log(passdata.state.chat);
+  //alert(JSON.stringify(chatList[0]));
 
 
   return (
@@ -167,6 +99,7 @@ function alerting(a){
 
 
     <div className="register">
+      <div className="register">
       <div className="container">
         <div className="row align-items-center my-5">
           <div className="col-lg-2">
@@ -177,22 +110,76 @@ function alerting(a){
               <div className="row">
                 
               <div className="col-lg-10"><center>
-                <Typography className="font-weight-light" variant="h2">Chat List</Typography></center>
+                <Typography className="font-weight-light" variant="h2">{passdata.state.name}</Typography></center>
                 </div>
               </div>
             
             <p></p>
 
             <form>
+            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <TableContainer>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  align={column.align}
+                  style={{ minWidth: column.minWidth }}
+                >
+                  {column.label}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {chatList
+              .map((row) => {
+                return (
+                  <TableRow hover tabIndex={-1} key={row.code} sx={{ height: 100 }}> 
+                    
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format && typeof value === 'number'
+                            ? column.format(value)
+                            : value}
+                        </TableCell>
+                      );
+                    })}
+                    
+                  </TableRow>
+                );
+              })}
 
 
-
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
             </form>
-            {/* <Buttons className="col-lg-2" variant="contained" color="primary" onClick={Get}>Get Chat</Buttons> */}
+            
+
           </div>
-          {/* {firstname} {message} {time} */}
+          <p></p>
+            <div className="row">
+<div className="row">
+    <TextFields required
+    className="col-lg-9" variant="outlined" label="Text" type="text" name="chatMessage"
+    />
+    <Buttons className="col-lg-3" variant="contained" color="primary" >Send</Buttons>
+</div>
+
+
+
+                </div>
+          
         </div>
       </div>
+      
+    </div>
     </div>
   );
 }
