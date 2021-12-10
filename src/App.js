@@ -6,8 +6,10 @@ import Register from "./pages/Register";
 import UpdateInfo from "./pages/UpdateInfo";
 import Login from "./pages/Login";
 import About from "./pages/About";
+import Chat from "./pages/Chat";
+import ChatMessage from "./pages/ChatMessage";
+import axios from 'axios'
 import Profile from "./pages/Profile";
-import axios from 'axios';
 import {store, useGlobalState} from 'state-pool';
 import AddProduct from "./components/AddProduct";
 import EditProduct from "./components/EditProdcut";
@@ -55,6 +57,8 @@ function App() {
 		  <Route exact path="/register"><Register /></Route>
 		  <Route exact path="/login"><Login /></Route>
 		  <Route exact path="/about"><About /></Route>
+      <Route exact path="/chat"><Chat /></Route>
+      <Route exact path="/chatMessage"><ChatMessage /></Route>
       <Route exact path="/profile"><Profile /></Route>
       <Route exact path="/updateinfo"><UpdateInfo /></Route>
       <Route exact path="/filter"><Filter/></Route>
