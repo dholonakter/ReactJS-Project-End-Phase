@@ -1,37 +1,81 @@
 import React from "react";
-import Navigation from "../components/Navigation"
+import Banner from "../components/Banner";
 import Footer from "../components/Footer"
-import {store, useGlobalState} from 'state-pool';
+import ProductsRow from "../components/ProductsRow";
+import Navigation from "../components/Navigation";
+
+const fakeData = {
+  bikesData: [
+    {
+      img_name: 'bike',
+      title: "Bike 1",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
+      price: 50,
+      rating: 4
+    },
+    {
+      img_name: 'bike',
+      title: "Bike 2",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
+      price: 50,
+      rating: 4
+    },
+    {
+      img_name: 'bike',
+      title: "Bike 3",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
+      price: 50,
+      rating: 4
+    },
+    {
+      img_name: 'bike',
+      title: "Bike 4",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
+      price: 50,
+      rating: 4
+    },
+  ],
+
+  booksData: [
+    {
+      img_name: 'book',
+      title: "Book 1",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
+      price: 50,
+      rating: 4
+    },
+    {
+      img_name: 'book',
+      title: "Book 2",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
+      price: 50,
+      rating: 4
+    },
+    {
+      img_name: 'book',
+      title: "Book 3",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto",
+      price: 50,
+      rating: 4
+    },
+    {
+      img_name: 'book',
+      title: "Book 4",
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut at labore ipsa dignissimos eveniet sequi iusto?",
+      price: 50,
+      rating: 4
+    },
+  ]
+}
 
 function Home() {
   return (
     <div className="home">
-	  <div>
-        <Navigation/>    
-      </div>
-      <div className="container">
-        <div className="row align-items-center my-5">
-          <div className="col-lg-7">
-            <img
-              className="img-fluid rounded mb-4 mb-lg-0"
-              src="http://placehold.it/900x400"
-              alt=""
-            />
-          </div>
-          <div className="col-lg-5">
-            <h1 className="font-weight-light">Home</h1>
-    
-            <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book.
-            </p>
-			<Footer/>
-          </div>
-        </div>
-      </div>
-    </div>	
+     <Navigation/>
+      <Banner />
+      <ProductsRow sectionTitle="Bikes" data={fakeData.bikesData}/>
+      <ProductsRow sectionTitle="Books" data={fakeData.booksData}/>
+    </div>
   );
 }
 export default Home;

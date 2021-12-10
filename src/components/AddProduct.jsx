@@ -2,7 +2,7 @@ import react, { useState } from 'react';
 import { FormGroup, FormControl, InputLabel, Input, Button, makeStyles, Typography } from '@material-ui/core';
 import { addProduct } from '../Service/api';
 import { useHistory } from 'react-router-dom';
-import NewNavigation from "../components/NewNavigation";
+import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
 const initialValue = {
@@ -40,7 +40,7 @@ const AddProduct = () => {
     return (
         <div className="addproduct">
         <div>
-        <NewNavigation/>    
+        <Navigation/>    
        </div>
         <FormGroup className={classes.container}>
             <Typography variant="h4">Add Product</Typography>

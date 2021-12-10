@@ -5,7 +5,7 @@ import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
 import { useState } from "react";
-import NewNavigation from "../components/NewNavigation";
+import Navigation from "../components/Navigation";
 import Footer from "../components/Footer"
 //import ReactDOM from "react-dom";
 
@@ -79,7 +79,7 @@ function Register() {
   return (
     <div className="app">   
      <div>
-        <NewNavigation/>    
+        <Navigation/>    
       </div>
     <div className="register">
   

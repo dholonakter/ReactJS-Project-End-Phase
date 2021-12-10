@@ -6,7 +6,7 @@ import {Typography, TextField, Button, Slider, Checkbox, FormGroup, FormControlL
 import Banner from "../components/Banner";
 import Footer from "../components/Footer"
 import ProductsRow from "../components/ProductsRow";
-import NewNavigation from "../components/NewNavigation";
+import Navigation from "../components/Navigation";
 
 class Filter extends React.Component {
 	
@@ -59,9 +59,11 @@ class Filter extends React.Component {
   }
 	
   componentDidMount(){
-	const url = 'https://i383988.hera.fhict.nl/database.php?search_product';
-	axios.get(url).then(response => response.data)
-	.then((data) => {
+        axios({
+          method: 'GET',
+          url:'https://i383988.hera.fhict.nl/database.php?search_product=""',
+          config: {headers:{'Content-Type': 'multipart/form-data'}}
+        }).then(response => response.data).then((data) => {
 		this.setState({ products: data});
 		this.setState({ filteredProducts: data});
 	})
@@ -192,7 +194,7 @@ class Filter extends React.Component {
   return (
     <div className="filter">	 
 	<div>
-        <NewNavigation/>
+        <Navigation/>
     </div> 
       <div className="container">
 	    <div className="col-xs-8">
