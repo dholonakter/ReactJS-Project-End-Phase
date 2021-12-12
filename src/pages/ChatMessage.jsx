@@ -4,6 +4,12 @@ import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import {makeStyles} from '@mui/styles';
+import yellow from "@material-ui/core/colors/yellow";
+
+import SaveIcon from '@material-ui/icons/Telegram';
+import '../index.css'
 
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -53,20 +59,27 @@ const columns = [
   },
 ];
 
+
+//backgroundColor: yellow[300]
+
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  height: 60,
+  lineHeight: '60px',
+  
+}));
+
 var chatData;
 chatData = [];
 
 
 export default function ChatMessage() {
-
+  const [text, setText] = useState('');
+  const history = useHistory();
   const passdata = useLocation();
 
-  function TEST(){
-  
-    
-       return (<div>aaauluu</div>);
-    
-  }
 
   function getData(a, b){
   
@@ -88,17 +101,33 @@ export default function ChatMessage() {
   }
 
   const chatList = getData(passdata.state.id, passdata.state.targetid);
-  console.log(chatData);
-  console.log(passdata.state.chat);
-  //alert(JSON.stringify(chatList[0]));
 
+  const handleSubmit = event => {
+    //event.preventDefault();
+    let formData = new FormData();
+    //setArr({"id":passdata.state.id,"targetid":passdata.state.targetid,"message":text});
+    formData.append('id', passdata.state.id);
+    formData.append('targetid',passdata.state.targetid);
+    formData.append('message',text);
+
+    
+        axios({
+          method: 'POST',
+          url:'https://i383988.hera.fhict.nl/chat/sendChat.php?',
+          data: formData,
+          config: {headers:{'Content-Type': 'multipart/form-data'}}
+        }).then(function(response){
+          console.log(response);
+          console.log('Chat Sent');
+          history.push("/chatMessage", {id: '10', targetid: passdata.state.targetid, name: passdata.state.name});
+        })
+    }
+  
 
   return (
-    
-      
-
 
     <div className="register">
+      
       <div className="register">
       <div className="container">
         <div className="row align-items-center my-5">
@@ -109,72 +138,48 @@ export default function ChatMessage() {
             
               <div className="row">
                 
-              <div className="col-lg-10"><center>
+              <div className="col-lg-10" style={{marginBottom: '50px'}}><center>
                 <Typography className="font-weight-light" variant="h2">{passdata.state.name}</Typography></center>
                 </div>
               </div>
             
             <p></p>
 
-            <form>
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
             {chatList
               .map((row) => {
                 return (
-                  <TableRow hover tabIndex={-1} key={row.code} sx={{ height: 100 }}> 
-                    
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                    
-                  </TableRow>
+                  <div>
+                  <div className="row">
+                    <div className={row.type2}></div>
+                    <div className="col-lg-8">
+                  <Item className="send" key={row.message} elevation='2'>
+                    <div className={row.type}>{row.message}</div>
+                  </Item>
+                  </div>
+                  </div>
+                  <div className="row">
+                    <div className={row.type2}></div>
+                    <div className="col-lg-8">
+                  
+                    <div style={{marginBottom: '20px'}}>{row.time}</div>
+                  
+                  </div>
+                  </div>
+                </div>
                 );
               })}
 
+            
+            <p></p>
 
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
-            </form>
+<div className="row">
+    <TextFields required className="col-lg-10" variant="outlined" label="Type your message here" type="text" name="chatMessage" value={text} onChange={(e) => setText(e.target.value)}/>
+    <div className="col-lg-2" style={{paddingLeft: '5px'}}><Buttons className="col-lg-12" variant="contained" style={{height: '100%'}} color="primary"  startIcon={<SaveIcon/>} onClick={handleSubmit}>Send</Buttons></div>
+</div>
             
 
           </div>
-          <p></p>
-            <div className="row">
-<div className="row">
-    <TextFields required
-    className="col-lg-9" variant="outlined" label="Text" type="text" name="chatMessage"
-    />
-    <Buttons className="col-lg-3" variant="contained" color="primary" >Send</Buttons>
-</div>
-
-
-
-                </div>
+        
           
         </div>
       </div>
