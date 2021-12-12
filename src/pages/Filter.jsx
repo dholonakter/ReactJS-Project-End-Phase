@@ -62,6 +62,7 @@ class Filter extends React.Component {
 	const url = 'https://i383988.hera.fhict.nl/database.php?search_product';
 	axios.get(url).then(response => response.data)
 	.then((data) => {
+		console.log(data);
 		this.setState({ products: data});
 		this.setState({ filteredProducts: data});
 	})
@@ -69,6 +70,7 @@ class Filter extends React.Component {
   
    
   filterList(){
+	    console.log(this.state.products);
 	    let productList = this.state.products;
 		let filteredList = [];
 		let nameValue = this.state.nameValue;

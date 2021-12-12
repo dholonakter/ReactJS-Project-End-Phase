@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FormGroup, FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, InputLabel, Input, Button, makeStyles, Typography } from '@material-ui/core';
 import TextFields from '@material-ui/core/TextField';
 import Buttons from '@material-ui/core/Button';
+import imageCompression from 'browser-image-compression';
 import {store, useGlobalState} from 'state-pool';
 import NewNavigation from "../components/NewNavigation";
 import Footer from "../components/Footer";
@@ -19,6 +20,7 @@ class AddProduct extends React.Component {
 		price: null,
 		category: "",
 		imgName: "",
+		productImg: null,
 	  };
 	  this.handleSubmit = this.handleSubmit.bind(this);
 	  this.handleNameChange = this.handleNameChange.bind(this);
@@ -45,16 +47,79 @@ class AddProduct extends React.Component {
 	this.setState({ category: catValue });
   }
     
+	getCategoryId(category){
+	  let categoryId = -1;
+		switch(category){  // Based on the RadioGroup values
+			case "book": 
+			  categoryId = 1
+			  break;
+			case "accessory": 
+			  categoryId = 2
+			  break;
+			case "bicycle": 
+			  categoryId = 3
+			  break;
+		}
+	  return categoryId;
+	}
+    
     handleImageChange(event){
-		//this.setState({imgName: event.target.files[0]})
-		console.log(event.target.files);
+	  let that = this;
+	  const img = event.target.files[0];
+	  const options = {
+	    maxSizeMB: 1,
+	    maxWidthOrHeight: 400,
+	    useWebWorker: true
+	  }
+	  imageCompression(img, options)
+	    .then(function (compressedImg) {
+		  that.setState({productImg: compressedImg});
+		});
+	    
 	}
   
     handleSubmit(event){
+      let formData = new FormData();
+	  let categoryId = this.getCategoryId(this.state.category);
+	  let imageFile = this.state.productImg;
+	  console.log(imageFile);
+      let valid = 1;
+      if(categoryId != -1 && this.state.productName != "" && this.state.productDesc != "" && this.state.price != null && imageFile != null && this.state.user.value.id != null){}else{
+        valid = 0;
+        alert("Something went wrong!");
+      }
+	  
+
+      if(valid == 1){	
+	    formData.append('add_product', 'adding product');
+        formData.append('user_id', this.state.user.value.id);
+	    formData.append('product_name', this.state.productName);
+	    formData.append('product_description', this.state.productDesc);
+	    formData.append('product_price', this.state.price);
+	    formData.append('category_id', categoryId);
+	    formData.append('product_image', imageFile);
+		for (var key of formData.entries()) {
+        console.log(key[0] + ', ' + key[1]);
+    }
+        axios({
+          method: 'POST',
+          url:'https://i383988.hera.fhict.nl/database.php?',
+          data: formData,
+          config: {headers:{'Content-Type': 'multipart/form-data'}}
+        }).then(function(response){
+          console.log(response);
+          console.log('Product added');
+          alert("Your product has been listed");
+        })
+      }
+      else{
+        alert("Please enter valid data!");
+      }
+    
 	 // event.preventDefault();
 	//  let formData = new FormData();
      // formData.append('imgName', event.target.image.files[0]);
-	  console.log(event.target);
+	 
     }
 
   render(){	
@@ -138,14 +203,14 @@ class AddProduct extends React.Component {
 			  
 			  <div className="row">
                   <div className="col-lg-1"></div>
-                  <input type="file" name="image" onChange={this.handleImageChange} />
+                  <input type="file" name="image" id="image"accept=".jpg,.jpeg,.png"onChange={this.handleImageChange} />
               </div>
                  
               <div className="row">
                   <div className="col-lg-10">
                     
                   </div>
-                  <Buttons className="col-lg-2" variant="contained" color="primary" onClick={this.handleSubmit}>Register</Buttons>
+                  <Buttons className="col-lg-2" variant="contained" color="primary" onClick={this.handleSubmit}>Add product</Buttons>
               </div>
 
             </form>

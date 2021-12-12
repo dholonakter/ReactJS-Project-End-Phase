@@ -16,7 +16,7 @@ class SearchBar extends React.Component {
 	}
 	
 	componentDidMount(){
-	const url = 'https://i383988.hera.fhict.nl/searchProduct/searchProduct.php?';
+	const url = 'https://i383988.hera.fhict.nl/database.php?search_product';
 	axios.get(url).then(response => response.data)
 	.then((data) => {
 		this.setState({ products: data});
@@ -66,7 +66,7 @@ class SearchBar extends React.Component {
                   }}
                 >
 				{option.product_name}
-                  <img src={process.env.PUBLIC_URL + '/images/' + option.img_name + '.jpg'} className="img-fluid w-50" alt="" />
+                  <img style={{height: "150px"}} src={`data:image/png;base64,${option.product_image}`} className="img-fluid w-50" alt="" />
                 </span>
               </React.Fragment>
             )}
