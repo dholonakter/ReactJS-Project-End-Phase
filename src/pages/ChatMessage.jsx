@@ -1,9 +1,15 @@
 import React from "react";
 import axios from 'axios';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import {makeStyles} from '@mui/styles';
+import yellow from "@material-ui/core/colors/yellow";
+
+import SaveIcon from '@material-ui/icons/Telegram';
+import '../index.css'
 
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -11,7 +17,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -54,119 +59,76 @@ const columns = [
   },
 ];
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
 
-function createChatPreview(a, b, c){
-  return { a, b, c };
-}
+//backgroundColor: yellow[300]
 
-const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-];
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  height: 60,
+  lineHeight: '60px',
+  
+}));
 
-
-
-function getData(){
-
-  const chatData = [];
-
-  axios({
-    method: 'GET',
-    url:'https://i383988.hera.fhict.nl/chat/getChatList.php?', //
-    config: {headers:{'Content-Type': 'multipart/form-data'}}
-  }).then(response => response.data).then((data) =>{
-     for(let i = 0; i<data.length; i++){
-         chatData.push(data[i]);
-     }
-     
-  })
-  console.log(chatData);
-  return chatData;
-}
-
-const chatList = getData();
-
-
-
-
+var chatData;
+chatData = [];
 
 
 export default function ChatMessage() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const params = useParams();
+  const [text, setText] = useState('');
+  const history = useHistory();
+  const passdata = useLocation();
 
-const users = [];
 
-const [firstname, setFirstname]=useState('');
-const [message, setMessage]=useState('');
-const [time, setTime]=useState('');
-
-const history = useHistory();
-function chatMessage(a){
-  // alert("data1 ="+ JSON.stringify(params));
-  // console.log("data1 ="+ JSON.stringify(params));
-  // history.push("/chatMessage?id="+a);
+  function getData(a, b){
   
+    axios({
+      method: 'GET',
+      url:'https://i383988.hera.fhict.nl/chat/getChat.php?id='+a+'&targetid='+b,
+      config: {headers:{'Content-Type': 'multipart/form-data'}}
+    }).then(response => response.data).then((data) =>{
+       chatData = [];
+       for(let i = 0; i<data.length; i++){
+         //alert(JSON.stringify(data[i]));
+           chatData.push(data[i]);
+           //console.log(chatData);
+       }
+       
+    })
+       return chatData;
+    
+  }
+
+  const chatList = getData(passdata.state.id, passdata.state.targetid);
+
+  const handleSubmit = event => {
+    //event.preventDefault();
+    let formData = new FormData();
+    //setArr({"id":passdata.state.id,"targetid":passdata.state.targetid,"message":text});
+    formData.append('id', passdata.state.id);
+    formData.append('targetid',passdata.state.targetid);
+    formData.append('message',text);
+
+    
+        axios({
+          method: 'POST',
+          url:'https://i383988.hera.fhict.nl/chat/sendChat.php?',
+          data: formData,
+          config: {headers:{'Content-Type': 'multipart/form-data'}}
+        }).then(function(response){
+          console.log(response);
+          console.log('Chat Sent');
+          history.push("/chatMessage", {id: '10', targetid: passdata.state.targetid, name: passdata.state.name});
+        })
+    }
   
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // this.props.history.push({
-  //   pathname: '/chatMessage',
-  //     state: data // your data array of objects
-  // })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-}
-function alerting(a){
-  
-  
-  alert(params);
-  history.push("/login");
-}
-
 
   return (
-    
-      
-
 
     <div className="register">
+      
+      <div className="register">
       <div className="container">
         <div className="row align-items-center my-5">
           <div className="col-lg-2">
@@ -176,23 +138,53 @@ function alerting(a){
             
               <div className="row">
                 
-              <div className="col-lg-10"><center>
-                <Typography className="font-weight-light" variant="h2">Chat List</Typography></center>
+              <div className="col-lg-10" style={{marginBottom: '50px'}}><center>
+                <Typography className="font-weight-light" variant="h2">{passdata.state.name}</Typography></center>
                 </div>
               </div>
             
             <p></p>
 
-            <form>
+            {chatList
+              .map((row) => {
+                return (
+                  <div>
+                  <div className="row">
+                    <div className={row.type2}></div>
+                    <div className="col-lg-8">
+                  <Item className="send" key={row.message} elevation='2'>
+                    <div className={row.type}>{row.message}</div>
+                  </Item>
+                  </div>
+                  </div>
+                  <div className="row">
+                    <div className={row.type2}></div>
+                    <div className="col-lg-8">
+                  
+                    <div style={{marginBottom: '20px'}}>{row.time}</div>
+                  
+                  </div>
+                  </div>
+                </div>
+                );
+              })}
 
+            
+            <p></p>
 
+<div className="row">
+    <TextFields required className="col-lg-10" variant="outlined" label="Type your message here" type="text" name="chatMessage" value={text} onChange={(e) => setText(e.target.value)}/>
+    <div className="col-lg-2" style={{paddingLeft: '5px'}}><Buttons className="col-lg-12" variant="contained" style={{height: '100%'}} color="primary"  startIcon={<SaveIcon/>} onClick={handleSubmit}>Send</Buttons></div>
+</div>
+            
 
-            </form>
-            {/* <Buttons className="col-lg-2" variant="contained" color="primary" onClick={Get}>Get Chat</Buttons> */}
           </div>
-          {/* {firstname} {message} {time} */}
+        
+          
         </div>
       </div>
+      
+    </div>
     </div>
   );
 }

@@ -88,3 +88,13 @@ a:hover {
 #clearBtn {
   cursor: pointer;
 }
+
+.send {
+  background-color : #14AAF5;
+  color: white;
+}
+
+.receive {
+  background-color : #555555;
+  color: white;
+}

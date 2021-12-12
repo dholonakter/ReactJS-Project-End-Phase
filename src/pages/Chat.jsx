@@ -20,6 +20,7 @@ import TextFields from '@material-ui/core/TextField';
 
 
 
+
 const columns = [
   // { id: 'name', label: 'Name', minWidth: 170 },
   // { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
@@ -53,20 +54,6 @@ const columns = [
   },
 ];
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
-
-function createChatPreview(a, b, c){
-  return { a, b, c };
-}
-
-const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-];
 
 
 
@@ -88,55 +75,47 @@ function getData(){
   return chatData;
 }
 
-const chatList = getData();
+var chatList = getData();
+console.log(chatList);
 
-export default function Chat() {
+
+function getChatData(a, b){
+  var chatData = [];
+  axios({
+    method: 'GET',
+    url:'https://i383988.hera.fhict.nl/chat/getChat.php?id='+a+'&targetid='+b,
+    config: {headers:{'Content-Type': 'multipart/form-data'}}
+  }).then(response => response.data).then((data) =>{
+     
+     for(let i = 0; i<data.length; i++){
+         chatData.push(data[i]);
+         console.log(chatData);
+     }
+     
+  })
+     return chatData;
+  
+}
+
+
+export default function Chat({navigation}) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
 const users = [];
-//const chatList = [];
+
 const [firstname, setFirstname]=useState('');
 const [message, setMessage]=useState('');
 const [time, setTime]=useState('');
 
 const history = useHistory();
-function chatMessage(a){
-  alert(a);
-  history.push("/chatMessage?id="+a);
-}
-function alerting(a){
-  alert(a);
-  history.push("/login");
+function chatMessage(a, b){
+  // chatList = getChatData(10, a);
+  // console.log(chatList);
+  // history.push("/chatMessage", {id: '10', targetid: a, name: b, chat: chatList});
+  history.push("/chatMessage", {id: '10', targetid: a, name: b});
 }
 
-// const Get = event => {
-//   event.preventDefault();
-//   axios({
-//     method: 'GET',
-//     url:'https://i383988.hera.fhict.nl/chat/getChatList.php?', //
-//     config: {headers:{'Content-Type': 'multipart/form-data'}}
-//   }).then(response => response.data).then((data) =>{
-//     //  console.log(JSON.parse(JSON.stringify(data)));
-//     //  console.log(JSON.parse(JSON.stringify(data)).length);
-//     console.log(chatList);
-//      for(let i = 0; i<data.length; i++){
-//          users.push(data[i]);
-//          //chatList.push(createChatPreview(users[0].name, users[0].message, users[0].time));
-//      }
-//     //  console.log("data ="+ data);
-//     //  console.log("data2 ="+ users);
-//     //  console.log("data3 ="+ JSON.stringify(users[0]));
-
-//      console.log("data1 ="+ JSON.stringify(users[0]));
-//      console.log("data2 ="+ JSON.stringify(users));
-//      console.log("data3 ="+ JSON.stringify(rows[0]));
-//      console.log("data4 ="+ JSON.stringify(rows));
-//      setFirstname(JSON.stringify(users[0].name));
-//      setMessage(JSON.stringify(users[0].message));
-//      setTime(JSON.stringify(users[0].time));
-//   })
-//  }
 
   return (
     
@@ -188,15 +167,12 @@ function alerting(a){
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align} onClick={() => chatMessage(row.id)}>
-                          {/* <Router>
-  <Link to = 'https://google.com/'> */}
+                        <TableCell key={column.id} align={column.align} onClick={() => chatMessage(row.id, row.name)}>
+
                           {column.format && typeof value === 'number'
                             ? column.format(value)
                             : value}
-                            {/* </Link>
 
-</Router> */}
                         </TableCell>
                       );
                     })}
@@ -222,12 +198,11 @@ function alerting(a){
         </Table>
       </TableContainer>
     </Paper>
-
-
             </form>
             {/* <Buttons className="col-lg-2" variant="contained" color="primary" onClick={Get}>Get Chat</Buttons> */}
+            {/* <button onClick={() => navigation.navigate("/chatMessage", {id: '10', targetid: '12', name: '12'})}>Click to reload!</button> */}
           </div>
-          {firstname} {message} {time}
+          {/* {firstname} {message} {time} */}
         </div>
       </div>
     </div>
