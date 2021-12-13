@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM, { render } from 'react-dom';
 import axios from 'axios';
 import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -10,73 +11,81 @@ import {store, useGlobalState} from 'state-pool';
 import Table from 'react-bootstrap/Table';
 
 
-function UserProducts() {  
-  const [currentUser, setCurrentUser] = useGlobalState("currentUser");
-  const [navigation, setNav] = useGlobalState("navigation");
-  const user = store.getState("currentUser");
+class UserProducts extends React.Component {  
+  constructor(props){
+    super(props);
+    this.state = {
+      currentUser: store.getState("currentUser"),
+      products: [],
+      loaded: false,
+      categories: [
+        {
+          id: 1,
+          label: "Books",
+        },
+            {
+          id: 2,
+          label: "Accessories",
+        },		
+        {
+          id: 3,
+          label: "Bicycles",
+        },		
+        ],
+    };
+  }
 
-  const [firstname, setFirstname] = useState('');
-  const [l_name, setL_name] = useState('');
-  const [phone, setPhone] = useState('');
+  componentDidMount(){
+    this.handleProducts();
+  }
+  shouldComponentUpdate(){
+    if(this.state.loaded == false){   
+      return true;
+      }
+    else{
+      return false;
+    }
+  }
+  componentDidUpdate(){
+    this.handleProducts();
+  }
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [c_password, setCPassword] = useState('');
-
-  const [street, setStreet] = useState('');
-  const [statee, setStatee] = useState('');
-  const [post, setPost] = useState('');
-  const [country, setCountry] = useState('');
-
-
-  function handleProducts(){  
-    if(user.value != null){
+handleProducts(){
+  const that = this;
+    if(this.state.currentUser.value != null){
       axios({
         method: 'GET',
-        url:"https://i383988.hera.fhict.nl/database.php?get_address="+user.value.address_id,
+        url:"https://i383988.hera.fhict.nl/database.php?get_user_products="+this.state.currentUser.value.id,
         config: {headers:{'Content-Type': 'multipart/form-data'}}
       }).then(function(response){
-      });
-    }else{
-      document.querySelector("#home_nav").click();
-    }
-  
-  }
-
-  useEffect(()=>{
-  }, []);
-
-  function setExpiration(){
-    let timestamp = new Date();
-    timestamp.setDate(timestamp.getDate());
-    timestamp.setHours(timestamp.getHours());
-    timestamp.setMinutes(timestamp.getMinutes());
-    timestamp.setSeconds(timestamp.getSeconds()+1);
-    return timestamp;
-  }
-
-  const handleLogout = event => {
-    event.preventDefault();
-    if(user.value !=null){
-      let formData = new FormData();
-      formData.append('logout_user', 'Signing out');
-      formData.append('user_id', user.value.id);
-      axios({
-        method: 'POST',
-        url:'https://i383988.hera.fhict.nl/database.php?',
-        data: formData,
-        config: {headers:{'Content-Type': 'multipart/form-data'}}
-      }).then(function(response){
-          setNav("/Login");
-          setCurrentUser("");
-          document.cookie="current_user= ; expires="+ setExpiration().toUTCString();
-          alert("Successfully logged out!");
-          document.querySelector("#home_nav").click();
+        that.setState({products: response.data});
+        that.setState({loaded: true});
+        
       });
     }
-  }
+}
+handleCategory(id){
+  axios({
+    method: 'GET',
+    url:"https://i383988.hera.fhict.nl/database.php?get_category="+id,
+    config: {headers:{'Content-Type': 'multipart/form-data'}}
+  }).then(function(response){
+    return id;
+  });
+}
+// getCategory(id){
+//   var result;
+//   axios({
+//     method: 'GET',
+//     url:"https://i383988.hera.fhict.nl/database.php?get_category="+id,
+//     config: {headers:{'Content-Type': 'multipart/form-data'}}
+//   }).then(function(response){
+//    result = response.data;
+//   });
+//   return result;
+// }
 
-
+render(){
   return (
     <div className="app">   
      <div>
@@ -101,30 +110,25 @@ function UserProducts() {
               <thead>
                 <tr>
                   <th>#</th>
-                  {Array.from({ length: 12 }).map((_, index) => (
-                    <th key={index}>Table heading</th>
-                  ))}
+                  <th>Product Name</th>
+                  <th>Product Description</th>
+                  <th>Product Price</th>
+                  <th>Product Category</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  {Array.from({ length: 12 }).map((_, index) => (
-                    <td key={index}>Table cell {index}</td>
-                  ))}
-                </tr>
-                <tr>
-                  <td>2</td>
-                  {Array.from({ length: 12 }).map((_, index) => (
-                    <td key={index}>Table cell {index}</td>
-                  ))}
-                </tr>
-                <tr>
-                  <td>3</td>
-                  {Array.from({ length: 12 }).map((_, index) => (
-                    <td key={index}>Table cell {index}</td>
-                  ))}
-                </tr>
+               {
+               this.state.products.map(product => {
+                 return(
+                  <tr>
+                    <td></td>
+                    <td>{product.product_name}</td>
+                    <td>{product.product_description}</td>
+                    <td>{product.product_price}</td>
+                    <td>{product.category_id}</td>
+                  </tr>
+                 );
+              })} 
               </tbody>
             </Table>
           </div>
@@ -136,6 +140,7 @@ function UserProducts() {
       </div>
     </div>
   );
+}
 }
 
 //ReactDOM.render(<Register />, document.getElementById('root'));

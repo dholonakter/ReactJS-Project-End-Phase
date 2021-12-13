@@ -53,7 +53,7 @@ function Profile() {
 
   useEffect(()=>{
     handleProfile();
-  }, []);
+  }, [email, street]);
 
   function setExpiration(){
     let timestamp = new Date();
