@@ -6,7 +6,7 @@ import {Typography, TextField, Button, Slider, Checkbox, FormGroup, FormControlL
 import Banner from "../components/Banner";
 import Footer from "../components/Footer"
 import ProductsRow from "../components/ProductsRow";
-import NewNavigation from "../components/NewNavigation";
+import Navigation from "../components/Navigation";
 
 class Filter extends React.Component {
 	
@@ -192,7 +192,7 @@ class Filter extends React.Component {
   return (
     <div className="filter">	 
 	<div>
-        <NewNavigation/>
+        <Navigation/>
     </div> 
       <div className="container">
 	    <div className="col-xs-8">
