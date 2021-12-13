@@ -6,7 +6,7 @@ import TextFields from '@material-ui/core/TextField';
 import Buttons from '@material-ui/core/Button';
 import imageCompression from 'browser-image-compression';
 import {store, useGlobalState} from 'state-pool';
-import NewNavigation from "../components/NewNavigation";
+import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
 class AddProduct extends React.Component {
@@ -115,11 +115,6 @@ class AddProduct extends React.Component {
       else{
         alert("Please enter valid data!");
       }
-    
-	 // event.preventDefault();
-	//  let formData = new FormData();
-     // formData.append('imgName', event.target.image.files[0]);
-	 
     }
 
   render(){	
@@ -127,7 +122,7 @@ class AddProduct extends React.Component {
   return (
 	<div className="app">   
      <div>
-        <NewNavigation/>    
+        <Navigation/>    
       </div>
     <div className="register">
   

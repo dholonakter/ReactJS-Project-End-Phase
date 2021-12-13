@@ -12,7 +12,7 @@ function ProductsRow({ sectionTitle, data }) {
                             <div className="card-body">
                                 <h5 className="card-title ">{item.product_name}</h5>                                
                                 <p className="fw-bold py-2">€ {item.product_price}</p>
-                                <a href="#" className="btn btn-success">Add to cart</a>
+                                <a href="#" className="btn btn-success">View</a>
                             </div>
                         </div>
                     </div>
