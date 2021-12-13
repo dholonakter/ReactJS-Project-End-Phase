@@ -1,12 +1,12 @@
 import React from "react";
-import NewNavigation from "../components/NewNavigation"
+import Navigation from "../components/Navigation"
 import Footer from "../components/Footer"
 
 function About() {
   return (
     <div className="about">
         <div>
-        <NewNavigation/>    
+        <Navigation/>    
       </div>
       <div className="container">
         <div className="row align-items-center my-5">

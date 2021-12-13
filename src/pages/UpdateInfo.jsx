@@ -6,7 +6,7 @@ import TextFields from '@material-ui/core/TextField';
 import SaveIcon from '@material-ui/icons/Save';
 import Cancel from '@material-ui/icons/Cancel';
 import { useState } from "react";
-import NewNavigation from "../components/NewNavigation";
+import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import {store, useGlobalState} from 'state-pool';
 import '../css/updateinfo.css';
@@ -225,7 +225,7 @@ function UpdateInfo() {
   return (
     <div className="register">
       <div>
-        <NewNavigation/>    
+        <Navigation/>    
       </div> 
       <div className="container">
         <div className="row align-items-center my-5">

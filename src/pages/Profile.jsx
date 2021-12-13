@@ -3,7 +3,8 @@ import axios from 'axios';
 import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
-import NewNavigation from "../components/NewNavigation";
+import Navigation from "../components/Navigation";
+import ProfileNavigation from "../components/ProfileNavigation";
 import Footer from "../components/Footer";
 import {store, useGlobalState} from 'state-pool';
 
@@ -91,25 +92,19 @@ function Profile() {
   return (
     <div className="app">   
      <div>
-        <NewNavigation/>     
+        <Navigation/>     
       </div>
     <div  className="profile">
-  
+  <div> 
+    <ProfileNavigation/>
+    </div>
       <div className="container">
         <div className="row align-items-center my-5">
           <div className="col-lg-2">
             
           </div>
           <div className="col-lg-8">
-            
-              <div className="row">
-                
-              <div className="col-lg-12"><center>
-                <Typography className="font-weight-light col-lg-12 text-right" variant="h3">Profile</Typography></center>
-                </div>
-              </div>
-            
-    
+          
             <form>
               <div className="row">
                 <Typography className="font-weight-light col-lg-12 text-right" variant="h5">Personal Information</Typography>
@@ -190,11 +185,11 @@ function Profile() {
                   <Typography className="font-weight-light col-lg-12 text-right" variant="h7">{country}</Typography>
               </div>
               <div className="row">
-                  <div className="col-lg-10">
-                    
+                  <div className="col-lg-10" style={{margin: 'left'}}>
+                      <Buttons className="col-lg-2" variant="contained" color="primary" onClick={navigateUpdate}>Update User</Buttons>
+                      <Buttons className="col-lg-2" variant="contained" color="primary" onClick={handleLogout}>Sign out</Buttons>
                   </div>
-                  <Buttons className="col-lg-2" variant="contained" color="primary" onClick={navigateUpdate}>Update User</Buttons>
-                  <Buttons className="col-lg-2" variant="contained" color="primary" onClick={handleLogout}>Sign out</Buttons>
+                
               </div>
               <p></p>
             </form>

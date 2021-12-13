@@ -3,7 +3,7 @@ import axios from 'axios';
 import TextFields from '@material-ui/core/TextField';
 import {store, useGlobalState} from 'state-pool';
 import Buttons from '@material-ui/core/Button';
-import NewNavigation from "../components/NewNavigation";
+import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import { deepPurple } from "@material-ui/core/colors";
 
@@ -70,7 +70,7 @@ function Login() {
   return (
     <div className="login">
         <div>
-        <NewNavigation/>    
+        <Navigation/>    
       </div>
       <div className="container">
         <div className="row align-items-center my-5">
