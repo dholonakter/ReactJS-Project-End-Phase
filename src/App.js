@@ -13,7 +13,7 @@ import ChatMessage from "./pages/ChatMessage";
 import axios from 'axios'
 import Profile from "./pages/Profile";
 import {store, useGlobalState} from 'state-pool';
-import AddProduct from "./components/AddProduct";
+import AddProduct from "./pages/AddProduct";
 import EditProduct from "./components/EditProdcut";
 import AllProducts  from "./components/AllProducts";
 import Navigation from "./components/Navigation";
@@ -68,8 +68,8 @@ function App() {
       <Route exact path="/filter"><Filter/></Route>
       <Route exact path="/userproducts"><UserProducts/></Route>
       <Route exact path="/userhistory"><UserHistory/></Route>
+	  <Route exact path="/add"><AddProduct/></Route>
       <Route exact path="/all" component={AllProducts} />
-        <Route exact path="/add" component={AddProduct} />
         <Route exact path="/edit/:id" component={EditProduct} />
         </Switch>
       </Router>
