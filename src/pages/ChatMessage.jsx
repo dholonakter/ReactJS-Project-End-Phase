@@ -1,7 +1,7 @@
 import React from "react";
 import axios from 'axios';
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link, withRouter } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
@@ -22,67 +22,35 @@ import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
 
-
-
-
-
-const columns = [
-  // { id: 'name', label: 'Name', minWidth: 170 },
-  // { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
-  {
-    id: 'name',
-    label: 'Name',
-    minWidth: 100,
-    //size: 32,
-    align: 'left',
-    format: (value) => value.toLocaleString('en-US'),
-    // render: (name) => (
-    //   <Typography style={{ fontSize: 35 }} variant="h1">
-    //     {name}
-    //   </Typography>
-    // )
-  },
-  {
-    id: 'message',
-    label: 'Message',
-    minWidth: 400,
-    //size: 20,
-    align: 'left',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'time',
-    label: 'Time',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-];
-
-
-//backgroundColor: yellow[300]
-
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   textAlign: 'center',
   color: theme.palette.text.secondary,
-  height: 60,
-  lineHeight: '60px',
-  
+  height: 50,
+  width: '100%',
+  lineHeight: '50px',
+  wordWrap: 'break-word',
 }));
 
 var chatData;
 chatData = [];
 
 
-export default function ChatMessage() {
-  const [text, setText] = useState('');
-  const history = useHistory();
-  const passdata = useLocation();
 
+class ChatMessage extends React.Component {
+	
+	constructor(props){
+    super(props);
+    this.state = { 
+      text: "",
+	  };
 
-  function getData(a, b){
-  
+    this.getData = this.getData.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
+	}
+
+  getData(a, b){
     axios({
       method: 'GET',
       url:'https://i383988.hera.fhict.nl/chat/getChat.php?id='+a+'&targetid='+b,
@@ -94,21 +62,29 @@ export default function ChatMessage() {
            chatData.push(data[i]);
            //console.log(chatData);
        }
-       
     })
        return chatData;
-    
   }
 
-  const chatList = getData(passdata.state.id, passdata.state.targetid);
+  handleTextChange(event){
+    let textValue = event.target.value;
+      this.setState({ text: textValue });
+    }
+  
 
-  const handleSubmit = event => {
-    //event.preventDefault();
+  componentDidUpdate(){
+    this.getData(this.props.location.state.id, this.props.location.state.targetid);
+  }
+
+  componentDidMount(){
+    this.getData(this.props.location.state.id, this.props.location.state.targetid);
+  }
+
+  handleSubmit() {
     let formData = new FormData();
-    //setArr({"id":passdata.state.id,"targetid":passdata.state.targetid,"message":text});
-    formData.append('id', passdata.state.id);
-    formData.append('targetid',passdata.state.targetid);
-    formData.append('message',text);
+    formData.append('id', this.props.location.state.id);
+    formData.append('targetid',this.props.location.state.targetid);
+    formData.append('message',this.state.text);
 
     
         axios({
@@ -119,72 +95,86 @@ export default function ChatMessage() {
         }).then(function(response){
           console.log(response);
           console.log('Chat Sent');
-          history.push("/chatMessage", {id: '10', targetid: passdata.state.targetid, name: passdata.state.name});
+//          history.push("/chatMessage", {id: '10', targetid: this.props.location.state.targetid, name: this.props.location.state.name});
         })
-    }
+  }
+
+
+  render(){	
   
+    return (
 
-  return (
-
-    <div className="register">
-      
       <div className="register">
-      <div className="container">
-        <div className="row align-items-center my-5">
-          <div className="col-lg-2">
-            
-          </div>
-          <div className="col-lg-8">
-            
-              <div className="row">
-                
-              <div className="col-lg-10" style={{marginBottom: '50px'}}><center>
-                <Typography className="font-weight-light" variant="h2">{passdata.state.name}</Typography></center>
+        <div className="register">
+        <div className="container">
+          <div className="row align-items-center my-5">
+            <div className="col-lg-2">
+              
+            </div>
+            <div className="col-lg-8">
+              
+                <div className="row">
+                  
+                <div className="col-lg-10" style={{marginBottom: '50px'}}><center>
+                  <Typography className="font-weight-light" variant="h2">{this.props.location.state.name}</Typography></center>
+                  </div>
                 </div>
+              
+              <p></p>
+  
+              {chatData
+                .map((row) => {
+                  return (
+                    <div>
+                    <div className="row">
+                      <div className={row.type2}></div>
+                      <div className="col-lg-8">
+                    <Item className="send" key={row.message} elevation='2'>
+                      <div className={row.type}>{row.message}</div>
+                    </Item>
+                    </div>
+                    </div>
+                    <div className="row">
+                      <div className={row.type2}></div>
+                      <div className="col-lg-8">
+                    
+                      <div style={{marginBottom: '20px'}}>{row.time}</div>
+                    
+                    </div>
+                    </div>
+                  </div>
+                  );
+                })}
+  
+              <p></p>
+  
+  <div className="row">
+      <TextFields required className="col-lg-10" variant="outlined" label="Type your message here" type="text" name="chatMessage" value={this.state.text} onChange={this.handleTextChange}/>
+      <div className="col-lg-2" style={{paddingLeft: '5px'}}><Buttons className="col-lg-12" variant="contained" style={{height: '100%'}} color="primary"  startIcon={<SaveIcon/>} onClick={this.handleSubmit}>Send</Buttons></div>
+  </div>
               </div>
-            
-            <p></p>
-
-            {chatList
-              .map((row) => {
-                return (
-                  <div>
-                  <div className="row">
-                    <div className={row.type2}></div>
-                    <div className="col-lg-8">
-                  <Item className="send" key={row.message} elevation='2'>
-                    <div className={row.type}>{row.message}</div>
-                  </Item>
-                  </div>
-                  </div>
-                  <div className="row">
-                    <div className={row.type2}></div>
-                    <div className="col-lg-8">
-                  
-                    <div style={{marginBottom: '20px'}}>{row.time}</div>
-                  
-                  </div>
-                  </div>
-                </div>
-                );
-              })}
-
-            
-            <p></p>
-
-<div className="row">
-    <TextFields required className="col-lg-10" variant="outlined" label="Type your message here" type="text" name="chatMessage" value={text} onChange={(e) => setText(e.target.value)}/>
-    <div className="col-lg-2" style={{paddingLeft: '5px'}}><Buttons className="col-lg-12" variant="contained" style={{height: '100%'}} color="primary"  startIcon={<SaveIcon/>} onClick={handleSubmit}>Send</Buttons></div>
-</div>
-            
-
+            </div>
           </div>
-        
-          
         </div>
       </div>
-      
-    </div>
-    </div>
-  );
+    );
+  }
 }
+export default withRouter(ChatMessage);
+
+
+// export default function ChatMessage() {
+//   const [text, setText] = useState('');
+//   const history = useHistory();
+//   const passdata = useLocation();
+
+
+  
+
+//   const chatList = getData(passdata.state.id, passdata.state.targetid);
+
+
+  
+
+  
+// }
