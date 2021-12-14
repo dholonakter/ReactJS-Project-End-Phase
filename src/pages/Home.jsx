@@ -75,6 +75,7 @@ function Home() {
       <Banner />
       <ProductsRow sectionTitle="Bikes" data={fakeData.bikesData}/>
       <ProductsRow sectionTitle="Books" data={fakeData.booksData}/>
+	  <Footer />
     </div>
   );
 }
