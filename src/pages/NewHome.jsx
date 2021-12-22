@@ -2,7 +2,7 @@ import React from "react";
 import Banner from "../components/Banner";
 import Footer from "../components/Footer";
 import ProductsRow from "../components/ProductsRow";
-import Navigation from "../components/Navigation";
+import NewNavigation from "../components/NewNavigation";
 
 const fakeData = {
   bikesData: [
@@ -76,10 +76,10 @@ const fakeData = {
   ],
 };
 
-function Home() {
+function NewHome() {
   return (
     <div className="home">
-      <Navigation />
+      <NewNavigation />
       <Banner />
       <ProductsRow sectionTitle="Bikes" data={fakeData.bikesData} />
       <ProductsRow sectionTitle="Books" data={fakeData.booksData} />
@@ -87,4 +87,4 @@ function Home() {
     </div>
   );
 }
-export default Home;
+export default NewHome;
