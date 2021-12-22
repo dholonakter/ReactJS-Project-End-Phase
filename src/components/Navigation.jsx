@@ -78,7 +78,7 @@ function Navigation(props) {
                 props.location.pathname === "/" ? "active" : ""
               }`}
             >
-              <Link className="text-white" to="/newhome">
+              <Link className="text-white" to="/home">
                 Home
               </Link>
             </p>
@@ -90,26 +90,8 @@ function Navigation(props) {
               <Link className="text-white" to="/add">
                 Add Product
               </Link>
-<<<<<<< HEAD:src/components/Navigation.jsx
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <div className="bg-dark pt-0">
-        <div className="d-flex align-items-center  container">
-
-
-          <p className={` pr-5 py-2  ${props.location.pathname === "/" ? "active" : ""}`} >
-            <Link className="text-white" to="/home" >
-              Home
-            </Link>
-          </p>
-          <p className={`pr-5 py-2  ${props.location.pathname === "/" ? "active" : ""}`} >
-            <Link className="text-white" to="/add" >
-              Add Product
-            </Link>
-          </p>
-          <p
+            </p>
+            <p
               className={`pr-5   ${
                 props.location.pathname === "/" ? "active" : ""
               }`}
@@ -118,7 +100,7 @@ function Navigation(props) {
                 Advance Search
               </Link>
             </p>
-          <p
+            <p
               className={`pr-5 ${
                 props.location.pathname === "/" ? "active" : ""
               }`}
@@ -127,6 +109,7 @@ function Navigation(props) {
                 Help
               </Link>
             </p>
+          </div>
         </div>
       </div>
     </>

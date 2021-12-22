@@ -17,7 +17,7 @@ function ProductsRow({ sectionTitle, data }) {
             <div className="card mb-3">
               <img
                 src={
-                  {`data:image/png;base64,${item.product_image}`} 
+                  `data:image/png;base64,${item.product_image}`
                 }
                 style={{
                   maxHeight: "230px",

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-<<<<<<< HEAD
 import axios from 'axios';
 import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -90,26 +89,30 @@ function Profile() {
     window.location.href = "https://i383988.hera.fhict.nl/updateinfo";
   };
 
-  return (
-<<<<<<< HEAD
-    <div className="app">   
-     <div>
-        <Navigation/>     
+ return (
+    <div className="app">
+      <div>
+        <Navigation />
       </div>
-    <div  className="profile">
-  <div> 
-    <ProfileNavigation/>
-    </div>
-      <div className="container">
-        <div className="row align-items-center my-5">
-          <div className="col-lg-2">
-            
-          </div>
-          <div className="col-lg-8">
-          
-            <form>
+      <div className="profile">
+	  <div> 
+        <ProfileNavigation/>
+      </div>
+        <div className="container">
+          <div className="row align-items-center my-5">
+            <div className="col-lg-2"></div>
+            <div className="col-lg-8">
               <div className="row">
-                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">Personal Information</Typography>
+                <div className="col-lg-12">
+                  <center>
+                    <Typography
+                      className="font-weight-light col-lg-12 text-right pb-4"
+                      variant="h4"
+                    >
+                      Profile
+                    </Typography>
+                  </center>
+                </div>
               </div>
 
               <form>
@@ -281,7 +284,6 @@ function Profile() {
     </div>
   );
 }
-
 //ReactDOM.render(<Register />, document.getElementById('root'));
 
 export default Profile;

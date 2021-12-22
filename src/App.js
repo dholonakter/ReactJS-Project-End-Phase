@@ -16,6 +16,7 @@ import AddProduct from "./pages/AddProduct";
 import EditProduct from "./components/EditProdcut";
 import AllProducts  from "./components/AllProducts";
 import Navigation from "./components/Navigation";
+import Home from "./pages/Home";
 import ProfileNavigation from "./components/ProfileNavigation";
 import { FaPhoneSlash } from "react-icons/fa";
 
@@ -47,9 +48,7 @@ function App() {
             }).then(function (response) {
               setCurrentUser(response.data);
               setNav("/Profile");
-            });
-          });
-              
+            });              
           }
         });
     }
