@@ -6,7 +6,7 @@ function Banner() {
       <img
         src={process.env.PUBLIC_URL + "/images/banner-img.jpg"}
         className="img-fluid w-100"
-        style={{ height: "45vh" }}
+        style={{ height: "70vh" }}
         alt=""
       />
     </div>
