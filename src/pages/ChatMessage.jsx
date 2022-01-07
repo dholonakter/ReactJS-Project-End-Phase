@@ -12,12 +12,6 @@ import SaveIcon from '@material-ui/icons/Telegram';
 import '../index.css'
 
 import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
@@ -33,9 +27,8 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 var chatData;
+var chatList;
 chatData = [];
-
-
 
 class ChatMessage extends React.Component {
 	
@@ -43,11 +36,15 @@ class ChatMessage extends React.Component {
     super(props);
     this.state = { 
       text: "",
+      refresh: ""
 	  };
 
     this.getData = this.getData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleRefresh = this.handleRefresh.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
+
+    chatList = this.getData(this.props.location.state.id, this.props.location.state.targetid);
 	}
 
   getData(a, b){
@@ -58,27 +55,30 @@ class ChatMessage extends React.Component {
     }).then(response => response.data).then((data) =>{
        chatData = [];
        for(let i = 0; i<data.length; i++){
-         //alert(JSON.stringify(data[i]));
            chatData.push(data[i]);
-           //console.log(chatData);
        }
     })
+       this.setState({ refresh: "aa" });
        return chatData;
   }
 
   handleTextChange(event){
     let textValue = event.target.value;
-      this.setState({ text: textValue });
-    }
+    this.setState({ text: textValue });
+  }
+
+  handleRefresh(event){
+    this.forceUpdate();
+  }
   
 
-  componentDidUpdate(){
-    this.getData(this.props.location.state.id, this.props.location.state.targetid);
+  componentDidMount() {
+    this.interval = setInterval(() => this.getData(this.props.location.state.id, this.props.location.state.targetid), 40);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
-  componentDidMount(){
-    this.getData(this.props.location.state.id, this.props.location.state.targetid);
-  }
 
   handleSubmit() {
     let formData = new FormData();
@@ -95,7 +95,6 @@ class ChatMessage extends React.Component {
         }).then(function(response){
           console.log(response);
           console.log('Chat Sent');
-//          history.push("/chatMessage", {id: '10', targetid: this.props.location.state.targetid, name: this.props.location.state.name});
         })
   }
 
@@ -112,11 +111,26 @@ class ChatMessage extends React.Component {
               
             </div>
             <div className="col-lg-8">
+
+                  <div className="row" style={{marginBottom: '100px'}}>
+           
+          
+                  <Link style={{color: "#000000"}}
+            id="chat_nav"
+            to="/chat"
+          >
+                  <Buttons className="col-lg-2" variant="contained" style={{height: '100%'}, {backgroundColor: "#FF0000"}} 
+      //             onClick={(e) => {
+      //              e.preventDefault();
+      //              window.location.href='http://google.com';
+      //              }}
+      > Back</Buttons></Link>
+                  </div>
               
-                <div className="row">
+                <div className="row" style={{marginBottom: '80px'}}>
                   
-                <div className="col-lg-10" style={{marginBottom: '50px'}}><center>
-                  <Typography className="font-weight-light" variant="h2">{this.props.location.state.name}</Typography></center>
+                <div className="col-lg-12" style={{textAlign: 'center'}}>
+                  <Typography className="font-weight-light" variant="h2">{this.props.location.state.name}</Typography>
                   </div>
                 </div>
               
@@ -128,7 +142,7 @@ class ChatMessage extends React.Component {
                     <div>
                     <div className="row">
                       <div className={row.type2}></div>
-                      <div className="col-lg-8">
+                      <div className={row.size}>
                     <Item className="send" key={row.message} elevation='2'>
                       <div className={row.type}>{row.message}</div>
                     </Item>
@@ -136,7 +150,7 @@ class ChatMessage extends React.Component {
                     </div>
                     <div className="row">
                       <div className={row.type2}></div>
-                      <div className="col-lg-8">
+                      <div className={row.size}>
                     
                       <div style={{marginBottom: '20px'}}>{row.time}</div>
                     
@@ -161,20 +175,3 @@ class ChatMessage extends React.Component {
   }
 }
 export default withRouter(ChatMessage);
-
-
-// export default function ChatMessage() {
-//   const [text, setText] = useState('');
-//   const history = useHistory();
-//   const passdata = useLocation();
-
-
-  
-
-//   const chatList = getData(passdata.state.id, passdata.state.targetid);
-
-
-  
-
-  
-// }

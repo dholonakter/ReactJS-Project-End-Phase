@@ -15,9 +15,11 @@ code {
 .send {
   background-color : #14AAF5;
   color: white;
+  word-wrap: break-word;
 }
 
 .receive {
   background-color : #555555;
   color: white;
+  word-wrap: break-word;
 }
