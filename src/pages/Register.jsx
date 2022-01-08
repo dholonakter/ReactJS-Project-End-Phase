@@ -89,7 +89,6 @@ function Register() {
         "Password needs to be at least 8 characters long and contain both letters and numbers"
       );
     }
-
     if (valid == 1) {
       axios({
         method: "POST",
@@ -105,6 +104,20 @@ function Register() {
       alert("Please enter valid data!");
     }
   };
+
+  const test =(event)=>{
+    let apiData = new FormData();
+    apiData.append("api_key", "fe013d3a5655425fbb1b1286c784430a");
+    apiData.append('email', "cheesesien@gmail.com");
+    axios({
+      method: "GET",
+      url: "https://emailvalidation.abstractapi.com/v1/?api_key=fe013d3a5655425fbb1b1286c784430a&email=cheesesien@gmail.com",
+      config: { headers: { "Content-Type": "multipart/form-data" } },
+    }).then(function (response) {
+      console.log(response);
+      console.log(response.data);
+    });
+  }
 
   return (
     <div className="app">   
@@ -128,7 +141,6 @@ function Register() {
 
               <p></p>
 
-              {/* <form onSubmit={handleSubmit}> */}
               <form>
                 <div className="row">
                   <Typography
@@ -137,17 +149,11 @@ function Register() {
                   >
                     Personal Information
                   </Typography>
-                  {/* <h2 className="font-weight-light col-lg-12">Personal Information</h2> */}
                 </div>
 
                 <p></p>
 
                 <div className="row">
-                  {/* <div className="col-lg-4" variant="h5">
-                    <Typography>
-                      First Name:
-                    </Typography>
-                  </div> */}
                   <div className="col-lg-1"></div>
                   <TextFields
                     required
@@ -159,18 +165,11 @@ function Register() {
                     variant="outlined"
                     onChange={(e) => setF_name(e.target.value)}
                   />
-                  {/* <input className="col-lg-8" type="text" name="f_name" value={f_name} onChange={(e) => setF_name(e.target.value)}/> */}
                 </div>
 
                 <p></p>
 
                 <div className="row">
-                  {/* <div className="col-lg-4">
-                    <Typography>
-                      Last Name:
-                    </Typography>
-                  </div>
-                  <input className="col-lg-8" type="text" name="l_name" value={l_name} onChange={(e) => setL_name(e.target.value)}/> */}
                   <div className="col-lg-1"></div>
                   <TextFields
                     required
@@ -187,12 +186,6 @@ function Register() {
                 <p></p>
 
                 <div className="row">
-                  {/* <div className="col-lg-4">
-                    <Typography>
-                      Phone Number:
-                    </Typography>
-                  </div>
-                  <input className="col-lg-8" type="number" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)}/> */}
                   <div className="col-lg-1"></div>
                   <TextFields
                     required
@@ -215,18 +208,11 @@ function Register() {
                   >
                     Account Information
                   </Typography>
-                  {/* <h2 className="font-weight-light col-lg-12">Account Information</h2> */}
                 </div>
 
                 <p></p>
 
                 <div className="row">
-                  {/* <div className="col-lg-4">
-                    <Typography>
-                      Email:
-                    </Typography>
-                  </div>
-                  <input className="col-lg-8" type="text" name="email" value={email} onChange={(e) => setEmail(e.target.value)}/> */}
                   <div className="col-lg-1"></div>
                   <TextFields
                     required
@@ -243,12 +229,6 @@ function Register() {
                 <p></p>
 
                 <div className="row">
-                  {/* <div className="col-lg-4">
-                    <Typography>
-                      Password:
-                    </Typography>
-                  </div>
-                  <input className="col-lg-8" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)}/> */}
                   <div className="col-lg-1"></div>
                   <TextFields
                     required
@@ -265,12 +245,6 @@ function Register() {
                 <p></p>
 
                 <div className="row">
-                  {/* <div className="col-lg-4">
-                    <Typography>
-                      Confirm Password:
-                    </Typography>
-                  </div>
-                  <input className="col-lg-8" type="password" name="c_password" value={c_password} onChange={(e) => setCPassword(e.target.value)}/> */}
                   <div className="col-lg-1"></div>
                   <TextFields
                     required
@@ -293,18 +267,11 @@ function Register() {
                   >
                     Address
                   </Typography>
-                  {/* <h2 className="font-weight-light col-lg-12">Address</h2> */}
                 </div>
 
                 <p></p>
 
                 <div className="row">
-                  {/* <div className="col-lg-4">
-                    <Typography>
-                      Street Name:
-                    </Typography>
-                  </div>
-                  <input className="col-lg-8" type="text" name="street_name" value={street} onChange={(e) => setStreet(e.target.value)}/> */}
                   <div className="col-lg-1"></div>
                   <TextFields
                     required
@@ -321,12 +288,6 @@ function Register() {
                 <p></p>
 
                 <div className="row">
-                  {/* <div className="col-lg-4">
-                    <Typography>
-                      State:
-                    </Typography>
-                  </div>
-                  <input className="col-lg-8" type="text" name="statee" value={statee} onChange={(e) => setStatee(e.target.value)}/> */}
                   <div className="col-lg-1"></div>
                   <TextFields
                     required
@@ -343,12 +304,6 @@ function Register() {
                 <p></p>
 
                 <div className="row">
-                  {/* <div className="col-lg-4">
-                    <Typography>
-                      Postal Code:
-                    </Typography>
-                  </div>
-                  <input className="col-lg-8" type="text" name="post" value={post} onChange={(e) => setPost(e.target.value)}/> */}
                   <div className="col-lg-1"></div>
                   <TextFields
                     required
@@ -365,12 +320,6 @@ function Register() {
                 <p></p>
 
                 <div className="row">
-                  {/* <div className="col-lg-4">
-                    <Typography>
-                      Country:
-                    </Typography>
-                  </div>
-                  <input className="col-lg-8" type="text" name="country" value={country} onChange={(e) => setCountry(e.target.value)}/> */}
                   <div className="col-lg-1"></div>
                   <TextFields
                     required
@@ -388,7 +337,6 @@ function Register() {
 
                 <div className="row">
                   <div className="col-lg-10"></div>
-                  {/* <button className="button col-lg-2 btn-primary btn-block" onClick={handleSubmit}>button</button> */}
                   <Buttons
                     className="col-lg-2"
                     variant="contained"
@@ -396,6 +344,15 @@ function Register() {
                     onClick={handleSubmit}
                   >
                     Register
+                  </Buttons>
+
+                  <Buttons
+                    className="col-lg-2"
+                    variant="contained"
+                    color="primary"
+                    onClick={test}
+                  >
+                    test
                   </Buttons>
                 </div>
               </form>
@@ -410,6 +367,5 @@ function Register() {
   );
 }
 
-//ReactDOM.render(<Register />, document.getElementById('root'));
 
 export default Register;
