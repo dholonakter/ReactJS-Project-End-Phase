@@ -10,12 +10,14 @@ import UserProducts from "./pages/UserProducts";
 import UserHistory from "./pages/UserHistory";
 import ChatMessage from "./pages/ChatMessage";
 import axios from "axios";
+import Verification from "./pages/Verification";
 import Profile from "./pages/Profile";
 import {store, useGlobalState} from 'state-pool';
 import AddProduct from "./pages/AddProduct";
 import EditProduct from "./components/EditProdcut";
 import AllProducts  from "./components/AllProducts";
 import Navigation from "./components/Navigation";
+//import Redirect from "./components/home.php";
 import Home from "./pages/Home";
 import ProfileNavigation from "./components/ProfileNavigation";
 import { FaPhoneSlash } from "react-icons/fa";
@@ -88,12 +90,18 @@ function App() {
           <Route exact path="/userproducts">
 		    <UserProducts/>
 		  </Route>
+      <Route exact path="/verification">
+		    <Verification/>
+		  </Route>
           <Route exact path="/userhistory">
 		    <UserHistory/>
 		  </Route>
           <Route exact path="/filter">
             <Filter />
           </Route>
+          {/* <Route exact path="/redirect">
+            <Redirect />
+		  </Route> */}
           <Route exact path="/all" component={AllProducts} />
           <Route exact path="/add" component={AddProduct} />
           <Route exact path="/edit/:id" component={EditProduct} />
