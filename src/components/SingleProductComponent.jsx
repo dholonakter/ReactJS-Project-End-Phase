@@ -9,7 +9,7 @@ import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import NewNavigation from "../components/NewNavigation"
+import Navigation from "../components/Navigation"
 import Footer from "../components/Footer"
 import { Typography } from '@material-ui/core';
 import { withRouter } from "react-router";
@@ -48,7 +48,7 @@ class SingleProductComponent extends React.Component{
         return(
             <div class="product">
                 <div>
-                    <NewNavigation />
+                    <Navigation />
                 </div>
                 <CardActionArea>
                     <header>

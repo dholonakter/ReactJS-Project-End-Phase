@@ -3,7 +3,7 @@ import axios from 'axios';
 import {Typography, TextField, Button, Slider, Checkbox, FormGroup, FormControlLabel} from '@material-ui/core';
 import React, { useState, useEffect } from "react";
 import { useParams } from 'react-router';
-import NewNavigation from "../components/NewNavigation"
+import Navigation from "../components/Navigation"
 import Footer from "../components/Footer"
 
 function SingleProductPage({item}){
