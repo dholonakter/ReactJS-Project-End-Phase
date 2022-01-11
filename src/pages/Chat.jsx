@@ -60,8 +60,8 @@ const columns = [
   function getData(user){
 
     if(user.value == null){
-      //window.location.href = "https://i383988.hera.fhict.nl/login";
-      window.location.href = "http://localhost:3000/login";
+      window.location.href = "https://i383988.hera.fhict.nl/login";
+      //window.location.href = "http://localhost:3000/login";
     }
     
       axios({
