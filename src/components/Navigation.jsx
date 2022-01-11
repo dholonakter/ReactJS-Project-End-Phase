@@ -101,6 +101,15 @@ function Navigation(props) {
               </Link>
             </p>
             <p
+              className={` pr-5   ${
+                props.location.pathname === "/" ? "active" : ""
+              }`}
+            >
+              <Link className="text-white" to="/chat">
+                Chat
+              </Link>
+            </p>
+            <p
               className={`pr-5 ${
                 props.location.pathname === "/" ? "active" : ""
               }`}

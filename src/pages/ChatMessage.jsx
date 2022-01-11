@@ -44,6 +44,10 @@ class ChatMessage extends React.Component {
     this.handleRefresh = this.handleRefresh.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
 
+    if(this.props.location.state == undefined) {
+      window.location.href = "https://i383988.hera.fhict.nl/login";
+    }
+
     chatList = this.getData(this.props.location.state.id, this.props.location.state.targetid);
 	}
 
@@ -163,7 +167,7 @@ class ChatMessage extends React.Component {
               <p></p>
   
   <div className="row">
-      <TextFields required className="col-lg-10" variant="outlined" label="Type your message here" type="text" name="chatMessage" value={this.state.text} onChange={this.handleTextChange}/>
+      <TextFields required className="col-lg-10" variant="outlined" label="Type your message here" type="text" name="chatMessage" value={this.state.text} onChange={this.handleTextChange} inputProps={{ maxLength: 60 }}/>
       <div className="col-lg-2" style={{paddingLeft: '5px'}}><Buttons className="col-lg-12" variant="contained" style={{height: '100%'}} color="primary"  startIcon={<SaveIcon/>} onClick={this.handleSubmit}>Send</Buttons></div>
   </div>
               </div>

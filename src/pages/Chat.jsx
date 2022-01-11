@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState } from "react";
 import { BrowserRouter, Route, Switch, Link, withRouter } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { store, useGlobalState } from "state-pool";
 
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -15,6 +16,10 @@ import TableRow from '@mui/material/TableRow';
 import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
+
+
+
+
 
 const columns = [
     {
@@ -40,40 +45,94 @@ const columns = [
     },
   ];
 
+  function setExpiration() {
+    let timestamp = new Date();
+    timestamp.setDate(timestamp.getDate());
+    timestamp.setHours(timestamp.getHours());
+    timestamp.setMinutes(timestamp.getMinutes());
+    timestamp.setSeconds(timestamp.getSeconds() + 1);
+    return timestamp;
+  }
+
+
   let chatData = [];
 
-  function getData(){
+  function getData(user){
 
-      chatData = [];
+    if(user.value == null){
+      //window.location.href = "https://i383988.hera.fhict.nl/login";
+      window.location.href = "http://localhost:3000/login";
+    }
     
       axios({
         method: 'GET',
-        url:'https://i383988.hera.fhict.nl/chat/getChatList.php?', //
+        url:'https://i383988.hera.fhict.nl/chat/getChatList.php?userID='+user.value.id, //
         config: {headers:{'Content-Type': 'multipart/form-data'}}
       }).then(response => response.data).then((data) =>{
+         chatData = [];
          for(let i = 0; i<data.length; i++){
              chatData.push(data[i]);
          }
          
       })
-      console.log(chatData);
       return chatData;
   }
-    
-    let chatList = getData();
+
+    var user;
+
   
 class Chat extends React.Component {
-	
 	constructor(props){
     super(props);
+    this.state = {
+      chats: chatData
+    };
+    //this.handleLogout();
+    user = store.getState("currentUser");
+    getData(store.getState("currentUser"));
 	}
-	
-	chatMessage(a, b) {
-    this.props.history.push("/chatMessage", {id: '10', targetid: a, name: b});
+
+	setChat = () => {
+    this.setState({
+      chats: chatData
+    });
+  }
+
+  handleLogout = () => {
+    //const [currentUser, setCurrentUser] = useGlobalState("currentUser");
+    //const [navigation, setNav] = useGlobalState("navigation");
+    if (user.value != null) {
+      let formData = new FormData();
+      formData.append("logout_user", "Signing out");
+      formData.append("user_id", user.value.id);
+      axios({
+        method: "POST",
+        url: "https://i383988.hera.fhict.nl/database.php?",
+        data: formData,
+        config: { headers: { "Content-Type": "multipart/form-data" } },
+      }).then(function (response) {
+        //setNav("/Login");
+        //setCurrentUser("");
+        document.cookie =
+          "current_user= ; expires=" + setExpiration().toUTCString();
+        alert("Successfully logged out!");
+        document.querySelector("#home_nav").click();
+      });
+    }
+  }
+
+	chatMessage(currUser, a, b) {
+    this.props.history.push("/chatMessage", {id: currUser, targetid: a, name: b});
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(() => this.setChat(), 500);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
   
   render(){	
-  
   return (
     <div className="register">
       <div className="container">
@@ -111,7 +170,7 @@ class Chat extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {chatList
+            {this.state.chats
               .map((row) => {
                 return (
                   <TableRow hover tabIndex={-1} key={row.code} sx={{ height: 100 }}> 
@@ -119,7 +178,7 @@ class Chat extends React.Component {
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={column.id} align={column.align} onClick={() => this.chatMessage(row.id, row.name)}>
+                        <TableCell key={column.id} align={column.align} onClick={() => this.chatMessage(user.value.id, row.id, row.name)}>
 
                           {column.format && typeof value === 'number'
                             ? column.format(value)
