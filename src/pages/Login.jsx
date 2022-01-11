@@ -39,7 +39,10 @@ function Login() {
        document.cookie="current_user="+id;
     });
   }
-
+  const openWindow = event =>{
+    event.preventDefault();
+    window.open('https://i383988.hera.fhict.nl/ForgotPassword','popUpWindow','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350');
+  }
   const handleLogin = event => {
     event.preventDefault(); 
     let user_id;   
@@ -103,7 +106,7 @@ function Login() {
                   <a href="/register">Register</a>
                 </p>
                 <p className="forgot-password text-right" style={{paddingRight: '40px'}}>
-                    Forgot <a href="/">Password?</a>
+                   <a href="https://i383988.hera.fhict.nl/ForgotPassword"> Forgot Password?</a>
                 </p>
             </form>
           </div>
