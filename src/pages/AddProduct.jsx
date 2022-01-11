@@ -19,9 +19,10 @@ class AddProduct extends React.Component {
 		productDesc: "",
 		price: null,
 		parsedPrice: null,
-		category: "",
+		category: "book",
 		imgName: "",
 		productImg: null,
+		error: false
 	  };
 	  this.handleSubmit = this.handleSubmit.bind(this);
 	  this.handleNameChange = this.handleNameChange.bind(this);
@@ -86,8 +87,12 @@ class AddProduct extends React.Component {
     
     handleImageChange(event){
 	  let that = this;
-	  const img = event.target.files[0];
-	  const options = {
+	  const img = event.target.files[0];	  
+	  if(img == null || img.type.toLowerCase().indexOf("image") == -1){
+		  this.setState({ error: true });
+		  alert("Please select an image for your product!");
+	  }else{
+		  const options = {
 	    maxSizeMB: 1,
 	    maxWidthOrHeight: 400,
 	    useWebWorker: true
@@ -96,7 +101,7 @@ class AddProduct extends React.Component {
 	    .then(function (compressedImg) {
 		  that.setState({productImg: compressedImg});
 		});
-	    
+	  }	    
 	}
   
     handleSubmit(event){
@@ -127,36 +132,63 @@ class AddProduct extends React.Component {
 	  }     
     }
 	
+	validProdName(){
+		if(this.state.productName == null || !(/\S/.test(this.state.productName))){
+			return false;
+		}else {
+			return true
+		}
+	}
+	
+	validProdDesc(){
+		if(this.state.productDesc == null || !(/\S/.test(this.state.productDesc))){
+			return false;
+		}else {
+			return true
+		}
+	}
+	
+	validPrice(){
+		if(Number.isNaN(this.state.parsedPrice) || !(/\S/.test(this.state.parsedPrice)) || this.state.parsedPrice <= 0 || this.state.parsedPrice == "NaN"){
+			return false
+		}else {
+			return true
+		}
+	}
+	
+	validCategory(){
+		if(this.getCategoryId(this.state.category) == -1){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
+	validImage(){
+		if(this.state.productImg == null || this.state.productImg.type.toLowerCase().indexOf("image") == -1){
+		  return false;
+	  }else{
+		  return true;
+	  }
+	}
+	
 	validateForm(){
 		let alertString = "";
-		let validForm = true;
+		let validForm;
 		if(this.state.user.value == null){
 			alert("Not signed into an account!");
 			validForm = false;
 			return validForm;
 		}
-		if(this.state.productName == null || !(/\S/.test(this.state.productName))){
-			alertString += "The product name is empty.\n";
+		if(!this.validProdName() || !this.validProdDesc() || !this.validPrice() || !this.validCategory || !this.validImage()){
 			validForm = false;
+			this.setState({ error: true });
+		}else{
+			validForm = true;
+			this.setState({ error: false });
 		}
-		if(this.state.productDesc == null || !(/\S/.test(this.state.productDesc))){
-			alertString += "The product description is empty.\n";
-			validForm = false;
-		}
-		if(Number.isNaN(this.state.parsedPrice) || !(/\S/.test(this.state.parsedPrice)) || this.state.parsedPrice <= 0 || this.state.parsedPrice == "NaN"){
-			alertString += "The price is not a valid positive number.\n";
-			validForm = false;
-		}
-		if(this.getCategoryId(this.state.category) == -1){
-			alertString += "No category has been selected for your product.\n";
-			validForm = false;
-		}
-		if(this.state.productImg == null){
-			alertString += "No image has been added for your product.\n";
-			validForm = false;
-		}
-		if(!validForm){
-			alert(alertString);
+		if(!this.validImage()){
+			alert("Please select an image for your product!");
 		}
 		return validForm;
 	}
@@ -199,6 +231,8 @@ class AddProduct extends React.Component {
                   <div className="col-lg-1"></div>
                   <TextFields required
                   className="col-lg-11" type="text" name="p_name" label="Product Name" value={this.state.productName} variant="outlined"
+				  error={this.state.error && !this.validProdName()  }
+				  helperText={this.state.error && !this.validProdName() ? 'Please enter a name for your product.' : ' '}
                   onChange={this.handleNameChange}
                   />
               </div>
@@ -209,6 +243,8 @@ class AddProduct extends React.Component {
                   <div className="col-lg-1"></div>
                   <TextFields required
                   className="col-lg-11" type="text" name="p_desc" label="Product Description" value={this.state.productDesc} variant="outlined"
+				  error={this.state.error && !this.validProdDesc() }
+				  helperText={this.state.error && !this.validProdDesc() ? 'Please enter a Description for your product.' : ' '}
 				  onChange={this.handleDescChange}
                   />
               </div>
@@ -218,7 +254,13 @@ class AddProduct extends React.Component {
               <div className="row">
                   <div className="col-lg-1"></div>
                   <TextFields required
-                  className="col-lg-11" variant="outlined" label="Price" type="number" name="price" value={this.state.price} onChange={this.handlePriceChange}
+                  className="col-lg-11" variant="outlined" label="Price(€)" type="number" name="price" value={this.state.price} 
+				  error={this.state.error && !this.validPrice() }
+				  helperText={this.state.error && !this.validPrice() ? 'Please enter a positive number for the price of your product.' : ' '}
+				  onChange={this.handlePriceChange}		
+                  InputLabelProps={{
+                    shrink: true,
+                  }}				  
                   />
               </div>
 
