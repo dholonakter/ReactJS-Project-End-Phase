@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import emailjs from '@emailjs/browser';
+
+import axios from "axios";
 import {
   Typography,
   TextField,
@@ -12,6 +14,10 @@ import {
 } from "@material-ui/core";
 
 function Verification(){
+const openWindow = event =>{
+  event.preventDefault();
+  window.open('https://i383988.hera.fhict.nl/register','popUpWindow','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350');
+}
 
   const handleEmail = event =>{ 
       event.preventDefault();
@@ -26,8 +32,8 @@ function Verification(){
   return (
     <div className="verification">
       <form id='form' onSubmit={handleEmail}>
-        <input type="text" name="to_email" value="cheesesien@gmail.com"style={{display: "none"}}/>
-        <input type="text" name="to_name" value="Ian"style={{display: "none"}}/>
+        <input type="text" name="to_email" value="c@gmail.com"style={{display: "none"}}/>
+        <input type="text" name="to_name" value=""style={{display: "none"}}/>
         <input type="text" name="verification_code" value="123"style={{display: "none"}}/>
       </form>
       <Button
@@ -36,7 +42,14 @@ function Verification(){
       color="primary"
       onClick={handleEmail}
       >Send</Button>
+        <Button
+      className="col-lg-2"
+      variant="contained"
+      color="primary"
+      onClick={openWindow}
+      >window</Button>
     </div>
+    
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Filter from "./pages/Filter";
 import Register from "./pages/Register";
@@ -16,6 +16,7 @@ import {store, useGlobalState} from 'state-pool';
 import AddProduct from "./pages/AddProduct";
 import EditProduct from "./components/EditProdcut";
 import AllProducts  from "./components/AllProducts";
+import ForgotPassword from "./pages/ForgotPassword";
 import Navigation from "./components/Navigation";
 //import Redirect from "./components/home.php";
 import Home from "./pages/Home";
@@ -92,6 +93,9 @@ function App() {
 		  </Route>
       <Route exact path="/verification">
 		    <Verification/>
+		  </Route>
+      <Route exact path="/ForgotPassword">
+		    <ForgotPassword/>
 		  </Route>
           <Route exact path="/userhistory">
 		    <UserHistory/>
