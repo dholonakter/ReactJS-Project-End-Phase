@@ -1,9 +1,15 @@
 import React from "react";
 import axios from "axios";
 //import {Button} from '@material-ui/core';
+import { getCountries } from 'react-phone-number-input/input'
+import en from 'react-phone-number-input/locale/en.json'
 import Buttons from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextFields from "@material-ui/core/TextField";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { useState } from "react";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer"
@@ -21,12 +27,90 @@ function Register() {
   const [street, setStreet] = useState("");
   const [statee, setStatee] = useState("");
   const [post, setPost] = useState("");
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState("Netherlands");
   const [arr, setArr] = useState("");
+  const [error, setError] = useState(false);
+  const [error_msg, setErrorMsg] = useState("");
 
+  const validText = (textValue) => {    
+	if(textValue == null || !(/\S/.test(textValue))){
+		return false;
+	}else {
+		return true;
+	}
+  }
+  
+  const validPost = () => {
+	  if(post == null || !(/\S/.test(post)) ){		  
+	    return false;
+	  }else {
+	   if( country === "Netherlands" && !(/^\d{4}[ ]?[A-Z]{2}$/.test(post))){
+		   return false
+	   }else{		   
+	     console.log(country);
+	     return true;
+	   }
+	 }
+  }
+  
+  const validEmail = () => {
+	if (validText(email) && email.includes("@", 1) && email.includes(".", 2)) {
+		return true;
+    } else {
+		return false;
+    }
+  }
+  
+  const validPassword = () => {
+    if (password.length >= 8 &&   new RegExp(/^((([0-9])+([a-z]))|(([a-z])+([0-9])))/, "i").test(password) && validText(password) ) {
+      if (password !== c_password) {
+		  setErrorMsg("Passwords do not match");
+		  return false;
+      }else{
+		  return true;
+	  }
+    } else {
+      setErrorMsg(
+        "Password needs to be at least 8 characters long and contain both letters and numbers"
+      );
+	  return false;
+    }
+  }
+  
+  const handleValidation = () => {
+	  let validForm;
+	  if(!validText(f_name) || !validText(l_name) || !validText(l_name) || !validText(street) || !validText(statee) || !validPost() || !validEmail() || !validPassword() || !validText(phone) ) {
+		  setError(true);
+		  validForm = false;
+	  }else{
+		  setError(false);
+		  validForm = true;
+	  }
+	  
+	  return validForm;
+  }
+  
+  const handlePhoneChange = (event) => {
+	  event.preventDefault();
+	  let number = event.target.value;
+	  
+	  if( number === '' || (/^[0-9\b]+$/.test(number)) ){
+		  setPhone(number);
+	  }
+  }  
+  
+  const handleCountrySelect = (event) => {
+    event.preventDefault();
+    const {
+      target: { value },
+    } = event;
+	setCountry(value);
+  }
+  
   const handleSubmit = (event) => {
     event.preventDefault();
-    let formData = new FormData();
+	if( handleValidation() ){
+	   let formData = new FormData();
     setArr({
       f_name: f_name,
       l_name: l_name,
@@ -67,29 +151,7 @@ function Register() {
     formData.append("statee", statee);
     formData.append("post", post);
     formData.append("country", country);
-
-    var valid = 1;
-    if (email.includes("@", 1) && email.includes(".", 2)) {
-    } else {
-      valid = 0;
-      alert("Email address is invalid!");
-    }
-
-    if (
-      password.length >= 8 &&
-      new RegExp(/^((([0-9])+([a-z]))|(([a-z])+([0-9])))/, "i").test(password)
-    ) {
-      if (password !== c_password) {
-        valid = 0;
-        alert("Password and confirm password needs to be the same!");
-      }
-    } else {
-      valid = 0;
-      alert(
-        "Password needs to be at least 8 characters long and contain both letters and numbers"
-      );
-    }
-    if (valid == 1) {
+	
       axios({
         method: "POST",
         url: "https://i383988.hera.fhict.nl/database.php?",
@@ -100,9 +162,7 @@ function Register() {
         console.log("New User Added");
         alert("Registration Completed!");
       });
-    } else {
-      alert("Please enter valid data!");
-    }
+	}   
   };
 
   const test =(event)=>{
@@ -163,6 +223,7 @@ function Register() {
                     label="First Name"
                     value={f_name}
                     variant="outlined"
+					inputProps={{ maxLength: 50 }}
                     onChange={(e) => setF_name(e.target.value)}
                   />
                 </div>
@@ -179,6 +240,7 @@ function Register() {
                     type="text"
                     name="l_name"
                     value={l_name}
+					inputProps={{ maxLength: 50 }}
                     onChange={(e) => setL_name(e.target.value)}
                   />
                 </div>
@@ -192,13 +254,13 @@ function Register() {
                     className="col-lg-11"
                     variant="outlined"
                     label="Phone"
-                    type="number"
                     name="phone"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+					inputProps={{ maxLength: 11 }}
+                    onChange={handlePhoneChange}
                   />
                 </div>
-
+				
                 <p></p>
 
                 <div className="row">
@@ -270,7 +332,7 @@ function Register() {
                 </div>
 
                 <p></p>
-
+				
                 <div className="row">
                   <div className="col-lg-1"></div>
                   <TextFields
@@ -281,6 +343,7 @@ function Register() {
                     type="text"
                     name="street_name"
                     value={street}
+					inputProps={{ maxLength: 50 }}
                     onChange={(e) => setStreet(e.target.value)}
                   />
                 </div>
@@ -297,6 +360,7 @@ function Register() {
                     type="text"
                     name="statee"
                     value={statee}
+					inputProps={{ maxLength: 50 }}
                     onChange={(e) => setStatee(e.target.value)}
                   />
                 </div>
@@ -313,27 +377,36 @@ function Register() {
                     type="text"
                     name="post"
                     value={post}
-                    onChange={(e) => setPost(e.target.value)}
+					inputProps={{ maxLength: 25 }}
+                    onChange={(e) => setPost(e.target.value.toUpperCase())}
                   />
                 </div>
 
                 <p></p>
-
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <TextFields
-                    required
-                    className="col-lg-11"
-                    variant="outlined"
-                    label="Country"
-                    type="text"
-                    name="country"
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                  />
-                </div>
-
-                <p></p>
+				
+				<div className ="row">
+				  <div className="col-lg-1"></div>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={country}
+                  label="country"
+                  onChange={handleCountrySelect}
+                >
+				
+				{getCountries().map((country) => (
+                <MenuItem
+  				  key={en[country]} 
+				  value={en[country]}
+				>
+                {en[country]}
+                </MenuItem>
+                ))}
+				
+				</Select>
+				</div>
+				
+				<p></p>
 
                 <div className="row">
                   <div className="col-lg-10"></div>
