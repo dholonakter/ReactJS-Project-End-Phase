@@ -1,12 +1,33 @@
-import React from "react";
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {Typography, TextField, Button, Slider, Checkbox, FormGroup, FormControlLabel} from '@material-ui/core';
-
+import React, { useState, useEffect } from "react";
+import { useParams } from 'react-router';
 import NewNavigation from "../components/NewNavigation"
 import Footer from "../components/Footer"
 
 function SingleProductPage({item}){
+const { id } = useParams();
+
+// function GetProductById(){
+//   axios({
+//     method: 'GET',
+//     url:"https://i383988.hera.fhict.nl/database.php?get_productById="+id,
+//     config: {headers:{'Content-Type': 'multipart/form-data'}}
+//   })
+//   console.log(id);
+// };
+
+// componentDidMount() {
+//   axios.get('https://i383988.hera.fhict.nl/database.php?get_productById="+id')
+//       .then(res => {
+//           this.setState({ product: res.data });
+//       })
+//       .catch(function (error) {
+//           console.log(error);
+//       })
+// }
+
 return(
 
 <div class="product">

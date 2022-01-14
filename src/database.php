@@ -118,6 +118,17 @@ switch ($method){
             $result = mysqli_query($connection, $sql);
             echo json_encode(mysqli_fetch_object($result));
         }
+        else if(isset($_GET['get_productById'])){
+            $sql = "SELECT * FROM product WHERE id = '".$_GET['get_productById']."'";
+            $result = mysqli_query($connection, $sql);
+            echo json_encode(mysqli_fetch_object($result));
+            // if(!$id) echo '[';
+            // for($i=0; $i<mysqli_num_rows($result); $i++){  
+            //     echo ($i>0?',':'').json_encode(mysqli_fetch_object($result));  
+            // } 
+            // if(!$id) echo ']';
+            // 
+        }
         break;
     }
 
