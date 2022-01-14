@@ -30,7 +30,6 @@ function Register() {
   const [country, setCountry] = useState("Netherlands");
   const [arr, setArr] = useState("");
   const [error, setError] = useState(false);
-  const [error_msg, setErrorMsg] = useState("");
 
   const validText = (textValue) => {    
 	if(textValue == null || !(/\S/.test(textValue))){
@@ -64,15 +63,11 @@ function Register() {
   const validPassword = () => {
     if (password.length >= 8 &&   new RegExp(/^((([0-9])+([a-z]))|(([a-z])+([0-9])))/, "i").test(password) && validText(password) ) {
       if (password !== c_password) {
-		  setErrorMsg("Passwords do not match");
 		  return false;
       }else{
 		  return true;
 	  }
     } else {
-      setErrorMsg(
-        "Password needs to be at least 8 characters long and contain both letters and numbers"
-      );
 	  return false;
     }
   }
@@ -224,6 +219,8 @@ function Register() {
                     value={f_name}
                     variant="outlined"
 					inputProps={{ maxLength: 50 }}
+					error={error && !validText(f_name) }
+				    helperText={error && !validText(f_name)? 'Please enter your first name' : ' '}
                     onChange={(e) => setF_name(e.target.value)}
                   />
                 </div>
@@ -241,6 +238,8 @@ function Register() {
                     name="l_name"
                     value={l_name}
 					inputProps={{ maxLength: 50 }}
+					error={error && !validText(l_name) }
+				    helperText={error && !validText(l_name)? 'Please enter your last name' : ' '}
                     onChange={(e) => setL_name(e.target.value)}
                   />
                 </div>
@@ -257,6 +256,8 @@ function Register() {
                     name="phone"
                     value={phone}
 					inputProps={{ maxLength: 11 }}
+					error={error && !validText(phone) }
+				    helperText={error && !validText(phone)? 'Please enter your phone number' : ' '}
                     onChange={handlePhoneChange}
                   />
                 </div>
@@ -284,6 +285,8 @@ function Register() {
                     type="text"
                     name="email"
                     value={email}
+					error={error && !validEmail() }
+				    helperText={error && !validEmail()? 'Please enter your email address' : ' '}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
@@ -300,6 +303,8 @@ function Register() {
                     type="password"
                     name="password"
                     value={password}
+					error={error && !validPassword() }
+				    helperText={error && !validPassword()? 'Password must be at least 8 characters long and contain both letters and numbers' : ' Password must be at least 8 characters long and contain both letters and numbers'}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
@@ -316,6 +321,8 @@ function Register() {
                     type="password"
                     name="c_password"
                     value={c_password}
+					error={error && password !== c_password }
+				    helperText={error && password !== c_password ? 'Passwords do not match' : ' '}
                     onChange={(e) => setCPassword(e.target.value)}
                   />
                 </div>
@@ -344,6 +351,8 @@ function Register() {
                     name="street_name"
                     value={street}
 					inputProps={{ maxLength: 50 }}
+					error={error && !validText(street) }
+				    helperText={error && !validText(street) ? 'Please enter your street and number' : ' '}
                     onChange={(e) => setStreet(e.target.value)}
                   />
                 </div>
@@ -361,6 +370,8 @@ function Register() {
                     name="statee"
                     value={statee}
 					inputProps={{ maxLength: 50 }}
+					error={error && !validText(statee) }
+				    helperText={error && !validText(statee) ? 'Please enter your city' : ' '}
                     onChange={(e) => setStatee(e.target.value)}
                   />
                 </div>
@@ -378,6 +389,8 @@ function Register() {
                     name="post"
                     value={post}
 					inputProps={{ maxLength: 25 }}
+					error={error && !validPost() }
+				    helperText={error && !validPost() ? 'Please enter your post code' : ' '}
                     onChange={(e) => setPost(e.target.value.toUpperCase())}
                   />
                 </div>
