@@ -47,7 +47,7 @@ function Navigation(props) {
                   {currentNavigation.value.replace("/", "")}
                 </Link>
               </li>
-              <li
+              {/* <li
                 className={`nav-item mr-auto  ${
                   props.location.pathname === "/register" ? "active" : ""
                 }`}
@@ -55,8 +55,8 @@ function Navigation(props) {
                 <Link className="nav-link font-weight-bold" to="/register">
                   Register
                 </Link>
-              </li>
-              <li
+              </li> */}
+              {/* <li
                 className={`nav-item mr-auto  ${
                   props.location.pathname === "/about" ? "active" : ""
                 }`}
@@ -64,7 +64,7 @@ function Navigation(props) {
                 <Link className="nav-link font-weight-bold" to="/about">
                   About
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
@@ -107,15 +107,6 @@ function Navigation(props) {
             >
               <Link className="text-white" to="/chat">
                 Chat
-              </Link>
-            </p>
-            <p
-              className={`pr-5 ${
-                props.location.pathname === "/" ? "active" : ""
-              }`}
-            >
-              <Link className="text-white" to="/home">
-                Help
               </Link>
             </p>
           </div>

@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import react, { useState } from "react";
 import {
   FormGroup,
   FormControl,
@@ -8,8 +8,8 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { addProduct } from '../Service/api';
-import { useHistory } from 'react-router-dom';
+import { addProduct } from "../Service/api";
+import { useHistory } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 
