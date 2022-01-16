@@ -3,6 +3,7 @@ import axios from "axios";
 //import {Button} from '@material-ui/core';
 import { getCountries } from 'react-phone-number-input/input'
 import en from 'react-phone-number-input/locale/en.json'
+import emailjs from '@emailjs/browser';
 import Buttons from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextFields from "@material-ui/core/TextField";
@@ -30,6 +31,32 @@ function Register() {
   const [country, setCountry] = useState("Netherlands");
   const [arr, setArr] = useState("");
   const [error, setError] = useState(false);
+
+  const [verCode, setVerCode] = useState("");
+  const [verLink, setVerLink] = useState("");
+
+  var vCode;
+
+  const generateLink = () => {
+    
+      axios({
+        method: "GET",
+        url:
+          "https://i383988.hera.fhict.nl/registerUser/generateVerificationCode.php",
+          config: { headers: { "Content-Type": "multipart/form-data" } },
+      }).then(function (response) {
+        vCode = response.data;
+        //console.log(vCode);
+        setVerCode(vCode);
+        var vLink = "https://i383988.hera.fhict.nl/registerUser/activate.php?v=" + vCode;
+        setVerLink(vLink); 
+        //console.log(verLink);
+      });
+  }
+
+  if(verCode == null || verCode == ""){
+    generateLink();
+  }
 
   const validText = (textValue) => {    
 	if(textValue == null || !(/\S/.test(textValue))){
@@ -116,6 +143,7 @@ function Register() {
       statee: statee,
       post: post,
       country: country,
+      vCode: verCode,
     });
     console.log(
       f_name +
@@ -146,16 +174,39 @@ function Register() {
     formData.append("statee", statee);
     formData.append("post", post);
     formData.append("country", country);
+    formData.append("vCode", verCode);
 	
+      // axios({
+      //   method: "POST",
+      //   url: "https://i383988.hera.fhict.nl/database.php?",
+      //   data: formData,
+      //   config: { headers: { "Content-Type": "multipart/form-data" } },
+      // }).then(function (response) {
+      //   console.log(response);
+      //   console.log("New User Added");
+      //   alert("Registration Completed!");
+      // });
+
       axios({
         method: "POST",
         url: "https://i383988.hera.fhict.nl/database.php?",
         data: formData,
         config: { headers: { "Content-Type": "multipart/form-data" } },
       }).then(function (response) {
-        console.log(response);
+        //console.log(response);
         console.log("New User Added");
-        alert("Registration Completed!");
+        alert("Registration Completed! Please verify your email!");
+        
+        console.log(verLink);
+
+      emailjs.sendForm('service_ohgufs8', 'template_fjb5ppk', document.getElementById('form'), 'user_wP1nWnhp6kPDxUx1v1MAi')
+      .then((result) => {
+        console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+
+        //setVerCode(""); 
       });
 	}   
   };
@@ -185,7 +236,7 @@ function Register() {
             <div className="col-lg-2"></div>
             <div className="col-lg-8">
               <div className="row">
-                <div className="col-lg-10">
+                <div className="col-lg-12">
                   <center>
                     <Typography className="font-weight-light" variant="h2">
                       Register
@@ -196,7 +247,7 @@ function Register() {
 
               <p></p>
 
-              <form>
+              <form id="form">
                 <div className="row">
                   <Typography
                     className="font-weight-light col-lg-12"
@@ -418,6 +469,17 @@ function Register() {
 				
 				</Select>
 				</div>
+
+                  <TextFields
+                    className="col-lg-11"
+                    variant="outlined"
+                    label="verification"
+                    type="text"
+                    name="verification"
+                    value={verLink}
+                    style={{display: "none"}}
+                    //onChange={(e) => setVerCode(e.target.value)}
+                  />
 				
 				<p></p>
 
@@ -432,14 +494,14 @@ function Register() {
                     Register
                   </Buttons>
 
-                  <Buttons
+                  {/* <Buttons
                     className="col-lg-2"
                     variant="contained"
                     color="primary"
                     onClick={test}
                   >
                     test
-                  </Buttons>
+                  </Buttons> */}
                 </div>
               </form>
             </div>
