@@ -1,18 +1,19 @@
 import React from "react";
 import axios from "axios";
 //import {Button} from '@material-ui/core';
-import { getCountries } from 'react-phone-number-input/input'
-import en from 'react-phone-number-input/locale/en.json'
+import { getCountries } from "react-phone-number-input/input";
+import en from "react-phone-number-input/locale/en.json";
 import Buttons from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextFields from "@material-ui/core/TextField";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import { useState } from "react";
 import Navigation from "../components/Navigation";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
+import { Box, Container } from "@material-ui/core";
 //import ReactDOM from "react-dom";
 
 function Register() {
@@ -31,122 +32,138 @@ function Register() {
   const [arr, setArr] = useState("");
   const [error, setError] = useState(false);
 
-  const validText = (textValue) => {    
-	if(textValue == null || !(/\S/.test(textValue))){
-		return false;
-	}else {
-		return true;
-	}
-  }
-  
+  const validText = (textValue) => {
+    if (textValue == null || !/\S/.test(textValue)) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   const validPost = () => {
-	  if(post == null || !(/\S/.test(post)) ){		  
-	    return false;
-	  }else {
-	   if( country === "Netherlands" && !(/^\d{4}[ ]?[A-Z]{2}$/.test(post))){
-		   return false
-	   }else{		   
-	     console.log(country);
-	     return true;
-	   }
-	 }
-  }
-  
+    if (post == null || !/\S/.test(post)) {
+      return false;
+    } else {
+      if (country === "Netherlands" && !/^\d{4}[ ]?[A-Z]{2}$/.test(post)) {
+        return false;
+      } else {
+        console.log(country);
+        return true;
+      }
+    }
+  };
+
   const validEmail = () => {
-	if (validText(email) && email.includes("@", 1) && email.includes(".", 2)) {
-		return true;
+    if (validText(email) && email.includes("@", 1) && email.includes(".", 2)) {
+      return true;
     } else {
-		return false;
+      return false;
     }
-  }
-  
+  };
+
   const validPassword = () => {
-    if (password.length >= 8 &&   new RegExp(/^((([0-9])+([a-z]))|(([a-z])+([0-9])))/, "i").test(password) && validText(password) ) {
+    if (
+      password.length >= 8 &&
+      new RegExp(/^((([0-9])+([a-z]))|(([a-z])+([0-9])))/, "i").test(
+        password
+      ) &&
+      validText(password)
+    ) {
       if (password !== c_password) {
-		  return false;
-      }else{
-		  return true;
-	  }
+        return false;
+      } else {
+        return true;
+      }
     } else {
-	  return false;
+      return false;
     }
-  }
-  
+  };
+
   const handleValidation = () => {
-	  let validForm;
-	  if(!validText(f_name) || !validText(l_name) || !validText(l_name) || !validText(street) || !validText(statee) || !validPost() || !validEmail() || !validPassword() || !validText(phone) ) {
-		  setError(true);
-		  validForm = false;
-	  }else{
-		  setError(false);
-		  validForm = true;
-	  }
-	  
-	  return validForm;
-  }
-  
+    let validForm;
+    if (
+      !validText(f_name) ||
+      !validText(l_name) ||
+      !validText(l_name) ||
+      !validText(street) ||
+      !validText(statee) ||
+      !validPost() ||
+      !validEmail() ||
+      !validPassword() ||
+      !validText(phone)
+    ) {
+      setError(true);
+      validForm = false;
+    } else {
+      setError(false);
+      validForm = true;
+    }
+
+    return validForm;
+  };
+
   const handlePhoneChange = (event) => {
-	  event.preventDefault();
-	  let number = event.target.value;
-	  
-	  if( number === '' || (/^[0-9\b]+$/.test(number)) ){
-		  setPhone(number);
-	  }
-  }  
-  
+    event.preventDefault();
+    let number = event.target.value;
+
+    if (number === "" || /^[0-9\b]+$/.test(number)) {
+      setPhone(number);
+    }
+  };
+
   const handleCountrySelect = (event) => {
     event.preventDefault();
     const {
       target: { value },
     } = event;
-	setCountry(value);
-  }
-  
+    setCountry(value);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-	if( handleValidation() ){
-	   let formData = new FormData();
-    setArr({
-      f_name: f_name,
-      l_name: l_name,
-      phone: phone,
-      email: email,
-      password: password,
-      street: street,
-      statee: statee,
-      post: post,
-      country: country,
-    });
-    console.log(
-      f_name +
-        ", " +
-        l_name +
-        ", " +
-        phone +
-        ", " +
-        email +
-        ", " +
-        password +
-        ", " +
-        street +
-        ", " +
-        statee +
-        ", " +
-        post +
-        ", " +
-        country
-    );
-    formData.append("register_user", "registering");
-    formData.append("f_name", f_name);
-    formData.append("l_name", l_name);
-    formData.append("phone", phone);
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("street", street);
-    formData.append("statee", statee);
-    formData.append("post", post);
-    formData.append("country", country);
-	
+    if (handleValidation()) {
+      let formData = new FormData();
+      setArr({
+        f_name: f_name,
+        l_name: l_name,
+        phone: phone,
+        email: email,
+        password: password,
+        street: street,
+        statee: statee,
+        post: post,
+        country: country,
+      });
+      console.log(
+        f_name +
+          ", " +
+          l_name +
+          ", " +
+          phone +
+          ", " +
+          email +
+          ", " +
+          password +
+          ", " +
+          street +
+          ", " +
+          statee +
+          ", " +
+          post +
+          ", " +
+          country
+      );
+      formData.append("register_user", "registering");
+      formData.append("f_name", f_name);
+      formData.append("l_name", l_name);
+      formData.append("phone", phone);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("street", street);
+      formData.append("statee", statee);
+      formData.append("post", post);
+      formData.append("country", country);
+
       axios({
         method: "POST",
         url: "https://i383988.hera.fhict.nl/database.php?",
@@ -157,13 +174,13 @@ function Register() {
         console.log("New User Added");
         alert("Registration Completed!");
       });
-	}   
+    }
   };
 
-  const test =(event)=>{
+  const test = (event) => {
     let apiData = new FormData();
     apiData.append("api_key", "fe013d3a5655425fbb1b1286c784430a");
-    apiData.append('email', "cheesesien@gmail.com");
+    apiData.append("email", "cheesesien@gmail.com");
     axios({
       method: "GET",
       url: "https://emailvalidation.abstractapi.com/v1/?api_key=fe013d3a5655425fbb1b1286c784430a&email=cheesesien@gmail.com",
@@ -172,286 +189,251 @@ function Register() {
       console.log(response);
       console.log(response.data);
     });
-  }
+  };
 
   return (
-    <div className="app">   
-     <div>
-        <Navigation/>    
-      </div>
-      <div className="register">
-        <div className="container">
-          <div className="row align-items-center my-5">
-            <div className="col-lg-2"></div>
-            <div className="col-lg-8">
-              <div className="row">
-                <div className="col-lg-10">
-                  <center>
-                    <Typography className="font-weight-light" variant="h2">
-                      Register
-                    </Typography>
-                  </center>
-                </div>
-              </div>
+    <div className="app">
+      <Navigation />
 
-              <p></p>
+      <Container maxWidth="sm">
+        <Typography
+          className="font-weight-light text-center"
+          style={{ padding: "20px 0px" }}
+          variant="h4"
+        >
+          Register
+        </Typography>
 
-              <form>
-                <div className="row">
-                  <Typography
-                    className="font-weight-light col-lg-12"
-                    variant="h4"
-                  >
-                    Personal Information
-                  </Typography>
-                </div>
+        {/* <form onSubmit={handleSubmit}> */}
 
-                <p></p>
+        <form>
+          <Typography className="font-weight-light text-left" variant="h5">
+            Personal Information
+          </Typography>
+          {/* <h2 className="font-weight-light col-lg-12">Personal Information</h2> */}
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <TextFields
-                    required
-                    className="col-lg-11"
-                    type="text"
-                    name="f_name"
-                    label="First Name"
-                    value={f_name}
-                    variant="outlined"
-					inputProps={{ maxLength: 50 }}
-					error={error && !validText(f_name) }
-				    helperText={error && !validText(f_name)? 'Please enter your first name' : ' '}
-                    onChange={(e) => setF_name(e.target.value)}
-                  />
-                </div>
+          <p></p>
 
-                <p></p>
+          {/* <div className="col-lg-4" variant="h5">
+          <Typography>
+            First Name:
+          </Typography>
+        </div> */}
+          <TextFields
+            required
+            fullWidth
+            type="text"
+            name="f_name"
+            label="First Name"
+            value={f_name}
+            variant="outlined"
+            inputProps={{ maxLength: 50 }}
+            error={error && !validText(f_name)}
+            helperText={
+              error && !validText(f_name) ? "Please enter your first name" : " "
+            }
+            onChange={(e) => setF_name(e.target.value)}
+          />
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <TextFields
-                    required
-                    className="col-lg-11"
-                    variant="outlined"
-                    label="Last Name"
-                    type="text"
-                    name="l_name"
-                    value={l_name}
-					inputProps={{ maxLength: 50 }}
-					error={error && !validText(l_name) }
-				    helperText={error && !validText(l_name)? 'Please enter your last name' : ' '}
-                    onChange={(e) => setL_name(e.target.value)}
-                  />
-                </div>
+          <p></p>
 
-                <p></p>
+          <TextFields
+            required
+            fullWidth
+            variant="outlined"
+            label="Last Name"
+            type="text"
+            name="l_name"
+            value={l_name}
+            inputProps={{ maxLength: 50 }}
+            error={error && !validText(l_name)}
+            helperText={
+              error && !validText(l_name) ? "Please enter your last name" : " "
+            }
+            onChange={(e) => setL_name(e.target.value)}
+          />
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <TextFields
-                    required
-                    className="col-lg-11"
-                    variant="outlined"
-                    label="Phone"
-                    name="phone"
-                    value={phone}
-					inputProps={{ maxLength: 11 }}
-					error={error && !validText(phone) }
-				    helperText={error && !validText(phone)? 'Please enter your phone number' : ' '}
-                    onChange={handlePhoneChange}
-                  />
-                </div>
-				
-                <p></p>
+          <p></p>
 
-                <div className="row">
-                  <Typography
-                    className="font-weight-light col-lg-12"
-                    variant="h4"
-                  >
-                    Account Information
-                  </Typography>
-                </div>
+          <TextFields
+            required
+            fullWidth
+            variant="outlined"
+            label="Phone"
+            name="phone"
+            value={phone}
+            inputProps={{ maxLength: 11 }}
+            error={error && !validText(phone)}
+            helperText={
+              error && !validText(phone)
+                ? "Please enter your phone number"
+                : " "
+            }
+            onChange={handlePhoneChange}
+          />
 
-                <p></p>
+          <p></p>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <TextFields
-                    required
-                    className="col-lg-11"
-                    variant="outlined"
-                    label="Email"
-                    type="text"
-                    name="email"
-                    value={email}
-					error={error && !validEmail() }
-				    helperText={error && !validEmail()? 'Please enter your email address' : ' '}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
+          <Typography className="font-weight-light" variant="h5">
+            Account Information
+          </Typography>
 
-                <p></p>
+          <p></p>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <TextFields
-                    required
-                    className="col-lg-11"
-                    variant="outlined"
-                    label="Password"
-                    type="password"
-                    name="password"
-                    value={password}
-					error={error && !validPassword() }
-				    helperText={error && !validPassword()? 'Password must be at least 8 characters long and contain both letters and numbers' : ' Password must be at least 8 characters long and contain both letters and numbers'}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
+          <TextFields
+            required
+            fullWidth
+            variant="outlined"
+            label="Email"
+            type="text"
+            name="email"
+            value={email}
+            error={error && !validEmail()}
+            helperText={
+              error && !validEmail() ? "Please enter your email address" : " "
+            }
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-                <p></p>
+          <p></p>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <TextFields
-                    required
-                    className="col-lg-11"
-                    variant="outlined"
-                    label="Confirm Password"
-                    type="password"
-                    name="c_password"
-                    value={c_password}
-					error={error && password !== c_password }
-				    helperText={error && password !== c_password ? 'Passwords do not match' : ' '}
-                    onChange={(e) => setCPassword(e.target.value)}
-                  />
-                </div>
+          <TextFields
+            required
+            fullWidth
+            variant="outlined"
+            label="Password"
+            type="password"
+            name="password"
+            value={password}
+            error={error && !validPassword()}
+            helperText={
+              error && !validPassword()
+                ? "Password must be at least 8 characters long and contain both letters and numbers"
+                : " Password must be at least 8 characters long and contain both letters and numbers"
+            }
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-                <p></p>
+          <p></p>
 
-                <div className="row">
-                  <Typography
-                    className="font-weight-light col-lg-12"
-                    variant="h4"
-                  >
-                    Address
-                  </Typography>
-                </div>
+          <TextFields
+            required
+            fullWidth
+            variant="outlined"
+            label="Confirm Password"
+            type="password"
+            name="c_password"
+            value={c_password}
+            error={error && password !== c_password}
+            helperText={
+              error && password !== c_password ? "Passwords do not match" : " "
+            }
+            onChange={(e) => setCPassword(e.target.value)}
+          />
 
-                <p></p>
-				
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <TextFields
-                    required
-                    className="col-lg-11"
-                    variant="outlined"
-                    label="Street Name"
-                    type="text"
-                    name="street_name"
-                    value={street}
-					inputProps={{ maxLength: 50 }}
-					error={error && !validText(street) }
-				    helperText={error && !validText(street) ? 'Please enter your street and number' : ' '}
-                    onChange={(e) => setStreet(e.target.value)}
-                  />
-                </div>
+          <p></p>
 
-                <p></p>
+          <Typography className="font-weight-light" variant="h5">
+            Address
+          </Typography>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <TextFields
-                    required
-                    className="col-lg-11"
-                    variant="outlined"
-                    label="State"
-                    type="text"
-                    name="statee"
-                    value={statee}
-					inputProps={{ maxLength: 50 }}
-					error={error && !validText(statee) }
-				    helperText={error && !validText(statee) ? 'Please enter your city' : ' '}
-                    onChange={(e) => setStatee(e.target.value)}
-                  />
-                </div>
+          <p></p>
 
-                <p></p>
+          <TextFields
+            required
+            fullWidth
+            variant="outlined"
+            label="Street Name"
+            type="text"
+            name="street_name"
+            value={street}
+            inputProps={{ maxLength: 50 }}
+            error={error && !validText(street)}
+            helperText={
+              error && !validText(street)
+                ? "Please enter your street and number"
+                : " "
+            }
+            onChange={(e) => setStreet(e.target.value)}
+          />
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <TextFields
-                    required
-                    className="col-lg-11"
-                    variant="outlined"
-                    label="Post Code"
-                    type="text"
-                    name="post"
-                    value={post}
-					inputProps={{ maxLength: 25 }}
-					error={error && !validPost() }
-				    helperText={error && !validPost() ? 'Please enter your post code' : ' '}
-                    onChange={(e) => setPost(e.target.value.toUpperCase())}
-                  />
-                </div>
+          <p></p>
 
-                <p></p>
-				
-				<div className ="row">
-				  <div className="col-lg-1"></div>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={country}
-                  label="country"
-                  onChange={handleCountrySelect}
-                >
-				
-				{getCountries().map((country) => (
-                <MenuItem
-  				  key={en[country]} 
-				  value={en[country]}
-				>
+          <TextFields
+            required
+            fullWidth
+            variant="outlined"
+            label="State"
+            type="text"
+            name="statee"
+            value={statee}
+            inputProps={{ maxLength: 50 }}
+            error={error && !validText(statee)}
+            helperText={
+              error && !validText(statee) ? "Please enter your city" : " "
+            }
+            onChange={(e) => setStatee(e.target.value)}
+          />
+
+          <p></p>
+
+          <TextFields
+            required
+            fullWidth
+            variant="outlined"
+            label="Post Code"
+            type="text"
+            name="post"
+            value={post}
+            inputProps={{ maxLength: 25 }}
+            error={error && !validPost()}
+            helperText={
+              error && !validPost() ? "Please enter your post code" : " "
+            }
+            onChange={(e) => setPost(e.target.value.toUpperCase())}
+          />
+
+          <p></p>
+
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={country}
+            label="country"
+            onChange={handleCountrySelect}
+          >
+            {getCountries().map((country) => (
+              <MenuItem key={en[country]} value={en[country]}>
                 {en[country]}
-                </MenuItem>
-                ))}
-				
-				</Select>
-				</div>
-				
-				<p></p>
+              </MenuItem>
+            ))}
+          </Select>
 
-                <div className="row">
-                  <div className="col-lg-10"></div>
-                  <Buttons
-                    className="col-lg-2"
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                  >
-                    Register
-                  </Buttons>
+          <p></p>
+          <Box display="flex" justifyContent="end" py={4}>
+            <Buttons
+              size="large"
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+            >
+              Register
+            </Buttons>
 
-                  <Buttons
-                    className="col-lg-2"
-                    variant="contained"
-                    color="primary"
-                    onClick={test}
-                  >
-                    test
-                  </Buttons>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <Footer />
-      </div>
+            <Buttons
+              size="large"
+              variant="contained"
+              color="primary"
+              onClick={test}
+            >
+              test
+            </Buttons>
+          </Box>
+        </form>
+      </Container>
+      <Footer />
     </div>
   );
 }
-
 
 export default Register;

@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
-import Buttons from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import TextFields from '@material-ui/core/TextField';
+import axios from "axios";
+import Buttons from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import TextFields from "@material-ui/core/TextField";
 import Navigation from "../components/Navigation";
 import ProfileNavigation from "../components/ProfileNavigation";
 import Footer from "../components/Footer";
 import { store, useGlobalState } from "state-pool";
+import { Container } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 function Profile() {
   const [currentUser, setCurrentUser] = useGlobalState("currentUser");
   const [navigation, setNav] = useGlobalState("navigation");
   const user = store.getState("currentUser");
-
+  const history = useHistory();
   const [firstname, setFirstname] = useState("");
   const [l_name, setL_name] = useState("");
   const [phone, setPhone] = useState("");
@@ -89,199 +91,108 @@ function Profile() {
     window.location.href = "https://i383988.hera.fhict.nl/updateinfo";
   };
 
- return (
-    <div className="app">
-      <div>
-        <Navigation />
-      </div>
-      <div className="profile">
-	  <div> 
-        <ProfileNavigation/>
-      </div>
-        <div className="container">
-          <div className="row align-items-center my-5">
-            <div className="col-lg-2"></div>
-            <div className="col-lg-8">
-              <div className="row">
-                <div className="col-lg-12">
-                  <center>
-                    <Typography
-                      className="font-weight-light col-lg-12 text-right pb-4"
-                      variant="h4"
-                    >
-                      Profile
-                    </Typography>
-                  </center>
-                </div>
-              </div>
+  return (
+    <>
+      <Navigation />
 
-              <form>
-                <div className="row">
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h5"
-                  >
-                    Personal Information
-                  </Typography>
-                </div>
+      <ProfileNavigation />
 
-                <p></p>
+      <div className="container text-left">
+        <form>
+          <Typography className="font-weight-light pt-5" variant="h5">
+            Personal Information
+          </Typography>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h7"
-                  >
-                    {firstname}
-                  </Typography>
-                </div>
+          <p></p>
 
-                <p></p>
+          <Typography className="font-weight-light" variant="h7">
+            {firstname}
+          </Typography>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h7"
-                  >
-                    {l_name}
-                  </Typography>
-                </div>
+          <p></p>
 
-                <p></p>
+          <Typography className="font-weight-light" variant="h7">
+            {l_name}
+          </Typography>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h7"
-                  >
-                    {phone}
-                  </Typography>
-                </div>
+          <p></p>
 
-                <p></p>
+          <Typography className="font-weight-light" variant="h7">
+            {phone}
+          </Typography>
 
-                <div className="row">
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h5"
-                  >
-                    Account Information
-                  </Typography>
-                </div>
+          <p></p>
 
-                <p></p>
+          <Typography className="font-weight-light" variant="h5">
+            Account Information
+          </Typography>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h7"
-                  >
-                    {email}
-                  </Typography>
-                </div>
+          <p></p>
 
-                <p></p>
+          <Typography className="font-weight-light" variant="h7">
+            {email}
+          </Typography>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h7"
-                  >
-                    ***********
-                  </Typography>
-                </div>
+          <p></p>
 
-                <p></p>
+          <Typography className="font-weight-light" variant="h7">
+            ***********
+          </Typography>
 
-                <div className="row">
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h5"
-                  >
-                    Address
-                  </Typography>
-                </div>
+          <p></p>
 
-                <p></p>
+          <Typography className="font-weight-light" variant="h5">
+            Address
+          </Typography>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h7"
-                  >
-                    {street}
-                  </Typography>
-                </div>
+          <p></p>
 
-                <p></p>
+          <Typography className="font-weight-light" variant="h7">
+            {street}
+          </Typography>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h7"
-                  >
-                    {statee}
-                  </Typography>
-                </div>
+          <p></p>
 
-                <p></p>
+          <Typography className="font-weight-light" variant="h7">
+            {statee}
+          </Typography>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h7"
-                  >
-                    {post}
-                  </Typography>
-                </div>
+          <p></p>
 
-                <p></p>
+          <Typography className="font-weight-light" variant="h7">
+            {post}
+          </Typography>
 
-                <div className="row">
-                  <div className="col-lg-1"></div>
-                  <Typography
-                    className="font-weight-light col-lg-12 text-right"
-                    variant="h7"
-                  >
-                    {country}
-                  </Typography>
-                </div>
-                <div className="d-flex justify-content-between mt-5">
-                  <Buttons
-                    className=""
-                    variant="contained"
-                    color="primary"
-                    onClick={navigateUpdate}
-                  >
-                    Update User
-                  </Buttons>
-                  <Buttons
-                    className=""
-                    variant="contained"
-                    color="primary"
-                    onClick={handleLogout}
-                  >
-                    Sign out
-                  </Buttons>
-                </div>
-                <p></p>
-              </form>
-            </div>
+          <p></p>
+
+          <Typography className="font-weight-light" variant="h7">
+            {country}
+          </Typography>
+          <div className="d-flex justify-content-between mt-5">
+            <Buttons
+              className=""
+              variant="contained"
+              color="primary"
+              onClick={() => history.push("/updateinfo")}
+            >
+              Update User
+            </Buttons>
+            <Buttons
+              className=""
+              variant="contained"
+              color="error"
+              style={{ backgroundColor: "rgb(245, 0, 87)", color: "#FFFF" }}
+              onClick={handleLogout}
+            >
+              Sign out
+            </Buttons>
           </div>
-        </div>
+          <p></p>
+        </form>
       </div>
-      <div>
-        <Footer />
-      </div>
-    </div>
+
+      <Footer />
+    </>
   );
 }
 //ReactDOM.render(<Register />, document.getElementById('root'));

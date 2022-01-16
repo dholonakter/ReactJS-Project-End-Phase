@@ -16,13 +16,11 @@ function ProductsRow({ sectionTitle, data }) {
           <div className="col-sm-12 col-md-6 col-lg-3" key={idx}>
             <div className="card mb-3">
               <img
-                src={
-                  `data:image/png;base64,${item.product_image}`
-                }
+                src={`data:image/png;base64,${item.product_image}`}
                 style={{
-                  maxHeight: "230px",
+                  height: "230px",
                   width: "100%",
-                  objectFit: "contain",
+                  objectFit: "cover",
                 }}
                 className="card-img-top p-3"
                 alt="..."

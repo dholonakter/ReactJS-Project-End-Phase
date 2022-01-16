@@ -9,6 +9,7 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
+  Grid,
 } from "@material-ui/core";
 
 import Banner from "../components/Banner";
@@ -66,15 +67,17 @@ class Filter extends React.Component {
     this.handleTextChange = this.handleTextChange.bind(this);
   }
 
-  componentDidMount(){
-	const url = 'https://i383988.hera.fhict.nl/database.php?search_product';
-	axios.get(url).then(response => response.data)
-	.then((data) => {
-		console.log(data);
-		this.setState({ products: data});
-		this.setState({ filteredProducts: data});
-	})
-  }  
+  componentDidMount() {
+    const url = "https://i383988.hera.fhict.nl/database.php?search_product";
+    axios
+      .get(url)
+      .then((response) => response.data)
+      .then((data) => {
+        console.log(data);
+        this.setState({ products: data });
+        this.setState({ filteredProducts: data });
+      });
+  }
 
   filterList() {
     let productList = this.state.products;
@@ -208,91 +211,184 @@ class Filter extends React.Component {
         </div>
         <div className="container">
           <div>
-            <h3 className="pb-5"> Search products </h3>
+            <h3 className="pb-5"> Search Products </h3>
             <div className="row">
-              <div className="col col-12 col-sm-12 col-md-9 order-2 order-md-1">
+              <div className="col col-12 col-sm-12 col-md-12 order-2">
                 <ProductsRow
                   sectionTitle="Products"
                   data={this.state.filteredProducts}
                 />
               </div>
-              <div className="col col-12 col-sm-12 col-md-3 order-1 order-md-2">
-                <div className="prod-search-name">
-                  <TextField
-                    label="Name"
-                    id="name-search"
-                    size="small"
-                    value={this.state.nameValue}
-                    onChange={this.handleTextChange}
-                  />
-                </div>
+              <div className="col col-12 col-sm-12 col-md-12 order-1">
+                <Grid container spacing={8}>
+                  <Grid item xs={12} sm={6} md={3}>
+                    <Typography variant="h6" className="text-left">
+                      Filter
+                    </Typography>
 
-                <div className="prod-search-price">
-                  <Typography>Price</Typography>
-                  <Slider
-                    value={this.state.sliderValue}
-                    defaultValue={100}
-                    //aria-label="Price slider"
-                    getAriaLabel={() => "Temperature range"}
-                    //getAriaValueText={this.valueLabelFormat}
-                    valueLabelFormat={this.valueLabelFormat}
-                    step={20}
-                    min={0}
-                    max={1000}
-                    marks={this.state.marks}
-                    onChange={this.handleSlideChange}
-                    valueLabelDisplay="auto"
-                  />
-                </div>
+                    <TextField
+                      fullWidth
+                      label="Name"
+                      id="name-search"
+                      size="small"
+                      value={this.state.nameValue}
+                      onChange={this.handleTextChange}
+                    />
 
-                <div className="prod-search-cat">
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={this.state.bookSelected}
-                          onChange={this.handleCheckChange}
-                          name="Books"
-                        />
-                      }
-                      label="Books"
+                    <br />
+                    <br />
+                    <br />
+
+                    <Typography>Price</Typography>
+
+                    <Slider
+                      value={this.state.sliderValue}
+                      defaultValue={100}
+                      //aria-label="Price slider"
+                      getAriaLabel={() => "Temperature range"}
+                      //getAriaValueText={this.valueLabelFormat}
+                      valueLabelFormat={this.valueLabelFormat}
+                      step={20}
+                      min={0}
+                      max={1000}
+                      marks={this.state.marks}
+                      onChange={this.handleSlideChange}
+                      valueLabelDisplay="auto"
                     />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={this.state.accSelected}
-                          onChange={this.handleCheckChange}
-                          name="Accessories"
-                        />
-                      }
-                      label="Accessories"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={this.state.bikeSelected}
-                          onChange={this.handleCheckChange}
-                          name="Bicycles"
-                        />
-                      }
-                      label="Bicycles"
-                    />
-                  </FormGroup>
-                </div>
-                <div>
-                  <Button
-                    className="col-lg-2"
-                    variant="contained"
-                    color="primary"
-                    onClick={this.handleReset}
+                  </Grid>
+                  <Grid item xs={6} md={3} className="text-left">
+                    <Typography variant="h6">Category</Typography>
+                    <br />
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={this.state.bookSelected}
+                            onChange={this.handleCheckChange}
+                            name="Books"
+                          />
+                        }
+                        label="Books"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={this.state.accSelected}
+                            onChange={this.handleCheckChange}
+                            name="Accessories"
+                          />
+                        }
+                        label="Accessories"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={this.state.bikeSelected}
+                            onChange={this.handleCheckChange}
+                            name="Bicycles"
+                          />
+                        }
+                        label="Bicycles"
+                      />
+                    </FormGroup>
+                  </Grid>
+                  <Grid item xs={6} md={3} className="text-left">
+                    <Typography variant="h6">Rate</Typography>
+
+                    <br />
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={true}
+                            onChange={(e) => console.log(e)}
+                            name="Rate 1"
+                          />
+                        }
+                        label="Rate 1"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={true}
+                            onChange={this.handleCheckChange}
+                            name="Rate 2"
+                          />
+                        }
+                        label="Rate 2"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={true}
+                            onChange={this.handleCheckChange}
+                            name="Rate 3"
+                          />
+                        }
+                        label="Rate 3"
+                      />
+                    </FormGroup>
+                  </Grid>
+                  <Grid item xs={6} md={2} className="text-left">
+                    <Typography variant="h6">Price</Typography>
+
+                    <br />
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={true}
+                            onChange={this.handleCheckChange}
+                            name="Filter 1"
+                          />
+                        }
+                        label="Filter 1"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={true}
+                            onChange={this.handleCheckChange}
+                            name="Filter 2"
+                          />
+                        }
+                        label="Filter 2"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={true}
+                            onChange={this.handleCheckChange}
+                            name="Filter 3"
+                          />
+                        }
+                        label="Filter 3"
+                      />
+                    </FormGroup>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={6}
+                    md={1}
+                    className="text-right d-flex flex-column justify-content-center"
                   >
-                    Reset
-                  </Button>
-                </div>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      style={{ maxWidth: 100 }}
+                      onClick={this.handleReset}
+                    >
+                      Reset
+                    </Button>
+                  </Grid>
+                </Grid>
               </div>
             </div>
           </div>
         </div>
+        <div style={{ height: "30vh" }} />
+        <Footer />
       </div>
     );
   }
