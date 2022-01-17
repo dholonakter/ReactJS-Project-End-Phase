@@ -13,6 +13,10 @@ import Navigation from "../components/Navigation"
 import Footer from "../components/Footer"
 import { Typography } from '@material-ui/core';
 import { withRouter } from "react-router";
+import { store, useGlobalState } from "state-pool";
+
+
+var user;
 
 class SingleProductComponent extends React.Component{
 
@@ -20,6 +24,7 @@ class SingleProductComponent extends React.Component{
         super(props);
         this.state = { productList :[]};
         this.routeParam = props.match.params.parameterToAccess;
+        user = store.getState("currentUser");
     }
 
     componentDidMount() {
@@ -29,11 +34,21 @@ class SingleProductComponent extends React.Component{
             .then(res => {
                 this.setState({ productList : res.data });
                 console.log(res)
+            const url2 = 'https://i383988.hera.fhict.nl/database.php?user_id='+this.state.productList.user_id
+            axios.get(url2)
+                .then(res2 => {
+                    this.setState({ seller : res2.data });
+                    console.log(res2)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
             })
             .catch(function (error) {
                 console.log(error);
             })
-        
+            
+            
         // axios.get(url).then(response => response.data)
         // .then((data) => {
         //     this.setState({ productList: data});
@@ -42,6 +57,15 @@ class SingleProductComponent extends React.Component{
     GetProductId = () => {
         console.log(this.state.productList.product_img)
        
+    }
+
+    chatMessage(currUser, a, b) {
+        if(currUser.value == null){
+            alert("Please log into your account before contacting the seller")
+        }else{
+            this.props.history.push("/chatMessage", {id: currUser.value.id, targetid: a, name: b});
+        }
+        
     }
 
     render(){
@@ -79,7 +103,8 @@ class SingleProductComponent extends React.Component{
                         </details>
                         <p>Price: {this.state.productList.product_price} euros</p>
 
-                        <button>Contact seller</button>
+                        <button onClick={() => this.chatMessage(user, this.state.productList.user_id, this.state.seller.firstname+" "+this.state.seller.lastname)}>Contact seller</button>
+                        {/* onClick={() => this.chatMessage(user.value.id, row.id, row.name)} */}
                 </CardContent>
                    
 
