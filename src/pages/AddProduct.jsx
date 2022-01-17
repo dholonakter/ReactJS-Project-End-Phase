@@ -30,13 +30,15 @@ class AddProduct extends React.Component {
       user: store.getState("currentUser"),
       productName: "",
       productDesc: "",
-      price: null,
-      parsedPrice: null,
+      price: "",
+      parsedPrice: 0,
       category: "book",
       imgName: "",
       productImg: null,
       error: false,
     };
+	
+    this.lookupUser();
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleDescChange = this.handleDescChange.bind(this);
@@ -45,6 +47,13 @@ class AddProduct extends React.Component {
     this.handleImageChange = this.handleImageChange.bind(this);
   }
 
+   lookupUser(){
+
+    if(this.state.user.value == null){
+      window.location.href = "/login";
+    }
+  }
+  
   handleNameChange(event) {
     let textValue = event.target.value;
     this.setState({ productName: textValue });
@@ -56,23 +65,13 @@ class AddProduct extends React.Component {
   handlePriceChange(event) {
     let priceValue = event.target.value;
     let parsedValue = parseFloat(priceValue).toFixed(2);
-
-    console.log(priceValue);
-    console.log(parsedValue);
-
-    let numStr = String(priceValue);
-    let decimalAmt = 0;
-    // String Contains Decimal
-    if (numStr.includes(".")) {
-      decimalAmt = numStr.split(".")[1].length;
+ 
+    if (priceValue === "" || /^(?!0\d)\d+(?:\.\d{0,2})?$/.test(priceValue)) {
+		this.setState({ price: priceValue });
     }
-
-    if (decimalAmt > 2) {
-      this.setState({ price: parsedValue });
-    } else {
-      this.setState({ price: priceValue });
-    }
-    this.setState({ parsedPrice: parsedValue });
+	this.setState( {parsedPrice: parsedValue} );
+	
+    
   }
   handleCategoryChange(event) {
     let catValue = event.target.value;
@@ -142,6 +141,8 @@ class AddProduct extends React.Component {
         config: { headers: { "Content-Type": "multipart/form-data" } },
       }).then(function (response) {
         alert("Your product has been listed");
+		let productId = response.data;
+		window.location.href = "/singleproductpage/" +productId;
       });
     }
   }
@@ -232,7 +233,7 @@ class AddProduct extends React.Component {
               style={{ padding: "30px 0px" }}
               variant="h4"
             >
-              Add Product
+              List your item
             </Typography>
 
             <form>
@@ -287,7 +288,6 @@ class AddProduct extends React.Component {
                 fullWidth
                 variant="outlined"
                 label="Price(€)"
-                type="number"
                 name="price"
                 value={this.state.price}
                 error={this.state.error && !this.validPrice()}

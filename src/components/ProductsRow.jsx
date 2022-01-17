@@ -7,11 +7,11 @@ function ProductsRow({ sectionTitle, data }) {
       ? string.substring(0, length) + "..."
       : string;
   };
-
-  return (
-    <div className="container py-5">
-      <h4>{sectionTitle}</h4>
-      <div className="row">
+  
+function dataExists(data){
+	if(data != null && data[0] != null && data[0].id != -1){		
+	return(
+	  <div className="row">
         {data.map((item, idx) => (
           <div className="col-sm-12 col-md-6 col-lg-3" key={idx}>
             <div className="card mb-3">
@@ -30,10 +30,10 @@ function ProductsRow({ sectionTitle, data }) {
                 <p className="card-text">
                   {item.product_description
                     ? trimString(item.product_description, 20)
-                    : "Lorem ipsum dolor sit, amet consectetur adipisicing elit."}
+                    : "..."}
                 </p>
                 <p className="fw-bold py-2">€ {item.product_price}</p>
-                <a href="#" className="btn btn-success btn-sm">
+                <a href={'/singleproductpage/' + item.id} className="btn btn-success btn-sm">
                   Read More
                 </a>
               </div>
@@ -41,6 +41,18 @@ function ProductsRow({ sectionTitle, data }) {
           </div>
         ))}
       </div>
+	)
+	}else{
+		return(
+		<p>No items of this category found</p>
+		)
+	}
+}
+
+  return (
+    <div className="container py-5">
+      <h4>{sectionTitle}</h4>
+      { dataExists(data) }
     </div>
   );
 }

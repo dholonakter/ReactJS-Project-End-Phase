@@ -88,7 +88,7 @@ function Navigation(props) {
               }`}
             >
               <Link className="text-white" to="/add">
-                Add Product
+                List an Item
               </Link>
             </p>
             <p
