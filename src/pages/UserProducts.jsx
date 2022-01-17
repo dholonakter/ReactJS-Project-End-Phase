@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactDOM, { render } from 'react-dom';
 import axios from 'axios';
 import Buttons from '@material-ui/core/Button';
+import Delete from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
 import Navigation from "../components/Navigation";
@@ -33,6 +34,7 @@ class UserProducts extends React.Component {
         },		
         ],
     };
+	//this.deleteProduct = this.deleteProduct.bind(this);
   }
 
   componentDidMount(){
@@ -73,6 +75,29 @@ handleCategory(id){
     return id;
   });
 }
+
+/*deleteProduct(id, product_name) {	
+  let confirmation = false;
+  if (window.confirm("Delete your product: " + product_name + "?")) {
+    confirmation = false;
+}
+  let formData = new FormData();
+  formData.append("delete_product", "deleting product");
+  formData.append("id", id);
+  if(confirmation){
+	axios({
+    method: 'POST',
+    url:"https://i383988.hera.fhict.nl/database.php?delete_product",
+	    data: formData,
+        config: { headers: { "Content-Type": "multipart/form-data" } },
+      }).then(function (response) {
+		  console.log(response);
+      });
+  }else{
+	  console.log("cancelled");
+  }	
+}
+*/
 // getCategory(id){
 //   var result;
 //   axios({
@@ -103,17 +128,17 @@ render(){
               <div className="row">
                 
               <div className="col-lg-12"><center>
-                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">My Products</Typography></center>
+                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">My Items</Typography></center>
                 </div>
               </div>
               <Table responsive>
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Product Name</th>
-                  <th>Product Description</th>
-                  <th>Product Price</th>
-                  <th>Product Category</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Price</th>
+                  <th>Category</th>
                 </tr>
               </thead>
               <tbody>
@@ -122,7 +147,7 @@ render(){
                  return(
                   <tr>
                     <td></td>
-                    <td>{product.product_name}</td>
+                    <td><a href={'/singleproductpage/' + product.id}>{product.product_name}	</a></td>
                     <td>{product.product_description}</td>
                     <td>{product.product_price}</td>
                     <td>{product.category_id}</td>

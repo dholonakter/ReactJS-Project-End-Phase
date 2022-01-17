@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Buttons from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
 import Navigation from "../components/Navigation";
@@ -98,36 +101,57 @@ function UserHistory() {
             
               <div className="row">  
               <div className="col-lg-12"><center>
-                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">Purchase History</Typography></center>
+                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">Order History</Typography></center>
                 </div>
               </div>
               <Table responsive>
               <thead>
                 <tr>
-                  <th>#</th>
-                  {Array.from({ length: 8 }).map((_, index) => (
-                    <th key={index}>Table heading</th>
-                  ))}
+                  <th>Order #</th>
+                  <th>Ordered by</th>
+				  <th>Item name</th>
+				  <th>Price</th>
+				  <th>Order Status</th>
+				  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>1</td>
-                  {Array.from({ length: 8 }).map((_, index) => (
-                    <td key={index}>Table cell {index}</td>
-                  ))}
+                  <td><a href="#">Ryan</a></td>
+				  <td><a href="#">Book</a></td>
+				  <td>€1</td>
+				  <td>Pending payment</td>
+				  <td><Buttons
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                >
+                  Update status
+                </Buttons>
+				</td>
                 </tr>
                 <tr>
                   <td>2</td>
-                  {Array.from({ length: 8 }).map((_, index) => (
-                    <td key={index}>Table cell {index}</td>
-                  ))}
+                  <td><a href="#">John</a></td>
+				  <td><a href="#">Bike</a></td>
+				  <td>€0.52</td>
+				  <td>Payment received</td>
+				  <td><Buttons
+                  variant="contained"
+                  size="small"
+                  color="primary"
+                >
+                  Update status
+                </Buttons>
+				</td>
                 </tr>
-                <tr>
+                 <tr>
                   <td>3</td>
-                  {Array.from({ length: 12 }).map((_, index) => (
-                    <td key={index}>Table cell {index}</td>
-                  ))}
+                  <td><a href="#">A</a></td>
+				  <td><a href="#">Bike</a></td>
+				  <td>€22</td>
+				  <td>Complete</td>				  
                 </tr>
               </tbody>
             </Table>
