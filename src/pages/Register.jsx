@@ -228,7 +228,7 @@ function Register() {
     }
   };
 
-  const test = (event) => {
+  const validateEmail =(event)=>{
     let apiData = new FormData();
     apiData.append("api_key", "fe013d3a5655425fbb1b1286c784430a");
     apiData.append("email", "cheesesien@gmail.com");
@@ -237,8 +237,13 @@ function Register() {
       url: "https://emailvalidation.abstractapi.com/v1/?api_key=fe013d3a5655425fbb1b1286c784430a&email=cheesesien@gmail.com",
       config: { headers: { "Content-Type": "multipart/form-data" } },
     }).then(function (response) {
-      console.log(response);
-      console.log(response.data);
+      if(response.data.deliverability =="DELIVERABLE"&&response.data.is_disposable_email.value ==false){
+        
+      }
+      else
+      {
+        alert("The provided email is not valid");
+      }
     });
   };
 
