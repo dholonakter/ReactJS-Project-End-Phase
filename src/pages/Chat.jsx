@@ -15,6 +15,8 @@ import TableRow from '@mui/material/TableRow';
 import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
+import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
 
 
 
@@ -134,6 +136,7 @@ class Chat extends React.Component {
   render(){	
   return (
     <div className="register">
+      <Navigation/>
       <div className="container">
         <div className="row align-items-center my-5">
           <div className="col-lg-2">
@@ -199,6 +202,7 @@ class Chat extends React.Component {
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
     );
   }

@@ -11,6 +11,9 @@ import yellow from "@material-ui/core/colors/yellow";
 import SaveIcon from '@material-ui/icons/Telegram';
 import '../index.css'
 
+import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
+
 import Paper from '@mui/material/Paper';
 import Buttons from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -109,6 +112,7 @@ class ChatMessage extends React.Component {
 
       <div className="register">
         <div className="register">
+          <Navigation/>
         <div className="container">
           <div className="row align-items-center my-5">
             <div className="col-lg-2">
@@ -119,16 +123,16 @@ class ChatMessage extends React.Component {
                   <div className="row" style={{marginBottom: '100px'}}>
            
           
-                  <Link style={{color: "#000000"}}
+                  <Link className="col-lg-3" style={{color: "#000000"}}
             id="chat_nav"
             to="/chat"
           >
-                  <Buttons className="col-lg-2" variant="contained" style={{height: '100%'}, {backgroundColor: "#FF0000"}} 
+                  <Buttons className="col-lg-12" variant="contained" style={{height: '100%'}, {backgroundColor: "#FF0000"}} 
       //             onClick={(e) => {
       //              e.preventDefault();
       //              window.location.href='http://google.com';
       //              }}
-      > Back</Buttons></Link>
+      >Go To Chat List</Buttons></Link>
                   </div>
               
                 <div className="row" style={{marginBottom: '80px'}}>
@@ -174,6 +178,7 @@ class ChatMessage extends React.Component {
             </div>
           </div>
         </div>
+        <Footer/>
       </div>
     );
   }

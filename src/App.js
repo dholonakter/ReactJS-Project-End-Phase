@@ -1,4 +1,4 @@
- import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Filter from "./pages/Filter";
 import Register from "./pages/Register";
@@ -12,16 +12,17 @@ import ChatMessage from "./pages/ChatMessage";
 import axios from "axios";
 import Verification from "./pages/Verification";
 import Profile from "./pages/Profile";
-import {store, useGlobalState} from 'state-pool';
+import { store, useGlobalState } from "state-pool";
 import AddProduct from "./pages/AddProduct";
 import EditProduct from "./components/EditProdcut";
-import AllProducts  from "./components/AllProducts";
+import AllProducts from "./components/AllProducts";
 import ForgotPassword from "./pages/ForgotPassword";
 import Navigation from "./components/Navigation";
 //import Redirect from "./components/home.php";
 import Home from "./pages/Home";
 import ProfileNavigation from "./components/ProfileNavigation";
 import { FaPhoneSlash } from "react-icons/fa";
+import SingleProductComponent from "./components/SingleProductComponent";
 
 store.setState("currentUser", null);
 store.setState("navigation", "/Login");
@@ -55,7 +56,7 @@ function App() {
             }).then(function (response) {
               setCurrentUser(response.data);
               setNav("/Profile");
-            });              
+            });
           }
         });
     }
@@ -91,19 +92,19 @@ function App() {
           </Route>
           <Route exact path="/updateinfo">
             <UpdateInfo />
-          </Route>		  
+          </Route>
           <Route exact path="/userproducts">
-		    <UserProducts/>
-		  </Route>
-      <Route exact path="/verification">
-		    <Verification/>
-		  </Route>
-      <Route exact path="/ForgotPassword">
-		    <ForgotPassword/>
-		  </Route>
+            <UserProducts />
+          </Route>
+          <Route exact path="/verification">
+            <Verification />
+          </Route>
+          <Route exact path="/ForgotPassword">
+            <ForgotPassword />
+          </Route>
           <Route exact path="/userhistory">
-		    <UserHistory/>
-		  </Route>
+            <UserHistory />
+          </Route>
           <Route exact path="/filter">
             <Filter />
           </Route>
@@ -113,6 +114,11 @@ function App() {
           <Route exact path="/all" component={AllProducts} />
           <Route exact path="/add" component={AddProduct} />
           <Route exact path="/edit/:id" component={EditProduct} />
+          <Route
+            exact
+            path="/SingleProductPage/:id"
+            component={SingleProductComponent}
+          />
         </Switch>
       </Router>
     </div>

@@ -221,8 +221,8 @@ function UpdateInfo() {
   return (
     <div className="register">
       <div>
-        <Navigation/>    
-      </div> 
+        <Navigation />
+      </div>
       <div className="container">
         <div className="row align-items-center my-5">
           <div className="col-lg-2"></div>
@@ -518,8 +518,8 @@ function UpdateInfo() {
             </form>
           </div>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 }
