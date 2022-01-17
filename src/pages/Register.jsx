@@ -1,8 +1,9 @@
 import React from "react";
 import axios from "axios";
 //import {Button} from '@material-ui/core';
-import { getCountries } from "react-phone-number-input/input";
-import en from "react-phone-number-input/locale/en.json";
+import { getCountries } from 'react-phone-number-input/input'
+import en from 'react-phone-number-input/locale/en.json'
+import emailjs from '@emailjs/browser';
 import Buttons from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextFields from "@material-ui/core/TextField";
@@ -32,6 +33,32 @@ function Register() {
   const [arr, setArr] = useState("");
   const [error, setError] = useState(false);
 
+  const [verCode, setVerCode] = useState("");
+  const [verLink, setVerLink] = useState("");
+
+  var vCode;
+
+  const generateLink = () => {
+    
+      axios({
+        method: "GET",
+        url:
+          "https://i383988.hera.fhict.nl/registerUser/generateVerificationCode.php",
+          config: { headers: { "Content-Type": "multipart/form-data" } },
+      }).then(function (response) {
+        vCode = response.data;
+        //console.log(vCode);
+        setVerCode(vCode);
+        var vLink = "https://i383988.hera.fhict.nl/registerUser/activate.php?v=" + vCode;
+        setVerLink(vLink); 
+        //console.log(verLink);
+      });
+  }
+
+  if(verCode == null || verCode == ""){
+    generateLink();
+  }
+
   const validText = (textValue) => {
     if (textValue == null || !/\S/.test(textValue)) {
       return false;
@@ -39,7 +66,7 @@ function Register() {
       return true;
     }
   };
-
+  
   const validPost = () => {
     if (post == null || !/\S/.test(post)) {
       return false;
@@ -121,48 +148,61 @@ function Register() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (handleValidation()) {
-      let formData = new FormData();
-      setArr({
-        f_name: f_name,
-        l_name: l_name,
-        phone: phone,
-        email: email,
-        password: password,
-        street: street,
-        statee: statee,
-        post: post,
-        country: country,
-      });
-      console.log(
-        f_name +
-          ", " +
-          l_name +
-          ", " +
-          phone +
-          ", " +
-          email +
-          ", " +
-          password +
-          ", " +
-          street +
-          ", " +
-          statee +
-          ", " +
-          post +
-          ", " +
-          country
-      );
-      formData.append("register_user", "registering");
-      formData.append("f_name", f_name);
-      formData.append("l_name", l_name);
-      formData.append("phone", phone);
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("street", street);
-      formData.append("statee", statee);
-      formData.append("post", post);
-      formData.append("country", country);
+	if( handleValidation() ){
+	   let formData = new FormData();
+    setArr({
+      f_name: f_name,
+      l_name: l_name,
+      phone: phone,
+      email: email,
+      password: password,
+      street: street,
+      statee: statee,
+      post: post,
+      country: country,
+      vCode: verCode,
+    });
+    console.log(
+      f_name +
+        ", " +
+        l_name +
+        ", " +
+        phone +
+        ", " +
+        email +
+        ", " +
+        password +
+        ", " +
+        street +
+        ", " +
+        statee +
+        ", " +
+        post +
+        ", " +
+        country
+    );
+    formData.append("register_user", "registering");
+    formData.append("f_name", f_name);
+    formData.append("l_name", l_name);
+    formData.append("phone", phone);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("street", street);
+    formData.append("statee", statee);
+    formData.append("post", post);
+    formData.append("country", country);
+    formData.append("vCode", verCode);
+	
+      // axios({
+      //   method: "POST",
+      //   url: "https://i383988.hera.fhict.nl/database.php?",
+      //   data: formData,
+      //   config: { headers: { "Content-Type": "multipart/form-data" } },
+      // }).then(function (response) {
+      //   console.log(response);
+      //   console.log("New User Added");
+      //   alert("Registration Completed!");
+      // });
 
       axios({
         method: "POST",
@@ -170,9 +210,20 @@ function Register() {
         data: formData,
         config: { headers: { "Content-Type": "multipart/form-data" } },
       }).then(function (response) {
-        console.log(response);
+        //console.log(response);
         console.log("New User Added");
-        alert("Registration Completed!");
+        alert("Registration Completed! Please verify your email!");
+        
+        console.log(verLink);
+
+      emailjs.sendForm('service_ohgufs8', 'template_fjb5ppk', document.getElementById('form'), 'user_wP1nWnhp6kPDxUx1v1MAi')
+      .then((result) => {
+        console.log(result.text);
+      }, (error) => {
+          console.log(error.text);
+      });
+
+        //setVerCode(""); 
       });
     }
   };
@@ -206,7 +257,7 @@ function Register() {
 
         {/* <form onSubmit={handleSubmit}> */}
 
-        <form>
+        <form id="form">
           <Typography className="font-weight-light text-left" variant="h5">
             Personal Information
           </Typography>
@@ -408,6 +459,17 @@ function Register() {
               </MenuItem>
             ))}
           </Select>
+
+          <TextFields
+                    className="col-lg-11"
+                    variant="outlined"
+                    label="verification"
+                    type="text"
+                    name="verification"
+                    value={verLink}
+                    style={{display: "none"}}
+                    //onChange={(e) => setVerCode(e.target.value)}
+                  />
 
           <p></p>
           <Box display="flex" justifyContent="end" py={4}>
