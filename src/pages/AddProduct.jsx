@@ -92,7 +92,7 @@ class AddProduct extends React.Component {
 
       if(valid == 1){	
 	    formData.append('add_product', 'adding product');
-        formData.append('user_id', this.state.user.value.id);
+      formData.append('user_id', this.state.user.value.id);
 	    formData.append('product_name', this.state.productName);
 	    formData.append('product_description', this.state.productDesc);
 	    formData.append('product_price', this.state.price);
