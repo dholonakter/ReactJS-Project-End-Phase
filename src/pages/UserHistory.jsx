@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Buttons from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
 import Navigation from "../components/Navigation";
@@ -27,8 +39,19 @@ function UserHistory() {
   const [statee, setStatee] = useState('');
   const [post, setPost] = useState('');
   const [country, setCountry] = useState('');
+  
+  const [open, setOpen] = React.useState(false);
+  const [status, setStatus] = React.useState("");
 
+   const handleClickOpen = () => {
+    setOpen(true);
+  };
 
+  const handleClose = () => {
+    setOpen(false);
+	console.log("closed");
+  };
+  
   function handleHistory(){  
     if(user.value != null){
       axios({
@@ -98,39 +121,92 @@ function UserHistory() {
             
               <div className="row">  
               <div className="col-lg-12"><center>
-                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">Purchase History</Typography></center>
+                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">Order History</Typography></center>
                 </div>
               </div>
               <Table responsive>
               <thead>
                 <tr>
-                  <th>#</th>
-                  {Array.from({ length: 8 }).map((_, index) => (
-                    <th key={index}>Table heading</th>
-                  ))}
+                  <th>Order #</th>
+                  <th>Ordered by</th>
+				  <th>Item name</th>
+				  <th>Price</th>
+				  <th>Order Status</th>
+				  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>1</td>
-                  {Array.from({ length: 8 }).map((_, index) => (
-                    <td key={index}>Table cell {index}</td>
-                  ))}
+                  <td><a href="#">Ryan Meijs</a></td>
+				  <td><a href="/singleproductpage/16">Visual C# How to Program 6th edition</a></td>
+				  <td>€35.00</td>
+				  <td>Pending payment</td>
+				  <td>
+				  <Buttons
+                  variant="contained"
+                  size="small"
+                  color="primary"
+				  onClick={handleClickOpen}
+                >
+                  Update status
+                </Buttons>
+				</td>
                 </tr>
                 <tr>
                   <td>2</td>
-                  {Array.from({ length: 8 }).map((_, index) => (
-                    <td key={index}>Table cell {index}</td>
-                  ))}
+                  <td><a href="#">Jan Muller</a></td>
+				  <td><a href="/singleproductpage/20">2nd hand bicycle</a></td>
+				  <td>€30.00</td>
+				  <td>Payment received</td>
+				  <td><Buttons
+                  variant="contained"
+                  size="small"
+                  color="primary"
+				  onClick={handleClickOpen}
+                >
+                  Update status
+                </Buttons>
+				</td>
                 </tr>
-                <tr>
+                 <tr>
                   <td>3</td>
-                  {Array.from({ length: 12 }).map((_, index) => (
-                    <td key={index}>Table cell {index}</td>
-                  ))}
+                  <td><a href="#">Alex Aver</a></td>
+				  <td><a href="/singleproductpage/23">Javascript Programming Book</a></td>
+				  <td>€10.00</td>
+				  <td>Complete</td>				  
                 </tr>
               </tbody>
             </Table>
+			<Dialog
+			  open={open}
+			  onClose={handleClose}
+			>
+			  <DialogTitle>Update order status</DialogTitle>
+			  <DialogContent>
+			    <Box
+            noValidate
+            component="form"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              m: 'auto',
+              width: 'fit-content',
+            }}
+          >
+              <List sx={{ pt: 0 }}>
+         <ListItem 
+		    button onClick={handleClose} >
+            <ListItemText primary="Received payment" />
+          </ListItem>
+		    <ListItem button onClick={handleClose} >
+            <ListItemText primary="Cancel order" />
+          </ListItem>
+          
+      </List>
+          </Box>
+			  </DialogContent>
+			</Dialog>
           </div>
         </div>
       </div>
