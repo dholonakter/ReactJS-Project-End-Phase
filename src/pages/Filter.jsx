@@ -38,10 +38,15 @@ class Filter extends React.Component {
           id: 3,
           label: "Bicycles",
         },
+		 {
+          id: 4,
+          label: "Other",
+        },
       ],
       bookSelected: true,
       accSelected: true,
       bikeSelected: true,
+	  otherSelected: true,
       priceValue: [0, 1000],
       sliderValue: [0, 1000],
       marks: [
@@ -99,7 +104,9 @@ class Filter extends React.Component {
           catCheck = true;
         } else if (product.category_id == 3 && this.state.bikeSelected) {
           catCheck = true;
-        }
+        } else if (product.category_id == 4 && this.state.otherSelected) {
+          catCheck = true;
+		}
       }
       if (
         product.product_description
@@ -143,6 +150,10 @@ class Filter extends React.Component {
         break;
       case "Bicycles":
         this.setState({ bikeSelected: event.target.checked }, () => {
+          this.handleFilter();
+        });
+	  case "Other":
+        this.setState({ otherSelected: event.target.checked }, () => {
           this.handleFilter();
         });
         break;
@@ -211,7 +222,7 @@ class Filter extends React.Component {
         </div>
         <div className="container">
           <div>
-            <h3 className="pb-5"> Search Products </h3>
+            <h3 className="pb-5"> Search Items </h3>
             <div className="row">
               <div className="col col-12 col-sm-12 col-md-12 order-2">
                 <ProductsRow
@@ -290,97 +301,17 @@ class Filter extends React.Component {
                         }
                         label="Bicycles"
                       />
-                    </FormGroup>
-                  </Grid>
-                  <Grid item xs={6} md={3} className="text-left">
-                    <Typography variant="h6">Rate</Typography>
-
-                    <br />
-                    <FormGroup>
-                      <FormControlLabel
+					  <FormControlLabel
                         control={
                           <Checkbox
-                            checked={true}
-                            onChange={(e) => console.log(e)}
-                            name="Rate 1"
-                          />
-                        }
-                        label="Rate 1"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={true}
+                            checked={this.state.otherSelected}
                             onChange={this.handleCheckChange}
-                            name="Rate 2"
+                            name="Other"
                           />
                         }
-                        label="Rate 2"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={true}
-                            onChange={this.handleCheckChange}
-                            name="Rate 3"
-                          />
-                        }
-                        label="Rate 3"
+                        label="Other"
                       />
                     </FormGroup>
-                  </Grid>
-                  <Grid item xs={6} md={2} className="text-left">
-                    <Typography variant="h6">Price</Typography>
-
-                    <br />
-                    <FormGroup>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={true}
-                            onChange={this.handleCheckChange}
-                            name="Filter 1"
-                          />
-                        }
-                        label="Filter 1"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={true}
-                            onChange={this.handleCheckChange}
-                            name="Filter 2"
-                          />
-                        }
-                        label="Filter 2"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={true}
-                            onChange={this.handleCheckChange}
-                            name="Filter 3"
-                          />
-                        }
-                        label="Filter 3"
-                      />
-                    </FormGroup>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={6}
-                    md={1}
-                    className="text-right d-flex flex-column justify-content-center"
-                  >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="large"
-                      style={{ maxWidth: 100 }}
-                      onClick={this.handleReset}
-                    >
-                      Reset
-                    </Button>
                   </Grid>
                 </Grid>
               </div>
