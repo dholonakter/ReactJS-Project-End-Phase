@@ -199,8 +199,10 @@ function ForgotPassword(){
             <Button  variant="contained" style={{margin:"auto", top:"20px",width:"90%", display:"block"}} color="primary" onClick={handlePassword}>Send</Button>
           </form>
       </div>  
-    <div>
+    <div style={{position:"fixed", bottom:"0", width: "100%"}}>
+
       <Footer />
+
     </div>
     </div>      
   );
