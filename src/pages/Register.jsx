@@ -486,15 +486,6 @@ function Register() {
             >
               Register
             </Buttons>
-
-            <Buttons
-              size="large"
-              variant="contained"
-              color="primary"
-              onClick={test}
-            >
-              test
-            </Buttons>
           </Box>
         </form>
       </Container>
