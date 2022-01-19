@@ -10,6 +10,7 @@ import {
   FormGroup,
   FormControlLabel,
   Grid,
+  Box,
 } from "@material-ui/core";
 
 import Banner from "../components/Banner";
@@ -38,7 +39,7 @@ class Filter extends React.Component {
           id: 3,
           label: "Bicycles",
         },
-		 {
+        {
           id: 4,
           label: "Other",
         },
@@ -46,7 +47,7 @@ class Filter extends React.Component {
       bookSelected: true,
       accSelected: true,
       bikeSelected: true,
-	  otherSelected: true,
+      otherSelected: true,
       priceValue: [0, 1000],
       sliderValue: [0, 1000],
       marks: [
@@ -106,7 +107,7 @@ class Filter extends React.Component {
           catCheck = true;
         } else if (product.category_id == 4 && this.state.otherSelected) {
           catCheck = true;
-		}
+        }
       }
       if (
         product.product_description
@@ -152,7 +153,7 @@ class Filter extends React.Component {
         this.setState({ bikeSelected: event.target.checked }, () => {
           this.handleFilter();
         });
-	  case "Other":
+      case "Other":
         this.setState({ otherSelected: event.target.checked }, () => {
           this.handleFilter();
         });
@@ -231,8 +232,8 @@ class Filter extends React.Component {
                 />
               </div>
               <div className="col col-12 col-sm-12 col-md-12 order-1">
-                <Grid container spacing={8}>
-                  <Grid item xs={12} sm={6} md={3}>
+                <Box display="flex" justifyContent="center">
+                  <Box mr={10}>
                     <Typography variant="h6" className="text-left">
                       Filter
                     </Typography>
@@ -266,9 +267,12 @@ class Filter extends React.Component {
                       onChange={this.handleSlideChange}
                       valueLabelDisplay="auto"
                     />
-                  </Grid>
-                  <Grid item xs={6} md={3} className="text-left">
-                    <Typography variant="h6">Category</Typography>
+                  </Box>
+
+                  <Box>
+                    <Typography variant="h6" style={{ marginLeft: -55 }}>
+                      Category
+                    </Typography>
                     <br />
                     <FormGroup>
                       <FormControlLabel
@@ -301,7 +305,7 @@ class Filter extends React.Component {
                         }
                         label="Bicycles"
                       />
-					  <FormControlLabel
+                      <FormControlLabel
                         control={
                           <Checkbox
                             checked={this.state.otherSelected}
@@ -312,8 +316,8 @@ class Filter extends React.Component {
                         label="Other"
                       />
                     </FormGroup>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Box>
               </div>
             </div>
           </div>
