@@ -22,41 +22,92 @@ import {store, useGlobalState} from 'state-pool';
 import Table from 'react-bootstrap/Table';
 
 
-function UserHistory() {  
-  const [currentUser, setCurrentUser] = useGlobalState("currentUser");
-  const [navigation, setNav] = useGlobalState("navigation");
-  const user = store.getState("currentUser");
+class UserHistory extends React.Component {    
+  constructor(props){
+    super(props);
+    this.state = {
+      currentUser: store.getState("currentUser"),
+	  navigation: store.getState("navigation"),
+	  user: store.getState("currentUser"),
+      buyOrders: [],
+	  sellOrders: [],
+      loaded: false,    
+      openDialog: false,
+    };
+	//this.deleteProduct = this.deleteProduct.bind(this);
+  }
 
-  const [firstname, setFirstname] = useState('');
-  const [l_name, setL_name] = useState('');
-  const [phone, setPhone] = useState('');
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [c_password, setCPassword] = useState('');
-
-  const [street, setStreet] = useState('');
-  const [statee, setStatee] = useState('');
-  const [post, setPost] = useState('');
-  const [country, setCountry] = useState('');
+  componentDidMount(){
+    this.getOrders();
+  }
   
-  const [open, setOpen] = React.useState(false);
-  const [status, setStatus] = React.useState("");
+  handleClickOpen(){
+    this.setState( {openDialog: true} );
+  }
 
-   const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-	console.log("closed");
+  handleClose = () => {
+    this.setState( {openDialog: false} );
   };
   
-  function handleHistory(){  
-    if(user.value != null){
+  getOrders(){
+	  
+	   if(this.state.user.value != null){
+		   let that = this;
+		 // get buyer orders
       axios({
         method: 'GET',
-        url:"https://i383988.hera.fhict.nl/database.php?get_address="+user.value.address_id,
+        url:"https://i383988.hera.fhict.nl/database.php?get_buyer_orders="+that.state.user.value.id,
+        config: {headers:{'Content-Type': 'multipart/form-data'}}
+      }).then(function(response){
+        if(response.data != null){
+			that.setState( {buyOrders: response.data} );
+		}
+		// get seller orders
+		axios({
+        method: 'GET',
+        url:"https://i383988.hera.fhict.nl/database.php?get_seller_orders="+that.state.user.value.id,
+        config: {headers:{'Content-Type': 'multipart/form-data'}}
+      }).then(function(response){
+        if(response.data != null){
+			that.setState( {sellOrders: response.data} );
+		}
+      });
+      });
+ 
+    }else{
+      document.querySelector("#home_nav").click();
+    }
+	  
+	 
+  }
+  
+  getProductById(productId){
+	  let product = [];
+	  const url = 'https://i383988.hera.fhict.nl/database.php?get_productById='+productId
+        axios.get(url)
+            .then(res => {
+				console.log(res);
+                product = res.data.product_name;
+				return product;
+				});
+  }
+  
+  getUserNameById(userId){
+	  let user = ""
+	  const url = 'https://i383988.hera.fhict.nl/database.php?user_id='+userId
+        axios.get(url)
+            .then(res => {
+				console.log(res);
+                user = res.data.firstname + " " + res.data.lastname;
+				return user;
+				});
+  }
+  
+  handleHistory(){  
+    if(this.state.user.value != null){
+      axios({
+        method: 'GET',
+        url:"https://i383988.hera.fhict.nl/database.php?get_address="+this.state.user.value.address_id,
         config: {headers:{'Content-Type': 'multipart/form-data'}}
       }).then(function(response){
   
@@ -68,10 +119,8 @@ function UserHistory() {
   
   }
 
-  useEffect(()=>{
-  }, []);
 
-  function setExpiration(){
+  setExpiration(){
     let timestamp = new Date();
     timestamp.setDate(timestamp.getDate());
     timestamp.setHours(timestamp.getHours());
@@ -80,31 +129,32 @@ function UserHistory() {
     return timestamp;
   }
 
-  const handleLogout = event => {
+  handleLogout(event){
     event.preventDefault();
-    if(user.value !=null){
+    if(this.state.user.value !=null){
       let formData = new FormData();
       formData.append('logout_user', 'Signing out');
-      formData.append('user_id', user.value.id);
+      formData.append('user_id', this.state.user.value.id);
       axios({
         method: 'POST',
         url:'https://i383988.hera.fhict.nl/database.php?',
         data: formData,
         config: {headers:{'Content-Type': 'multipart/form-data'}}
       }).then(function(response){
-          setNav("/Login");
-          setCurrentUser("");
-          document.cookie="current_user= ; expires="+ setExpiration().toUTCString();
+          this.setState({navigation: "/Login"});
+          this.setState({currentUser: ""});
+          document.cookie="current_user= ; expires="+ this.setExpiration().toUTCString();
           alert("Successfully logged out!");
           document.querySelector("#home_nav").click();
       });
     }
   }
 
-  const navigateUpdate = event =>{
-    window.location.href="https://i383988.hera.fhict.nl/updateinfo";
+  navigateUpdate(event){
+    window.location.href="/updateinfo";
   }
 
+render(){
   return (
     <div className="app">   
      <div>
@@ -130,57 +180,36 @@ function UserHistory() {
                   <th>Order #</th>
                   <th>Ordered by</th>
 				  <th>Item name</th>
-				  <th>Price</th>
 				  <th>Order Status</th>
 				  <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td><a href="#">Ryan Meijs</a></td>
-				  <td><a href="/singleproductpage/16">Visual C# How to Program 6th edition</a></td>
-				  <td>€35.00</td>
-				  <td>Pending payment</td>
-				  <td>
-				  <Buttons
+			  
+			   <tbody>
+               {
+               this.state.buyOrders.map(order => {
+                 return(
+                  <tr>
+                    <td>{order.id}</td>
+					<td>{this.getUserNameById(order.seller_id)}</td>
+                    <td><a href={'/singleproductpage/' + order.product_id}>{this.getProductById(order.product_id)}	</a></td>
+                    <td>{order.order_status}</td>
+					<td><Buttons
                   variant="contained"
                   size="small"
                   color="primary"
-				  onClick={handleClickOpen}
+				  onClick={this.handleClickOpen}
                 >
                   Update status
-                </Buttons>
-				</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td><a href="#">Jan Muller</a></td>
-				  <td><a href="/singleproductpage/20">2nd hand bicycle</a></td>
-				  <td>€30.00</td>
-				  <td>Payment received</td>
-				  <td><Buttons
-                  variant="contained"
-                  size="small"
-                  color="primary"
-				  onClick={handleClickOpen}
-                >
-                  Update status
-                </Buttons>
-				</td>
-                </tr>
-                 <tr>
-                  <td>3</td>
-                  <td><a href="#">Alex Aver</a></td>
-				  <td><a href="/singleproductpage/23">Javascript Programming Book</a></td>
-				  <td>€10.00</td>
-				  <td>Complete</td>				  
-                </tr>
+                </Buttons></td>
+                  </tr>
+                 );
+              })} 
               </tbody>
             </Table>
 			<Dialog
-			  open={open}
-			  onClose={handleClose}
+			  open={this.openDialog}
+			  onClose={this.handleClose}
 			>
 			  <DialogTitle>Update order status</DialogTitle>
 			  <DialogContent>
@@ -196,10 +225,10 @@ function UserHistory() {
           >
               <List sx={{ pt: 0 }}>
          <ListItem 
-		    button onClick={handleClose} >
+		    button onClick={this.handleClose} >
             <ListItemText primary="Received payment" />
           </ListItem>
-		    <ListItem button onClick={handleClose} >
+		    <ListItem button onClick={this.handleClose} >
             <ListItemText primary="Cancel order" />
           </ListItem>
           
@@ -216,6 +245,7 @@ function UserHistory() {
       </div>
     </div>
   );
+}
 }
 
 //ReactDOM.render(<Register />, document.getElementById('root'));
