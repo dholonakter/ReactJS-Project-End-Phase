@@ -113,7 +113,7 @@ function renderDialogs(currentStatus, orderContext, order, orderType){
       </Dialog>
 	  </div>
 	)
-	}else if (orderType == "sale" && (currentStatus.toLowerCase() == "pending payment" || currentStatus.toLowerCase() == "payment received")){
+	}else if (orderType == "sale" && (currentStatus.toLowerCase() == "pending payment" || currentStatus.toLowerCase() == "received payment")){
 		return(
 		<div>
 					<td><Buttons

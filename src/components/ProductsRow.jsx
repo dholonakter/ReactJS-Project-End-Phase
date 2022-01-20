@@ -28,8 +28,8 @@ function dataExists(data){
               <div className="card-body">
                 <h5 className="card-title ">{item.title}</h5>
                 <p className="card-text">
-                  {item.product_description
-                    ? trimString(item.product_description, 20)
+                  {item.product_name
+                    ? trimString(item.product_name, 20)
                     : "..."}
                 </p>
                 <p className="fw-bold py-2">€ {item.product_price}</p>
