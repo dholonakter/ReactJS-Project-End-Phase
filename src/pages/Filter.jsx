@@ -79,7 +79,6 @@ class Filter extends React.Component {
       .get(url)
       .then((response) => response.data)
       .then((data) => {
-        console.log(data);
         this.setState({ products: data });
         this.setState({ filteredProducts: data });
       });
@@ -91,7 +90,6 @@ class Filter extends React.Component {
     let nameValue = this.state.nameValue;
     let categories = this.state.categories;
     let priceValue = this.state.priceValue;
-    console.log(priceValue);
 
     for (let product of productList) {
       let priceCheck = false;
@@ -164,8 +162,6 @@ class Filter extends React.Component {
   handleSlideChange(event, value) {
     let lowerValue = value[0];
     let upperValue = value[1];
-    console.log(upperValue);
-    console.log(lowerValue);
     lowerValue = this.calculateValue(lowerValue);
     upperValue = this.calculateValue(upperValue);
     let newValue = [lowerValue, upperValue];

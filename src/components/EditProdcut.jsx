@@ -33,7 +33,6 @@ const EditProduct = () => {
     const loadProductDetails = async() => {
         const response = await getProducts(id);
         setProduct(response.data);
-        console.log(response.data);
     }
 
     const editProdctDetails = async() => {
@@ -42,7 +41,6 @@ const EditProduct = () => {
     }
 
     const onValueChange = (e) => {
-        console.log(e.target.value);
         setProduct({...prodcut, [e.target.name]: e.target.value})
     }
 

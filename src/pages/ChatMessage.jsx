@@ -118,7 +118,6 @@ class ChatMessage extends React.Component {
       data: formData,
       config: { headers: { "Content-Type": "multipart/form-data" } },
     }).then(function (response) {
-      console.log(response);
       console.log("Chat Sent");
     });
   }

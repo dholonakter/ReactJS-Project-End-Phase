@@ -33,22 +33,17 @@ function App() {
   const [navigation, setNav] = useGlobalState("navigation");
   //this useEffect function is what GETS the data which is being posted in the database.php file with $_POST
   useEffect(() => {
-    console.log(document.cookie);
     let current_user;
     let user_id;
     if (document.cookie != "") {
       user_id = document.cookie.replace('current_user=', '');
-      console.log("trying to log user_id="+user_id);
       axios({
         method: "GET",
         url: "https://i383988.hera.fhict.nl/database.php?session="+user_id,
         config: { headers: { "Content-Type": "multipart/form-data" } },
       }).then(function (response) {
-        console.log(response.data);
-          console.log(response.data.user_id);
           current_user = response.data.user_id;
           if (document.cookie == "current_user=" + current_user) {
-            console.log("trying to log");
             axios({
               method: "GET",
               url: "https://i383988.hera.fhict.nl/database.php?user_id=" + current_user,
