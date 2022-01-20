@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-//import {FormGroup, FormControl, InputLabel, Input, Button, makeStyles, Typography } from '@material-ui/core';
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
-//import { getProducts} from '../Service/api';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -65,12 +63,10 @@ class SingleProductComponent extends React.Component{
         axios.get(url)
             .then(res => {
                 this.setState({ productList : res.data });
-                console.log(res)
             const url2 = 'https://i383988.hera.fhict.nl/database.php?user_id='+this.state.productList.user_id
             axios.get(url2)
                 .then(res2 => {
                     this.setState({ seller : res2.data });
-                    console.log(res2)
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -79,11 +75,6 @@ class SingleProductComponent extends React.Component{
             .catch(function (error) {
                 console.log(error);
             })
-            
-            
-        // axios.get(url).then(response => response.data)
-        // .then((data) => {
-        //     this.setState({ productList: data});
     } 
 	
 	getDateTime() {
@@ -113,16 +104,17 @@ class SingleProductComponent extends React.Component{
 	}
 	
 	createOrder(buyer, sellerId, productId){
-	  if(buyer.value == null){
-            alert("Please log into your account to order this item")
-        }else{
-			const url = "https://i383988.hera.fhict.nl/database.php?get_order="+productId;
-    axios
-      .get(url)
-      .then((response) => response.data)
-      .then((data) => {
-        if(data != null){
-			alert("Product has already been ordered")
+		 if(buyer.value == null){
+            alert("Please log into your account to order this item");
+		 }else{
+			 let that = this;
+			 axios({				 
+				 method: 'GET',
+        url:"https://i383988.hera.fhict.nl/database.php?get_order="+productId,
+        config: {headers:{'Content-Type': 'multipart/form-data'}}
+      }).then(function(response){
+        if(response.data != null && response.data.length != 0){
+			alert("Product has already been ordered")		
 		}else{
 			let formData = new FormData();
 		formData.append("create_order", "Create order");
@@ -136,16 +128,12 @@ class SingleProductComponent extends React.Component{
           data: formData,
          config: { headers: { "Content-Type": "multipart/form-data" } },
         }).then(function (response) {
-			console.log(response);
-        });
+			alert("Order successfully created");
+        });			
 		}
-      });			
-		}	  
-	}
-
-  GetProductId = () => {
-    console.log(this.state.productList.product_img);
-  };
+	 });			 
+ }
+}
 
   chatMessage(currUser, a, b) {
     if (currUser.value == null) {
