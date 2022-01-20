@@ -53,7 +53,7 @@ class ChatMessage extends React.Component {
     this.handleTextChange = this.handleTextChange.bind(this);
 
     if (this.props.location.state == undefined) {
-      window.location.href = "https://i383988.hera.fhict.nl/login";
+      window.location.href = "/login";
     }
 
     chatList = this.getData(

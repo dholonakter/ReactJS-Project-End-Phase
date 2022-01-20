@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import { BrowserRouter, Route, Switch, Link, withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { store, useGlobalState } from "state-pool";
+
 import Buttons from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Dialog from '@material-ui/core/Dialog';
@@ -15,99 +19,212 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
+import ChatIcon from '@material-ui/icons/Chat';
 import Navigation from "../components/Navigation";
 import ProfileNavigation from "../components/ProfileNavigation";
 import Footer from "../components/Footer";
-import {store, useGlobalState} from 'state-pool';
 import Table from 'react-bootstrap/Table';
 
+var user;
+
+function renderStatusOptions(currentStatus, orderContext, order, orderType){
+	console.log(order);
+	if(currentStatus.toLowerCase() == "pending payment"){
+		return(
+		<List sx={{ pt: 0 }}>
+         <ListItem 
+		    button onClick={()=> {orderContext.updateStatus(order.id, "Received payment"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Received payment" />
+          </ListItem>
+		    <ListItem button onClick={()=> {orderContext.updateStatus(order.id, "Cancelled"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Cancel order" />
+          </ListItem>          
+      </List>
+	)
+	}else if (currentStatus.toLowerCase() == "received payment"){
+		return(
+		<List sx={{ pt: 0 }}>
+         <ListItem 
+		    button onClick={()=> {orderContext.updateStatus(order.id, "Product shipped"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Product shipped" />
+          </ListItem>
+		    <ListItem button onClick={()=> {orderContext.updateStatus(order.id, "Cancelled"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Cancel order" />
+          </ListItem>          
+      </List>
+	  )
+	}else if (currentStatus.toLowerCase() == "product shipped" && orderType == "purchase"){
+		return(
+		<List sx={{ pt: 0 }}>
+		 <ListItem 
+		    button onClick={()=> {orderContext.updateStatus(order.id, "Product received"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Product received" />
+          </ListItem>
+		    <ListItem button onClick={()=> {orderContext.updateStatus(order.id, "Cancelled"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Cancel order" />
+          </ListItem>                 
+      </List>
+	  )
+	}else if (currentStatus.toLowerCase() == "product shipped" && orderType == "sale"){
+		return(
+		<List sx={{ pt: 0 }}>
+		    <ListItem button onClick={()=> orderContext.setState( {open: !orderContext.state.open})} >
+            <ListItemText primary="Close" />
+          </ListItem>          
+      </List>
+	  )
+	}
+	
+}
+
+function renderDialogs(currentStatus, orderContext, order, orderType){
+	if(orderType == "purchase" && currentStatus.toLowerCase() == "product shipped" ){
+		return(
+		<div>
+					<td><Buttons
+                  variant="contained"
+                  size="small"
+                  color="primary"
+				  onClick={()=> {orderContext.setState( {open: !orderContext.state.open}); orderContext.setState( {currentId: order.id} ) }}
+                >
+                  Update status
+                </Buttons></td>
+	  <Dialog
+			  open={orderContext.state.open && orderContext.state.currentId == order.id}
+			  onClose={()=>orderContext.setState( {open: !orderContext.state.open}) }
+			>
+			  <DialogTitle>Update order status</DialogTitle>
+			  <DialogContent>
+			    <Box
+            noValidate
+            component="form"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              m: 'auto',
+              width: 'fit-content',
+            }}
+          >
+              
+			  {renderStatusOptions(order.order_status, orderContext, order, orderType)}
+			  
+          </Box>
+			  </DialogContent>
+      </Dialog>
+	  </div>
+	)
+	}else if (orderType == "sale" && (currentStatus.toLowerCase() == "pending payment" || currentStatus.toLowerCase() == "payment received")){
+		return(
+		<div>
+					<td><Buttons
+                  variant="contained"
+                  size="small"
+                  color="primary"
+				  onClick={()=> {orderContext.setState( {open: !orderContext.state.open}); orderContext.setState( {currentId: order.id} ) }}
+                >
+                  Update status
+                </Buttons></td>
+	  <Dialog
+			  open={orderContext.state.open && orderContext.state.currentId == order.id}
+			  onClose={()=>orderContext.setState( {open: !orderContext.state.open}) }
+			>
+			  <DialogTitle>Update order status</DialogTitle>
+			  <DialogContent>
+			    <Box
+            noValidate
+            component="form"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              m: 'auto',
+              width: 'fit-content',
+            }}
+          >
+              
+			  {renderStatusOptions(order.order_status, orderContext, order, orderType)}
+			  
+          </Box>
+			  </DialogContent>
+      </Dialog>
+	  </div>
+	)
+	}
+}
 
 class UserHistory extends React.Component {    
   constructor(props){
     super(props);
     this.state = {
-      currentUser: store.getState("currentUser"),
-	  navigation: store.getState("navigation"),
-	  user: store.getState("currentUser"),
       buyOrders: [],
+	  buyOrderDetails: [],
 	  sellOrders: [],
+	  sellOrderDetails: [],
       loaded: false,    
-      openDialog: false,
+      open: false,
+	  currentId: 0
     };
+        user = store.getState("currentUser");
 	//this.deleteProduct = this.deleteProduct.bind(this);
   }
 
   componentDidMount(){
-    this.getOrders();
+	this.getOrders();	
   }
   
-  handleClickOpen(){
-    this.setState( {openDialog: true} );
-  }
-
-  handleClose = () => {
-    this.setState( {openDialog: false} );
-  };
-  
-  getOrders(){
-	  
-	   if(this.state.user.value != null){
+  getOrders(){	  
+	   if(user.value != null){
 		   let that = this;
 		 // get buyer orders
       axios({
         method: 'GET',
-        url:"https://i383988.hera.fhict.nl/database.php?get_buyer_orders="+that.state.user.value.id,
+        url:"https://i383988.hera.fhict.nl/database.php?get_buyer_orders="+user.value.id,
         config: {headers:{'Content-Type': 'multipart/form-data'}}
       }).then(function(response){
         if(response.data != null){
-			that.setState( {buyOrders: response.data} );
+			that.setState( {buyOrders: response.data} );			
 		}
 		// get seller orders
 		axios({
         method: 'GET',
-        url:"https://i383988.hera.fhict.nl/database.php?get_seller_orders="+that.state.user.value.id,
+        url:"https://i383988.hera.fhict.nl/database.php?get_seller_orders="+user.value.id,
         config: {headers:{'Content-Type': 'multipart/form-data'}}
       }).then(function(response){
         if(response.data != null){
 			that.setState( {sellOrders: response.data} );
+			console.log(response);
 		}
       });
       });
  
     }else{
       document.querySelector("#home_nav").click();
-    }
-	  
-	 
-  }
+    }	 
+  }    
   
-  getProductById(productId){
-	  let product = [];
-	  const url = 'https://i383988.hera.fhict.nl/database.php?get_productById='+productId
-        axios.get(url)
-            .then(res => {
-				console.log(res);
-                product = res.data.product_name;
-				return product;
-				});
-  }
-  
-  getUserNameById(userId){
-	  let user = ""
-	  const url = 'https://i383988.hera.fhict.nl/database.php?user_id='+userId
-        axios.get(url)
-            .then(res => {
-				console.log(res);
-                user = res.data.firstname + " " + res.data.lastname;
-				return user;
-				});
+  updateStatus(orderId, newStatus){
+	  let formData = new FormData();
+	  let that = this;
+	  console.log (orderId, newStatus);
+    formData.append("update_status", "updating status");
+	formData.append("id", orderId);
+    formData.append("order_status", newStatus);
+    axios({
+        method: "POST",
+        url: "https://i383988.hera.fhict.nl/database.php?",
+        data: formData,
+        config: { headers: { "Content-Type": "multipart/form-data" } },
+      }).then(function (response) {
+        console.log(response);
+		that.getOrders();
+        alert("Status update has been processed");
+      });
   }
   
   handleHistory(){  
     if(this.state.user.value != null){
       axios({
         method: 'GET',
-        url:"https://i383988.hera.fhict.nl/database.php?get_address="+this.state.user.value.address_id,
+        url:"https://i383988.hera.fhict.nl/database.php?get_address="+user.value.address_id,
         config: {headers:{'Content-Type': 'multipart/form-data'}}
       }).then(function(response){
   
@@ -115,8 +232,7 @@ class UserHistory extends React.Component {
  
     }else{
       document.querySelector("#home_nav").click();
-    }
-  
+    }  
   }
 
 
@@ -128,24 +244,15 @@ class UserHistory extends React.Component {
     timestamp.setSeconds(timestamp.getSeconds()+1);
     return timestamp;
   }
-
-  handleLogout(event){
-    event.preventDefault();
-    if(this.state.user.value !=null){
-      let formData = new FormData();
-      formData.append('logout_user', 'Signing out');
-      formData.append('user_id', this.state.user.value.id);
-      axios({
-        method: 'POST',
-        url:'https://i383988.hera.fhict.nl/database.php?',
-        data: formData,
-        config: {headers:{'Content-Type': 'multipart/form-data'}}
-      }).then(function(response){
-          this.setState({navigation: "/Login"});
-          this.setState({currentUser: ""});
-          document.cookie="current_user= ; expires="+ this.setExpiration().toUTCString();
-          alert("Successfully logged out!");
-          document.querySelector("#home_nav").click();
+  
+  chatMessage(currUser, a, b) {
+    if (currUser.value == null) {
+      alert("Please log into your account before contacting the seller");
+    } else {
+      this.props.history.push("/chatMessage", {
+        id: currUser.value.id,
+        targetid: a,
+        name: b,
       });
     }
   }
@@ -171,7 +278,7 @@ render(){
             
               <div className="row">  
               <div className="col-lg-12"><center>
-                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">Order History</Typography></center>
+                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">My Purchases</Typography></center>
                 </div>
               </div>
               <Table responsive>
@@ -181,7 +288,6 @@ render(){
                   <th>Ordered by</th>
 				  <th>Item name</th>
 				  <th>Order Status</th>
-				  <th>Action</th>
                 </tr>
               </thead>
 			  
@@ -191,52 +297,75 @@ render(){
                  return(
                   <tr>
                     <td>{order.id}</td>
-					<td>{this.getUserNameById(order.seller_id)}</td>
-                    <td><a href={'/singleproductpage/' + order.product_id}>{this.getProductById(order.product_id)}	</a></td>
-                    <td>{order.order_status}</td>
 					<td><Buttons
-                  variant="contained"
-                  size="small"
-                  color="primary"
-				  onClick={this.handleClickOpen}
-                >
-                  Update status
-                </Buttons></td>
+			  variant="text"
+			  color="primary"
+              size="small"
+              startIcon={<ChatIcon/>}
+              onClick={() =>this.chatMessage(user, order.user_id, order.firstname)
+              }
+            >
+			{order.firstname}
+            </Buttons></td>
+                    <td><a href={'/singleproductpage/' + order.product_id}>{order.product_name}</a></td>
+                    <td>{order.order_status}</td>
+					
+			       {renderDialogs(order.order_status, this, order, "purchase")}
+				
+				
                   </tr>
                  );
               })} 
               </tbody>
             </Table>
-			<Dialog
-			  open={this.openDialog}
-			  onClose={this.handleClose}
-			>
-			  <DialogTitle>Update order status</DialogTitle>
-			  <DialogContent>
-			    <Box
-            noValidate
-            component="form"
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              m: 'auto',
-              width: 'fit-content',
-            }}
-          >
-              <List sx={{ pt: 0 }}>
-         <ListItem 
-		    button onClick={this.handleClose} >
-            <ListItemText primary="Received payment" />
-          </ListItem>
-		    <ListItem button onClick={this.handleClose} >
-            <ListItemText primary="Cancel order" />
-          </ListItem>
-          
-      </List>
-          </Box>
-			  </DialogContent>
-			</Dialog>
           </div>
+		  
+		  <div className="col-lg-12">
+            
+              <div className="row">  
+              <div className="col-lg-12"><center>
+                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">My Sales</Typography></center>
+                </div>
+              </div>
+              <Table responsive>
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Ordered from</th>
+				  <th>Item name</th>
+				  <th>Order Status</th>
+                </tr>
+              </thead>
+			  
+			   <tbody>
+               {
+               this.state.sellOrders.map(order => {
+                 return(
+                  <tr>
+                    <td>{order.id}</td>
+					<td><Buttons
+			  variant="text"
+			  color="primary"
+              size="small"
+              startIcon={<ChatIcon/>}
+              onClick={() =>this.chatMessage(user, order.user_id, order.firstname)
+              }
+            >
+			{order.firstname}
+            </Buttons></td>
+                    <td><a href={'/singleproductpage/' + order.product_id}>{order.product_name}</a></td>
+                    <td>{order.order_status}</td>
+			  {renderDialogs(order.order_status, this, order, "sale")}
+                  </tr>
+				  
+                 );
+              })} 
+              </tbody>
+            </Table>
+			
+			
+          </div>
+		  
         </div>
       </div>
     </div>
@@ -250,4 +379,4 @@ render(){
 
 //ReactDOM.render(<Register />, document.getElementById('root'));
 
-export default UserHistory;
+export default withRouter(UserHistory);
