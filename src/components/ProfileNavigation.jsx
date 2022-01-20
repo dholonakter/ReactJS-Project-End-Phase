@@ -48,7 +48,7 @@ function ProfileNavigation(props) {
               }`}
             >
               <Link className="nav-link font-weight-bold" to="/userhistory">
-                Purchase History
+                Order History
               </Link>
             </li>
           </ul>

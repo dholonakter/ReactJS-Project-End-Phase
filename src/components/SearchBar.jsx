@@ -66,6 +66,7 @@ class SearchBar extends React.Component {
           options={this.state.filteredProducts}
           getOptionLabel={(option) => option.product_name.toString()}
           renderOption={(option) => (
+		  <a href={'/singleproductpage/' + option.id}>
             <React.Fragment>
               <span
                 style={{ cursor: "pointer" }}
@@ -82,6 +83,7 @@ class SearchBar extends React.Component {
                 />
               </span>
             </React.Fragment>
+			</a>
           )}
           renderInput={(params) => (
             <TextField

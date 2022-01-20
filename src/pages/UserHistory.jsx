@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import { BrowserRouter, Route, Switch, Link, withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { store, useGlobalState } from "state-pool";
+
 import Buttons from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Dialog from '@material-ui/core/Dialog';
@@ -15,45 +19,209 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import TextFields from '@material-ui/core/TextField';
+import ChatIcon from '@material-ui/icons/Chat';
 import Navigation from "../components/Navigation";
 import ProfileNavigation from "../components/ProfileNavigation";
 import Footer from "../components/Footer";
-import {store, useGlobalState} from 'state-pool';
 import Table from 'react-bootstrap/Table';
 
+var user;
 
-function UserHistory() {  
-  const [currentUser, setCurrentUser] = useGlobalState("currentUser");
-  const [navigation, setNav] = useGlobalState("navigation");
-  const user = store.getState("currentUser");
+function renderStatusOptions(currentStatus, orderContext, order, orderType){
+	console.log(order);
+	if(currentStatus.toLowerCase() == "pending payment"){
+		return(
+		<List sx={{ pt: 0 }}>
+         <ListItem 
+		    button onClick={()=> {orderContext.updateStatus(order.id, "Received payment"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Received payment" />
+          </ListItem>
+		    <ListItem button onClick={()=> {orderContext.updateStatus(order.id, "Cancelled"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Cancel order" />
+          </ListItem>          
+      </List>
+	)
+	}else if (currentStatus.toLowerCase() == "received payment"){
+		return(
+		<List sx={{ pt: 0 }}>
+         <ListItem 
+		    button onClick={()=> {orderContext.updateStatus(order.id, "Product shipped"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Product shipped" />
+          </ListItem>
+		    <ListItem button onClick={()=> {orderContext.updateStatus(order.id, "Cancelled"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Cancel order" />
+          </ListItem>          
+      </List>
+	  )
+	}else if (currentStatus.toLowerCase() == "product shipped" && orderType == "purchase"){
+		return(
+		<List sx={{ pt: 0 }}>
+		 <ListItem 
+		    button onClick={()=> {orderContext.updateStatus(order.id, "Product received"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Product received" />
+          </ListItem>
+		    <ListItem button onClick={()=> {orderContext.updateStatus(order.id, "Cancelled"); orderContext.setState( {open: !orderContext.state.open}); }} >
+            <ListItemText primary="Cancel order" />
+          </ListItem>                 
+      </List>
+	  )
+	}else if (currentStatus.toLowerCase() == "product shipped" && orderType == "sale"){
+		return(
+		<List sx={{ pt: 0 }}>
+		    <ListItem button onClick={()=> orderContext.setState( {open: !orderContext.state.open})} >
+            <ListItemText primary="Close" />
+          </ListItem>          
+      </List>
+	  )
+	}
+	
+}
 
-  const [firstname, setFirstname] = useState('');
-  const [l_name, setL_name] = useState('');
-  const [phone, setPhone] = useState('');
+function renderDialogs(currentStatus, orderContext, order, orderType){
+	if(orderType == "purchase" && currentStatus.toLowerCase() == "product shipped" ){
+		return(
+		<div>
+					<td><Buttons
+                  variant="contained"
+                  size="small"
+                  color="primary"
+				  onClick={()=> {orderContext.setState( {open: !orderContext.state.open}); orderContext.setState( {currentId: order.id} ) }}
+                >
+                  Update status
+                </Buttons></td>
+	  <Dialog
+			  open={orderContext.state.open && orderContext.state.currentId == order.id}
+			  onClose={()=>orderContext.setState( {open: !orderContext.state.open}) }
+			>
+			  <DialogTitle>Update order status</DialogTitle>
+			  <DialogContent>
+			    <Box
+            noValidate
+            component="form"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              m: 'auto',
+              width: 'fit-content',
+            }}
+          >
+              
+			  {renderStatusOptions(order.order_status, orderContext, order, orderType)}
+			  
+          </Box>
+			  </DialogContent>
+      </Dialog>
+	  </div>
+	)
+	}else if (orderType == "sale" && (currentStatus.toLowerCase() == "pending payment" || currentStatus.toLowerCase() == "payment received")){
+		return(
+		<div>
+					<td><Buttons
+                  variant="contained"
+                  size="small"
+                  color="primary"
+				  onClick={()=> {orderContext.setState( {open: !orderContext.state.open}); orderContext.setState( {currentId: order.id} ) }}
+                >
+                  Update status
+                </Buttons></td>
+	  <Dialog
+			  open={orderContext.state.open && orderContext.state.currentId == order.id}
+			  onClose={()=>orderContext.setState( {open: !orderContext.state.open}) }
+			>
+			  <DialogTitle>Update order status</DialogTitle>
+			  <DialogContent>
+			    <Box
+            noValidate
+            component="form"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              m: 'auto',
+              width: 'fit-content',
+            }}
+          >
+              
+			  {renderStatusOptions(order.order_status, orderContext, order, orderType)}
+			  
+          </Box>
+			  </DialogContent>
+      </Dialog>
+	  </div>
+	)
+	}
+}
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [c_password, setCPassword] = useState('');
+class UserHistory extends React.Component {    
+  constructor(props){
+    super(props);
+    this.state = {
+      buyOrders: [],
+	  buyOrderDetails: [],
+	  sellOrders: [],
+	  sellOrderDetails: [],
+      loaded: false,    
+      open: false,
+	  currentId: 0
+    };
+        user = store.getState("currentUser");
+	//this.deleteProduct = this.deleteProduct.bind(this);
+  }
 
-  const [street, setStreet] = useState('');
-  const [statee, setStatee] = useState('');
-  const [post, setPost] = useState('');
-  const [country, setCountry] = useState('');
+  componentDidMount(){
+	this.getOrders();	
+  }
   
-  const [open, setOpen] = React.useState(false);
-  const [status, setStatus] = React.useState("");
-
-   const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-	console.log("closed");
-  };
+  getOrders(){	  
+	   if(user.value != null){
+		   let that = this;
+		 // get buyer orders
+      axios({
+        method: 'GET',
+        url:"https://i383988.hera.fhict.nl/database.php?get_buyer_orders="+user.value.id,
+        config: {headers:{'Content-Type': 'multipart/form-data'}}
+      }).then(function(response){
+        if(response.data != null){
+			that.setState( {buyOrders: response.data} );			
+		}
+		// get seller orders
+		axios({
+        method: 'GET',
+        url:"https://i383988.hera.fhict.nl/database.php?get_seller_orders="+user.value.id,
+        config: {headers:{'Content-Type': 'multipart/form-data'}}
+      }).then(function(response){
+        if(response.data != null){
+			that.setState( {sellOrders: response.data} );
+			console.log(response);
+		}
+      });
+      });
+ 
+    }else{
+      document.querySelector("#home_nav").click();
+    }	 
+  }    
   
-  function handleHistory(){  
-    if(user.value != null){
+  updateStatus(orderId, newStatus){
+	  let formData = new FormData();
+	  let that = this;
+	  console.log (orderId, newStatus);
+    formData.append("update_status", "updating status");
+	formData.append("id", orderId);
+    formData.append("order_status", newStatus);
+    axios({
+        method: "POST",
+        url: "https://i383988.hera.fhict.nl/database.php?",
+        data: formData,
+        config: { headers: { "Content-Type": "multipart/form-data" } },
+      }).then(function (response) {
+        console.log(response);
+		that.getOrders();
+        alert("Status update has been processed");
+      });
+  }
+  
+  handleHistory(){  
+    if(this.state.user.value != null){
       axios({
         method: 'GET',
         url:"https://i383988.hera.fhict.nl/database.php?get_address="+user.value.address_id,
@@ -64,14 +232,11 @@ function UserHistory() {
  
     }else{
       document.querySelector("#home_nav").click();
-    }
-  
+    }  
   }
 
-  useEffect(()=>{
-  }, []);
 
-  function setExpiration(){
+  setExpiration(){
     let timestamp = new Date();
     timestamp.setDate(timestamp.getDate());
     timestamp.setHours(timestamp.getHours());
@@ -79,32 +244,24 @@ function UserHistory() {
     timestamp.setSeconds(timestamp.getSeconds()+1);
     return timestamp;
   }
-
-  const handleLogout = event => {
-    event.preventDefault();
-    if(user.value !=null){
-      let formData = new FormData();
-      formData.append('logout_user', 'Signing out');
-      formData.append('user_id', user.value.id);
-      axios({
-        method: 'POST',
-        url:'https://i383988.hera.fhict.nl/database.php?',
-        data: formData,
-        config: {headers:{'Content-Type': 'multipart/form-data'}}
-      }).then(function(response){
-          setNav("/Login");
-          setCurrentUser("");
-          document.cookie="current_user= ; expires="+ setExpiration().toUTCString();
-          alert("Successfully logged out!");
-          document.querySelector("#home_nav").click();
+  
+  chatMessage(currUser, a, b) {
+    if (currUser.value == null) {
+      alert("Please log into your account before contacting the seller");
+    } else {
+      this.props.history.push("/chatMessage", {
+        id: currUser.value.id,
+        targetid: a,
+        name: b,
       });
     }
   }
 
-  const navigateUpdate = event =>{
-    window.location.href="https://i383988.hera.fhict.nl/updateinfo";
+  navigateUpdate(event){
+    window.location.href="/updateinfo";
   }
 
+render(){
   return (
     <div className="app">   
      <div>
@@ -121,7 +278,7 @@ function UserHistory() {
             
               <div className="row">  
               <div className="col-lg-12"><center>
-                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">Order History</Typography></center>
+                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">My Purchases</Typography></center>
                 </div>
               </div>
               <Table responsive>
@@ -130,84 +287,85 @@ function UserHistory() {
                   <th>Order #</th>
                   <th>Ordered by</th>
 				  <th>Item name</th>
-				  <th>Price</th>
 				  <th>Order Status</th>
-				  <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td><a href="#">Ryan Meijs</a></td>
-				  <td><a href="/singleproductpage/16">Visual C# How to Program 6th edition</a></td>
-				  <td>€35.00</td>
-				  <td>Pending payment</td>
-				  <td>
-				  <Buttons
-                  variant="contained"
-                  size="small"
-                  color="primary"
-				  onClick={handleClickOpen}
-                >
-                  Update status
-                </Buttons>
-				</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td><a href="#">Jan Muller</a></td>
-				  <td><a href="/singleproductpage/20">2nd hand bicycle</a></td>
-				  <td>€30.00</td>
-				  <td>Payment received</td>
-				  <td><Buttons
-                  variant="contained"
-                  size="small"
-                  color="primary"
-				  onClick={handleClickOpen}
-                >
-                  Update status
-                </Buttons>
-				</td>
-                </tr>
-                 <tr>
-                  <td>3</td>
-                  <td><a href="#">Alex Aver</a></td>
-				  <td><a href="/singleproductpage/23">Javascript Programming Book</a></td>
-				  <td>€10.00</td>
-				  <td>Complete</td>				  
-                </tr>
+			  
+			   <tbody>
+               {
+               this.state.buyOrders.map(order => {
+                 return(
+                  <tr>
+                    <td>{order.id}</td>
+					<td><Buttons
+			  variant="text"
+			  color="primary"
+              size="small"
+              startIcon={<ChatIcon/>}
+              onClick={() =>this.chatMessage(user, order.user_id, order.firstname)
+              }
+            >
+			{order.firstname}
+            </Buttons></td>
+                    <td><a href={'/singleproductpage/' + order.product_id}>{order.product_name}</a></td>
+                    <td>{order.order_status}</td>
+					
+			       {renderDialogs(order.order_status, this, order, "purchase")}
+				
+				
+                  </tr>
+                 );
+              })} 
               </tbody>
             </Table>
-			<Dialog
-			  open={open}
-			  onClose={handleClose}
-			>
-			  <DialogTitle>Update order status</DialogTitle>
-			  <DialogContent>
-			    <Box
-            noValidate
-            component="form"
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              m: 'auto',
-              width: 'fit-content',
-            }}
-          >
-              <List sx={{ pt: 0 }}>
-         <ListItem 
-		    button onClick={handleClose} >
-            <ListItemText primary="Received payment" />
-          </ListItem>
-		    <ListItem button onClick={handleClose} >
-            <ListItemText primary="Cancel order" />
-          </ListItem>
-          
-      </List>
-          </Box>
-			  </DialogContent>
-			</Dialog>
           </div>
+		  
+		  <div className="col-lg-12">
+            
+              <div className="row">  
+              <div className="col-lg-12"><center>
+                <Typography className="font-weight-light col-lg-12 text-right" variant="h5">My Sales</Typography></center>
+                </div>
+              </div>
+              <Table responsive>
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Ordered from</th>
+				  <th>Item name</th>
+				  <th>Order Status</th>
+                </tr>
+              </thead>
+			  
+			   <tbody>
+               {
+               this.state.sellOrders.map(order => {
+                 return(
+                  <tr>
+                    <td>{order.id}</td>
+					<td><Buttons
+			  variant="text"
+			  color="primary"
+              size="small"
+              startIcon={<ChatIcon/>}
+              onClick={() =>this.chatMessage(user, order.user_id, order.firstname)
+              }
+            >
+			{order.firstname}
+            </Buttons></td>
+                    <td><a href={'/singleproductpage/' + order.product_id}>{order.product_name}</a></td>
+                    <td>{order.order_status}</td>
+			  {renderDialogs(order.order_status, this, order, "sale")}
+                  </tr>
+				  
+                 );
+              })} 
+              </tbody>
+            </Table>
+			
+			
+          </div>
+		  
         </div>
       </div>
     </div>
@@ -217,7 +375,8 @@ function UserHistory() {
     </div>
   );
 }
+}
 
 //ReactDOM.render(<Register />, document.getElementById('root'));
 
-export default UserHistory;
+export default withRouter(UserHistory);

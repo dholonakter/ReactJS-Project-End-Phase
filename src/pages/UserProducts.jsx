@@ -19,20 +19,6 @@ class UserProducts extends React.Component {
       currentUser: store.getState("currentUser"),
       products: [],
       loaded: false,
-      categories: [
-        {
-          id: 1,
-          label: "Books",
-        },
-            {
-          id: 2,
-          label: "Accessories",
-        },		
-        {
-          id: 3,
-          label: "Bicycles",
-        },		
-        ],
     };
 	//this.deleteProduct = this.deleteProduct.bind(this);
   }
@@ -52,7 +38,7 @@ class UserProducts extends React.Component {
     this.handleProducts();
   }
 
-handleProducts(){
+  handleProducts(){
   const that = this;
     if(this.state.currentUser.value != null){
       axios({
@@ -65,51 +51,24 @@ handleProducts(){
         
       });
     }
-}
-handleCategory(id){
-  axios({
-    method: 'GET',
-    url:"https://i383988.hera.fhict.nl/database.php?get_category="+id,
-    config: {headers:{'Content-Type': 'multipart/form-data'}}
-  }).then(function(response){
-    return id;
-  });
-}
-
-/*deleteProduct(id, product_name) {	
-  let confirmation = false;
-  if (window.confirm("Delete your product: " + product_name + "?")) {
-    confirmation = false;
-}
-  let formData = new FormData();
-  formData.append("delete_product", "deleting product");
-  formData.append("id", id);
-  if(confirmation){
-	axios({
-    method: 'POST',
-    url:"https://i383988.hera.fhict.nl/database.php?delete_product",
-	    data: formData,
-        config: { headers: { "Content-Type": "multipart/form-data" } },
-      }).then(function (response) {
-		  console.log(response);
-      });
-  }else{
-	  console.log("cancelled");
-  }	
-}
-*/
-// getCategory(id){
-//   var result;
-//   axios({
-//     method: 'GET',
-//     url:"https://i383988.hera.fhict.nl/database.php?get_category="+id,
-//     config: {headers:{'Content-Type': 'multipart/form-data'}}
-//   }).then(function(response){
-//    result = response.data;
-//   });
-//   return result;
-// }
-
+  }
+  
+  getCategoryName(categoryId){
+		switch(categoryId){
+			case "1":
+			  return "Books"
+			  break;
+			case "2":
+			  return "Accessories"
+			  break;
+			case "3":
+			  return "Bicycles"
+			  break;
+			case "4":
+			  return "Other"
+			  break;
+		}
+	}
 
 render(){
   return (
@@ -151,7 +110,7 @@ render(){
                     <td><a href={'/singleproductpage/' + product.id}>{product.product_name}	</a></td>
                     <td>{product.product_description}</td>
                     <td>{product.product_price}</td>
-                    <td>{product.category_id}</td>
+                    <td>{ this.getCategoryName(product.category_id) }</td>
                   </tr>
                  );
               })} 
