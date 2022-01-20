@@ -128,7 +128,8 @@ function ForgotPassword(){
       url:"https://i383988.hera.fhict.nl/database.php?user_email="+email,
       config: { headers: { "Content-Type": "multipart/form-data" } },
     }).then(function (response) {
-      if(response.data.reset_code === reset_code)
+      console.log(response.data.reset_code);
+      if(verify_code == reset_code)
       {
         passwordresetForm();
       }

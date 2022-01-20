@@ -42,7 +42,6 @@ const AddProduct = () => {
   let history = useHistory();
 
   const onValueChange = (e) => {
-    console.log(e.target.value);
     setProduct({ ...product, [e.target.name]: e.target.value });
   };
 
